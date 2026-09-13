@@ -2,382 +2,708 @@
 
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
 
 ```
-<!-- Responsive Mobile -->
+<!-- =====================================================
+     BASIC META
+====================================================== -->
+
+<meta charset="UTF-8">
+
 <meta
     name="viewport"
     content="width=device-width, initial-scale=1, viewport-fit=cover"
 >
 
-<!-- PWA -->
-<meta name="theme-color" content="#2563eb">
 <meta
-    name="description"
-    content="Laundry Work Manager - Aplikasi Manajemen Pekerjaan Laundry"
+    name="theme-color"
+    content="#2563eb"
 >
 
-<title>Laundry Work Manager</title>
+<meta
+    name="description"
+    content="Laundry Work Manager - Aplikasi PWA Manajemen Pekerjaan Laundry Offline"
+>
 
-<!-- PWA Manifest -->
-<link rel="manifest" href="manifest.json">
+<meta
+    name="mobile-web-app-capable"
+    content="yes"
+>
 
-<!-- Icons -->
-<link rel="icon" href="icons/icon.svg">
+<meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+>
 
-<!-- CSS -->
-<link rel="stylesheet" href="style.css">
+<meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="default"
+>
+
+<meta
+    name="apple-mobile-web-app-title"
+    content="Laundry Manager"
+>
+
+
+<!-- =====================================================
+     TITLE
+====================================================== -->
+
+<title id="documentTitle">
+    Laundry Work Manager
+</title>
+
+
+<!-- =====================================================
+     PWA
+====================================================== -->
+
+<link
+    rel="manifest"
+    href="manifest.json"
+>
+
+
+<!-- =====================================================
+     ICON
+====================================================== -->
+
+<link
+    rel="icon"
+    href="icons/icon.svg"
+    type="image/svg+xml"
+>
+
+<link
+    rel="apple-touch-icon"
+    href="icons/icon-192.png"
+>
+
+
+<!-- =====================================================
+     CSS
+====================================================== -->
+
+<link
+    rel="stylesheet"
+    href="style.css"
+>
 ```
 
 </head>
 
 <body>
 
-<!-- =====================================================
-     APP HEADER
-===================================================== -->
+<!-- =========================================================
+     NOSCRIPT
+========================================================== -->
 
-<header class="app-header">
+<noscript>
 
 ```
-<div class="header-left">
+<div class="noscript-warning">
 
-    <button
-        id="menuToggle"
-        class="icon-button"
-        aria-label="Menu"
-    >
-        ☰
-    </button>
+    <h2>
+        JavaScript Dibutuhkan
+    </h2>
 
-</div>
-
-
-<div class="header-center">
-
-    <div class="app-logo">
-        🧺
-    </div>
-
-    <div class="app-title-area">
-
-        <h1 id="appNameHeader">
-            Laundry Work Manager
-        </h1>
-
-        <span id="appSubtitle">
-            PWA Offline Manager
-        </span>
-
-    </div>
-
-</div>
-
-
-<div class="header-right">
-
-    <button
-        id="darkModeToggle"
-        class="icon-button"
-        title="Mode Tampilan"
-    >
-        ◐
-    </button>
+    <p>
+        Aplikasi Laundry Work Manager membutuhkan JavaScript
+        untuk dapat berjalan.
+    </p>
 
 </div>
 ```
 
-</header>
+</noscript>
 
-<!-- =====================================================
-     MAIN APPLICATION
-===================================================== -->
+<!-- =========================================================
+     SKIP LINK ACCESSIBILITY
+========================================================== -->
 
-<div class="app-layout">
+<a
+href="#mainContent"
+class="skip-link"
 
-```
-<!-- =================================================
-     SIDEBAR
-================================================= -->
-
-<aside
-    id="sidebar"
-    class="sidebar"
 >
 
-    <!-- Sidebar Header -->
+```
+Lewati ke konten utama
+```
 
-    <div class="sidebar-header">
+</a>
 
-        <div class="sidebar-logo">
-            🧺
-        </div>
-
-        <div>
-
-            <strong id="sidebarAppName">
-                Laundry Work Manager
-            </strong>
-
-            <small>
-                Offline PWA
-            </small>
-
-        </div>
-
-    </div>
-
-
-    <!-- Navigation -->
-
-    <nav class="sidebar-nav">
-
-
-        <button
-            class="nav-button active"
-            data-page="dashboard"
-        >
-            <span class="nav-icon">🏠</span>
-
-            <span>
-                Dashboard
-            </span>
-
-        </button>
-
-
-
-        <button
-            class="nav-button"
-            data-page="input"
-        >
-            <span class="nav-icon">⚡</span>
-
-            <span>
-                Input WhatsApp
-            </span>
-
-        </button>
-
-
-
-        <button
-            class="nav-button"
-            data-page="transactions"
-        >
-            <span class="nav-icon">🧾</span>
-
-            <span>
-                Transaksi
-            </span>
-
-        </button>
-
-
-
-        <button
-            class="nav-button"
-            data-page="reports"
-        >
-            <span class="nav-icon">📊</span>
-
-            <span>
-                Laporan & Cetak
-            </span>
-
-        </button>
-
-
-
-        <button
-            class="nav-button"
-            data-page="commission"
-        >
-            <span class="nav-icon">💰</span>
-
-            <span>
-                Komisi Karyawan
-            </span>
-
-        </button>
-
-
-
-        <button
-            class="nav-button"
-            data-page="master"
-        >
-            <span class="nav-icon">⚙️</span>
-
-            <span>
-                Master Data
-            </span>
-
-        </button>
-
-
-
-        <button
-            class="nav-button"
-            data-page="backup"
-        >
-            <span class="nav-icon">💾</span>
-
-            <span>
-                Backup & Restore
-            </span>
-
-        </button>
-
-
-    </nav>
-
-
-
-    <!-- Sidebar Footer -->
-
-    <div class="sidebar-footer">
-
-        <small>
-            Laundry Work Manager
-        </small>
-
-        <small>
-            Version 3 FINAL
-        </small>
-
-    </div>
-
-
-</aside>
-
-
-
-<!-- =================================================
-     SIDEBAR OVERLAY MOBILE
-================================================= -->
+<!-- =========================================================
+     APPLICATION SHELL
+========================================================== -->
 
 <div
-    id="sidebarOverlay"
-    class="sidebar-overlay"
-></div>
+    id="appShell"
+    class="app-shell"
+>
+
+```
+<!-- =====================================================
+     HEADER
+====================================================== -->
+
+<header
+    class="app-header"
+    role="banner"
+>
+
+
+    <!-- HEADER LEFT -->
+
+    <div class="header-left">
+
+
+        <!-- MOBILE MENU -->
+
+        <button
+            id="menuToggle"
+            class="icon-button"
+            type="button"
+            aria-label="Buka menu navigasi"
+            aria-controls="sidebar"
+            aria-expanded="false"
+        >
+            ☰
+        </button>
+
+
+    </div>
 
 
 
-<!-- =================================================
-     MAIN CONTENT
-================================================= -->
+    <!-- HEADER CENTER -->
 
-<main class="main-content">
-
-
-    <!-- Page Header -->
-
-    <div class="page-header">
-
-        <div>
-
-            <h2 id="pageTitle">
-                Dashboard
-            </h2>
-
-            <p
-                id="pageDescription"
-                class="page-description"
-            >
-                Ringkasan aktivitas laundry hari ini
-            </p>
-
-        </div>
+    <div
+        class="header-center"
+    >
 
 
         <div
-            id="pageHeaderAction"
-            class="page-header-action"
+            class="app-logo"
+            aria-hidden="true"
+        >
+            🧺
+        </div>
+
+
+
+        <div
+            class="app-title-area"
         >
 
-            <!-- Dynamic Action -->
+
+            <h1
+                id="appNameHeader"
+            >
+                Laundry Work Manager
+            </h1>
+
+
+            <span
+                id="appSubtitle"
+            >
+                PWA Offline Manager
+            </span>
+
 
         </div>
+
 
     </div>
 
 
 
-    <!-- =============================================
-         APPLICATION CONTENT
-    ============================================= -->
+    <!-- HEADER RIGHT -->
 
     <div
-        id="appContent"
-        class="app-content"
+        class="header-right"
     >
 
 
-        <!-- =========================================
-             LOADING
-        ========================================= -->
+        <!-- ONLINE / OFFLINE -->
 
-        <div class="loading-screen">
+        <span
+            id="connectionStatus"
+            class="connection-status"
+            role="status"
+            aria-live="polite"
+            title="Status koneksi"
+        >
 
-            <div class="loading-spinner"></div>
+            <span
+                id="connectionDot"
+                class="connection-dot"
+            ></span>
 
-            <p>
-                Memuat aplikasi...
-            </p>
+            <span
+                id="connectionText"
+            >
+                Online
+            </span>
 
-        </div>
+        </span>
+
+
+
+        <!-- DARK MODE -->
+
+        <button
+            id="darkModeToggle"
+            class="icon-button"
+            type="button"
+            aria-label="Ganti mode tampilan"
+            title="Mode tampilan"
+        >
+            ◐
+        </button>
 
 
     </div>
 
 
-</main>
+</header>
+
+
+
+<!-- =====================================================
+     APPLICATION LAYOUT
+====================================================== -->
+
+<div
+    class="app-layout"
+>
+
+
+
+    <!-- =================================================
+         SIDEBAR
+    ================================================== -->
+
+    <aside
+        id="sidebar"
+        class="sidebar"
+        aria-label="Navigasi utama"
+    >
+
+
+        <!-- SIDEBAR HEADER -->
+
+        <div
+            class="sidebar-header"
+        >
+
+
+            <div
+                class="sidebar-logo"
+                aria-hidden="true"
+            >
+                🧺
+            </div>
+
+
+
+            <div
+                class="sidebar-brand"
+            >
+
+
+                <strong
+                    id="sidebarAppName"
+                >
+                    Laundry Work Manager
+                </strong>
+
+
+                <small>
+                    Offline PWA
+                </small>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =============================================
+             NAVIGATION
+        ============================================== -->
+
+        <nav
+            class="sidebar-nav"
+            aria-label="Menu aplikasi"
+        >
+
+
+
+            <!-- DASHBOARD -->
+
+            <button
+                class="nav-button active"
+                type="button"
+                data-page="dashboard"
+                aria-current="page"
+            >
+
+                <span
+                    class="nav-icon"
+                    aria-hidden="true"
+                >
+                    🏠
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </button>
+
+
+
+            <!-- INPUT WHATSAPP -->
+
+            <button
+                class="nav-button"
+                type="button"
+                data-page="input"
+            >
+
+                <span
+                    class="nav-icon"
+                    aria-hidden="true"
+                >
+                    ⚡
+                </span>
+
+                <span>
+                    Input WhatsApp
+                </span>
+
+            </button>
+
+
+
+            <!-- TRANSACTIONS -->
+
+            <button
+                class="nav-button"
+                type="button"
+                data-page="transactions"
+            >
+
+                <span
+                    class="nav-icon"
+                    aria-hidden="true"
+                >
+                    🧾
+                </span>
+
+                <span>
+                    Transaksi
+                </span>
+
+            </button>
+
+
+
+            <!-- REPORT -->
+
+            <button
+                class="nav-button"
+                type="button"
+                data-page="reports"
+            >
+
+                <span
+                    class="nav-icon"
+                    aria-hidden="true"
+                >
+                    📊
+                </span>
+
+                <span>
+                    Laporan & Cetak
+                </span>
+
+            </button>
+
+
+
+            <!-- COMMISSION -->
+
+            <button
+                class="nav-button"
+                type="button"
+                data-page="commission"
+            >
+
+                <span
+                    class="nav-icon"
+                    aria-hidden="true"
+                >
+                    💰
+                </span>
+
+                <span>
+                    Komisi Karyawan
+                </span>
+
+            </button>
+
+
+
+            <!-- MASTER -->
+
+            <button
+                class="nav-button"
+                type="button"
+                data-page="master"
+            >
+
+                <span
+                    class="nav-icon"
+                    aria-hidden="true"
+                >
+                    ⚙️
+                </span>
+
+                <span>
+                    Master Data
+                </span>
+
+            </button>
+
+
+
+            <!-- BACKUP -->
+
+            <button
+                class="nav-button"
+                type="button"
+                data-page="backup"
+            >
+
+                <span
+                    class="nav-icon"
+                    aria-hidden="true"
+                >
+                    💾
+                </span>
+
+                <span>
+                    Backup & Restore
+                </span>
+
+            </button>
+
+
+        </nav>
+
+
+
+        <!-- =============================================
+             SIDEBAR FOOTER
+        ============================================== -->
+
+        <div
+            class="sidebar-footer"
+        >
+
+            <small
+                id="sidebarVersion"
+            >
+                Version 3 FINAL
+            </small>
+
+
+            <small>
+                Offline Ready
+            </small>
+
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =================================================
+         MOBILE SIDEBAR OVERLAY
+    ================================================== -->
+
+    <div
+        id="sidebarOverlay"
+        class="sidebar-overlay"
+        hidden
+        aria-hidden="true"
+    ></div>
+
+
+
+    <!-- =================================================
+         MAIN CONTENT
+    ================================================== -->
+
+    <main
+        id="mainContent"
+        class="main-content"
+        tabindex="-1"
+    >
+
+
+
+        <!-- =============================================
+             PAGE HEADER
+        ============================================== -->
+
+        <section
+            class="page-header"
+            aria-labelledby="pageTitle"
+        >
+
+
+            <div
+                class="page-header-text"
+            >
+
+
+                <h2
+                    id="pageTitle"
+                >
+                    Dashboard
+                </h2>
+
+
+                <p
+                    id="pageDescription"
+                    class="page-description"
+                >
+                    Ringkasan aktivitas laundry hari ini
+                </p>
+
+
+            </div>
+
+
+
+            <!-- DYNAMIC ACTION -->
+
+            <div
+                id="pageHeaderAction"
+                class="page-header-action"
+            >
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =============================================
+             APPLICATION CONTENT
+        ============================================== -->
+
+        <section
+            id="appContent"
+            class="app-content"
+            aria-live="polite"
+            aria-busy="true"
+        >
+
+
+            <!-- LOADING -->
+
+            <div
+                class="loading-screen"
+                role="status"
+            >
+
+
+                <div
+                    class="loading-spinner"
+                    aria-hidden="true"
+                ></div>
+
+
+                <p>
+                    Memuat aplikasi...
+                </p>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
 ```
 
 </div>
 
-<!-- =====================================================
+<!-- =========================================================
      TOAST NOTIFICATION
-===================================================== -->
+========================================================== -->
 
 <div
     id="toast"
     class="toast"
+    role="status"
+    aria-live="polite"
+    aria-atomic="true"
+    hidden
 >
 
 ```
 <div
     id="toastIcon"
     class="toast-icon"
+    aria-hidden="true"
 >
     ✓
 </div>
+
 
 
 <div
     class="toast-content"
 >
 
+
     <strong
         id="toastTitle"
     >
-        Berhasil
+        Informasi
     </strong>
+
 
     <span
         id="toastMessage"
     >
-        Data berhasil disimpan
     </span>
 
+
 </div>
+
 
 
 <button
     id="toastClose"
     class="toast-close"
+    type="button"
+    aria-label="Tutup notifikasi"
 >
     ×
 </button>
@@ -385,42 +711,70 @@
 
 </div>
 
-<!-- =====================================================
+<!-- =========================================================
      CONFIRM MODAL
-===================================================== -->
+     
+     SECURITY:
+     - hidden by default
+     - role dialog
+     - aria-modal
+     - focus trap handled by app.js
+     - Escape handled by app.js
+     - focus restored when closed
+========================================================== -->
 
 <div
     id="confirmModal"
     class="modal-backdrop"
+    hidden
 >
 
 ```
 <div
+    id="confirmDialog"
     class="modal-card"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="confirmTitle"
+    aria-describedby="confirmMessage"
+    tabindex="-1"
 >
 
 
-    <div class="modal-header">
+    <!-- HEADER -->
+
+    <div
+        class="modal-header"
+    >
+
 
         <div>
 
-            <h3 id="confirmTitle">
+
+            <h3
+                id="confirmTitle"
+            >
                 Konfirmasi
             </h3>
+
 
             <p
                 id="confirmMessage"
                 class="modal-description"
             >
-                Apakah Anda yakin?
+                Apakah Anda yakin ingin melanjutkan?
             </p>
 
+
         </div>
+
 
 
         <button
             id="confirmClose"
             class="modal-close"
+            type="button"
+            aria-label="Tutup dialog konfirmasi"
         >
             ×
         </button>
@@ -430,21 +784,27 @@
 
 
 
+    <!-- ACTIONS -->
+
     <div
         class="modal-actions"
     >
 
+
         <button
             id="confirmCancel"
             class="btn btn-secondary"
+            type="button"
         >
             Batal
         </button>
 
 
+
         <button
             id="confirmYes"
             class="btn btn-danger"
+            type="button"
         >
             Ya, Lanjutkan
         </button>
@@ -458,28 +818,44 @@
 
 </div>
 
-<!-- =====================================================
+<!-- =========================================================
      FORM MODAL
-===================================================== -->
+========================================================== -->
 
 <div
     id="formModal"
     class="modal-backdrop"
+    hidden
 >
 
 ```
 <div
+    id="formDialog"
     class="modal-card modal-large"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="formModalTitle"
+    aria-describedby="formModalDescription"
+    tabindex="-1"
 >
 
 
-    <div class="modal-header">
+    <!-- HEADER -->
+
+    <div
+        class="modal-header"
+    >
+
 
         <div>
 
-            <h3 id="formModalTitle">
+
+            <h3
+                id="formModalTitle"
+            >
                 Form Data
             </h3>
+
 
             <p
                 id="formModalDescription"
@@ -487,12 +863,16 @@
             >
             </p>
 
+
         </div>
+
 
 
         <button
             id="formModalClose"
             class="modal-close"
+            type="button"
+            aria-label="Tutup formulir"
         >
             ×
         </button>
@@ -502,6 +882,21 @@
 
 
 
+    <!-- =============================================
+         MODAL BODY
+
+         Konten dibuat oleh JavaScript.
+
+         Untuk keamanan:
+         Jangan memasukkan input user langsung
+         menggunakan innerHTML.
+
+         Gunakan:
+         - textContent
+         - createElement
+         - setAttribute
+    ============================================== -->
+
     <div
         id="formModalBody"
         class="modal-body"
@@ -510,6 +905,8 @@
     </div>
 
 
+
+    <!-- MODAL FOOTER -->
 
     <div
         id="formModalFooter"
@@ -524,62 +921,192 @@
 
 </div>
 
-<!-- =====================================================
+<!-- =========================================================
+     DETAIL MODAL
+
+     Untuk:
+     - Detail transaksi
+     - Preview laporan
+     - Detail komisi
+========================================================== -->
+
+<div
+    id="detailModal"
+    class="modal-backdrop"
+    hidden
+>
+
+```
+<div
+    id="detailDialog"
+    class="modal-card modal-large"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="detailModalTitle"
+    aria-describedby="detailModalDescription"
+    tabindex="-1"
+>
+
+
+    <!-- HEADER -->
+
+    <div
+        class="modal-header"
+    >
+
+
+        <div>
+
+
+            <h3
+                id="detailModalTitle"
+            >
+                Detail
+            </h3>
+
+
+            <p
+                id="detailModalDescription"
+                class="modal-description"
+            >
+                Informasi detail
+            </p>
+
+
+        </div>
+
+
+
+        <button
+            id="detailModalClose"
+            class="modal-close"
+            type="button"
+            aria-label="Tutup detail"
+        >
+            ×
+        </button>
+
+
+    </div>
+
+
+
+    <!-- BODY -->
+
+    <div
+        id="detailModalBody"
+        class="modal-body"
+    >
+
+    </div>
+
+
+
+    <!-- FOOTER -->
+
+    <div
+        id="detailModalFooter"
+        class="modal-actions"
+    >
+
+    </div>
+
+
+</div>
+```
+
+</div>
+
+<!-- =========================================================
      PRINT AREA
-     
+
      Digunakan untuk:
-     - Thermal 58mm
-     - Print Browser
-     - Save PDF
-===================================================== -->
+
+     ✓ Thermal 58mm
+     ✓ Browser Print
+     ✓ Save PDF
+     ✓ Laporan HP
+========================================================== -->
 
 <div
     id="printArea"
     class="print-area"
+    aria-hidden="true"
 >
 
 </div>
 
-<!-- =====================================================
-     IMAGE EXPORT CANVAS
-     
-     Digunakan untuk:
-     - Export JPG
-     - Share Image
-===================================================== -->
+<!-- =========================================================
+     EXPORT AREA
+
+     Digunakan oleh app.js untuk:
+
+     ✓ JPG
+     ✓ PNG
+     ✓ Image Report
+========================================================== -->
+
+<div
+    id="imageExportArea"
+    class="image-export-area"
+    aria-hidden="true"
+>
+
+</div>
+
+<!-- =========================================================
+     CANVAS EXPORT
+
+     Disiapkan untuk:
+
+     ✓ Export JPG
+     ✓ Export Image
+========================================================== -->
 
 <canvas
 id="reportCanvas"
-style="display:none"
+width="800"
+height="1200"
+hidden
 
 > </canvas>
 
-<!-- =====================================================
+<!-- =========================================================
      OFFLINE INDICATOR
-===================================================== -->
+========================================================== -->
 
 <div
     id="offlineIndicator"
     class="offline-indicator"
+    role="status"
+    aria-live="polite"
+    hidden
 >
 
 ```
-<span class="offline-dot"></span>
+<span
+    class="offline-dot"
+    aria-hidden="true"
+></span>
 
-<span id="offlineText">
-    Offline Mode
+
+<span
+    id="offlineText"
+>
+    Mode Offline
 </span>
 ```
 
 </div>
 
-<!-- =====================================================
-     INSTALL PWA BUTTON
-===================================================== -->
+<!-- =========================================================
+     PWA INSTALL PROMPT
+========================================================== -->
 
 <div
     id="installContainer"
-    class="install-container hidden"
+    class="install-container"
+    hidden
 >
 
 ```
@@ -587,35 +1114,50 @@ style="display:none"
     class="install-card"
 >
 
-    <div class="install-icon">
+
+    <div
+        class="install-icon"
+        aria-hidden="true"
+    >
         🧺
     </div>
 
 
-    <div class="install-content">
+
+    <div
+        class="install-content"
+    >
+
 
         <strong>
             Install Aplikasi
         </strong>
 
+
         <span>
             Install aplikasi agar dapat digunakan seperti aplikasi Android.
         </span>
 
+
     </div>
+
 
 
     <button
         id="installButton"
         class="btn btn-primary"
+        type="button"
     >
         Install
     </button>
 
 
+
     <button
         id="installClose"
         class="install-close"
+        type="button"
+        aria-label="Tutup informasi install"
     >
         ×
     </button>
@@ -626,11 +1168,58 @@ style="display:none"
 
 </div>
 
-<!-- =====================================================
-     JAVASCRIPT
-===================================================== -->
+<!-- =========================================================
+     SCREEN READER ANNOUNCEMENT
+========================================================== -->
 
-<script src="app.js"></script>
+<div
+    id="screenReaderAnnouncement"
+    class="sr-only"
+    aria-live="assertive"
+    aria-atomic="true"
+>
+
+</div>
+
+<!-- =========================================================
+     APPLICATION FOOTER
+========================================================== -->
+
+<footer
+    class="app-footer"
+>
+
+```
+<span
+    id="footerAppName"
+>
+    Laundry Work Manager
+</span>
+
+
+<span
+    class="footer-separator"
+    aria-hidden="true"
+>
+    •
+</span>
+
+
+<span>
+    PWA Offline Ready
+</span>
+```
+
+</footer>
+
+<!-- =========================================================
+     JAVASCRIPT APPLICATION
+========================================================== -->
+
+<script
+    src="app.js"
+    defer
+></script>
 
 </body>
 </html>
