@@ -7,7 +7,7 @@ VERSION: V3 FINAL
 
 */
 
-const CACHE_NAME = 'laundry-manager-v3.0.0';
+const CACHE_NAME = 'laundry-manager-v3.0.1';
 
 const APP_SHELL = [
 './',
