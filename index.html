@@ -1,1040 +1,2283 @@
 <!DOCTYPE html>
-
 <html lang="id">
 <head>
   <meta charset="UTF-8">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
 
->
+  <meta
+    name="theme-color"
+    content="#2563eb"
+  >
 
-  <meta name="theme-color" content="#2563eb">
+  <meta
+    name="description"
+    content="Aplikasi manajemen pekerjaan laundry offline berbasis PWA"
+  >
 
-<meta
-name="description"
-content="Aplikasi manajemen laundry dan komisi karyawan offline berbasis PWA"
+  <meta
+    name="mobile-web-app-capable"
+    content="yes"
+  >
 
->
+  <meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+  >
 
-  <title id="pageTitle">Laundry Manager</title>
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="default"
+  >
+
+  <title>Laundry Manager</title>
 
   <!-- PWA -->
+  <link
+    rel="manifest"
+    href="manifest.json"
+  >
 
-  <link rel="manifest" href="manifest.json">
-
-  <!-- Icons -->
-
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
-
-  <!-- CSS -->
-
-  <link rel="stylesheet" href="style.css">
-
-  <!-- Icons -->
+  <!-- ICON -->
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="192x192"
+    href="icons/icon-192x192.png"
+  >
 
   <link
+    rel="apple-touch-icon"
+    href="icons/icon-192x192.png"
+  >
+
+  <!-- CSS -->
+  <link
     rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    href="style.css"
   >
 </head>
 
+
 <body>
 
-<!-- =====================================================
-     APP LOADER
-===================================================== -->
 
-<div id="appLoader" class="app-loader">
-  <div class="loader-box">
-    <div class="loader-logo">
-      <i class="fa-solid fa-shirt"></i>
+<!-- =========================================
+     SPLASH SCREEN
+========================================= -->
+
+<div
+  id="splashScreen"
+  class="splash-screen"
+  aria-live="polite"
+>
+
+  <div class="splash-content">
+
+    <div class="splash-logo">
+
+      <img
+        id="splashIcon"
+        src="icons/icon-192x192.png"
+        alt="Logo aplikasi"
+      >
+
     </div>
 
-```
-<h2 id="loaderAppName">Laundry Manager</h2>
 
-<div class="loader-spinner"></div>
-
-<p>Menyiapkan aplikasi...</p>
-```
-
-  </div>
-</div>
-
-<!-- =====================================================
-     APP
-===================================================== -->
-
-<div id="app" class="app">
-
-<!-- =====================================================
-     SIDEBAR
-===================================================== -->
-
-<aside class="sidebar" id="sidebar">
-
-  <div class="sidebar-header">
-
-```
-<div class="brand">
-
-  <div class="brand-icon">
-    <i class="fa-solid fa-shirt"></i>
-  </div>
-
-  <div class="brand-text">
-
-    <h2 id="appNameHeader">
+    <h1 id="splashAppName">
       Laundry Manager
-    </h2>
+    </h1>
 
-    <span>
-      PWA Offline
-    </span>
+
+    <p id="splashStatus">
+      Menyiapkan aplikasi...
+    </p>
+
+
+    <div class="loader">
+
+      <span></span>
+      <span></span>
+      <span></span>
+
+    </div>
+
 
   </div>
 
 </div>
 
-<button
-  class="sidebar-close"
-  id="sidebarClose"
-  aria-label="Tutup menu"
+
+
+<!-- =========================================
+     APP SHELL
+========================================= -->
+
+<div
+  id="appShell"
+  class="app-shell"
 >
-  <i class="fa-solid fa-xmark"></i>
-</button>
-```
+
+
+<!-- =========================================
+     SIDEBAR
+========================================= -->
+
+<aside
+  id="sidebar"
+  class="sidebar"
+>
+
+
+  <!-- BRAND -->
+
+  <div class="sidebar-brand">
+
+
+    <div class="brand-icon">
+
+      <img
+        id="brandIcon"
+        src="icons/icon-192x192.png"
+        alt="Logo"
+      >
+
+    </div>
+
+
+    <div class="brand-text">
+
+      <strong id="appName">
+        Laundry Manager
+      </strong>
+
+      <small>
+        Offline First PWA
+      </small>
+
+    </div>
+
+
+    <button
+      id="closeSidebarBtn"
+      class="icon-button mobile-only"
+      type="button"
+      aria-label="Tutup menu"
+    >
+      ✕
+    </button>
+
 
   </div>
+
+
 
   <!-- NAVIGATION -->
 
-  <nav class="sidebar-nav">
+  <nav
+    class="sidebar-nav"
+    aria-label="Navigasi utama"
+  >
 
-```
-<p class="nav-label">
-  MENU UTAMA
-</p>
 
+    <button
+      class="nav-item active"
+      data-page="dashboard"
+      type="button"
+    >
 
-<button
-  class="nav-item active"
-  data-page="dashboard"
->
+      <span class="nav-icon">🏠</span>
 
-  <i class="fa-solid fa-house"></i>
+      <span class="nav-label">
+        Dashboard
+      </span>
 
-  <span>
-    Dashboard
-  </span>
+    </button>
 
-</button>
 
 
-<button
-  class="nav-item"
-  data-page="input"
->
+    <button
+      class="nav-item"
+      data-page="input"
+      type="button"
+    >
 
-  <i class="fa-solid fa-plus"></i>
+      <span class="nav-icon">➕</span>
 
-  <span>
-    Input Produksi
-  </span>
+      <span class="nav-label">
+        Input Pekerjaan
+      </span>
 
-</button>
+    </button>
 
 
-<button
-  class="nav-item"
-  data-page="wa"
->
 
-  <i class="fa-brands fa-whatsapp"></i>
+    <button
+      class="nav-item"
+      data-page="transactions"
+      type="button"
+    >
 
-  <span>
-    Import WhatsApp
-  </span>
+      <span class="nav-icon">📋</span>
 
-</button>
+      <span class="nav-label">
+        Data Pekerjaan
+      </span>
 
+    </button>
 
-<button
-  class="nav-item"
-  data-page="history"
->
 
-  <i class="fa-solid fa-clock-rotate-left"></i>
 
-  <span>
-    Riwayat
-  </span>
+    <button
+      class="nav-item"
+      data-page="reports"
+      type="button"
+    >
 
-</button>
+      <span class="nav-icon">📊</span>
 
+      <span class="nav-label">
+        Laporan
+      </span>
 
-<p class="nav-label">
-  DATA MASTER
-</p>
+    </button>
 
 
-<button
-  class="nav-item"
-  data-page="employees"
->
 
-  <i class="fa-solid fa-users"></i>
+    <button
+      class="nav-item"
+      data-page="employees"
+      type="button"
+    >
 
-  <span>
-    Karyawan
-  </span>
+      <span class="nav-icon">👥</span>
 
-</button>
+      <span class="nav-label">
+        Karyawan & Komisi
+      </span>
 
+    </button>
 
-<button
-  class="nav-item"
-  data-page="items"
->
 
-  <i class="fa-solid fa-boxes-stacked"></i>
 
-  <span>
-    Item & Harga
-  </span>
+    <button
+      class="nav-item"
+      data-page="items"
+      type="button"
+    >
 
-</button>
+      <span class="nav-icon">📦</span>
 
+      <span class="nav-label">
+        Master Item
+      </span>
 
-<button
-  class="nav-item"
-  data-page="categories"
->
+    </button>
 
-  <i class="fa-solid fa-layer-group"></i>
 
-  <span>
-    Kategori
-  </span>
 
-</button>
+    <button
+      class="nav-item"
+      data-page="tiers"
+      type="button"
+    >
 
+      <span class="nav-icon">🏷️</span>
 
-<button
-  class="nav-item"
-  data-page="tiers"
->
+      <span class="nav-label">
+        Tier & Parameter
+      </span>
 
-  <i class="fa-solid fa-list-ol"></i>
+    </button>
 
-  <span>
-    Parameter / Tier
-  </span>
 
-</button>
 
+    <button
+      class="nav-item"
+      data-page="backup"
+      type="button"
+    >
 
-<p class="nav-label">
-  LAPORAN
-</p>
+      <span class="nav-icon">💾</span>
 
+      <span class="nav-label">
+        Backup & Restore
+      </span>
 
-<button
-  class="nav-item"
-  data-page="daily-report"
->
+    </button>
 
-  <i class="fa-solid fa-calendar-day"></i>
 
-  <span>
-    Laporan Harian
-  </span>
 
-</button>
+    <button
+      class="nav-item"
+      data-page="settings"
+      type="button"
+    >
 
+      <span class="nav-icon">⚙️</span>
 
-<button
-  class="nav-item"
-  data-page="monthly-report"
->
+      <span class="nav-label">
+        Pengaturan
+      </span>
 
-  <i class="fa-solid fa-calendar-days"></i>
+    </button>
 
-  <span>
-    Laporan Bulanan
-  </span>
-
-</button>
-
-
-<p class="nav-label">
-  SISTEM
-</p>
-
-
-<button
-  class="nav-item"
-  data-page="backup"
->
-
-  <i class="fa-solid fa-database"></i>
-
-  <span>
-    Backup & Restore
-  </span>
-
-</button>
-
-
-<button
-  class="nav-item"
-  data-page="settings"
->
-
-  <i class="fa-solid fa-gear"></i>
-
-  <span>
-    Pengaturan
-  </span>
-
-</button>
-```
 
   </nav>
+
+
 
   <!-- SIDEBAR FOOTER -->
 
   <div class="sidebar-footer">
 
-```
-<div class="offline-status">
+    <div
+      id="databaseStatus"
+      class="database-status"
+    >
 
-  <span
-    id="connectionDot"
-    class="connection-dot"
-  ></span>
+      <span class="status-dot"></span>
 
-  <span id="connectionStatus">
-    Offline Ready
-  </span>
+      <span>
+        Database Lokal
+      </span>
 
-</div>
+    </div>
 
 
-<div class="version">
-  Version 3.0 Final
-</div>
-```
+    <small id="appVersion">
+      V4.0.0
+    </small>
+
 
   </div>
 
+
 </aside>
 
-<!-- =====================================================
+
+
+<!-- =========================================
      SIDEBAR OVERLAY
-===================================================== -->
+========================================= -->
 
 <div
   id="sidebarOverlay"
   class="sidebar-overlay"
 ></div>
 
-<!-- =====================================================
+
+
+<!-- =========================================
      MAIN
-===================================================== -->
+========================================= -->
 
-<main class="main-content">
+<main
+  class="main-content"
+>
 
-<!-- =====================================================
-     TOP HEADER
-===================================================== -->
 
-<header class="top-header">
+<!-- =========================================
+     HEADER
+========================================= -->
+
+<header
+  class="top-header"
+>
+
+
+  <!-- LEFT -->
 
   <div class="header-left">
 
-```
-<button
-  id="sidebarToggle"
-  class="icon-button mobile-menu"
-  aria-label="Buka menu"
->
 
-  <i class="fa-solid fa-bars"></i>
+    <button
+      id="menuBtn"
+      class="icon-button"
+      type="button"
+      aria-label="Buka menu"
+    >
+      ☰
+    </button>
 
-</button>
 
+    <div class="page-heading">
 
-<div class="page-heading">
+      <h1 id="pageTitle">
+        Dashboard
+      </h1>
 
-  <h1 id="pageTitleText">
-    Dashboard
-  </h1>
+      <p id="pageSubtitle">
+        Ringkasan pekerjaan hari ini
+      </p>
 
-  <p id="pageSubtitle">
-    Ringkasan aktivitas hari ini
-  </p>
+    </div>
 
-</div>
-```
 
   </div>
+
+
+
+  <!-- RIGHT -->
 
   <div class="header-right">
 
-```
-<!-- DATE -->
 
-<div class="header-date">
+    <!-- ONLINE STATUS -->
 
-  <i class="fa-solid fa-calendar"></i>
-
-  <span id="currentDate">
-    -
-  </span>
-
-</div>
-
-
-<!-- COMMISSION TOGGLE -->
-
-<div class="commission-toggle">
-
-  <span class="toggle-label">
-    Komisi
-  </span>
-
-  <label class="switch">
-
-    <input
-      type="checkbox"
-      id="commissionVisibility"
-      checked
+    <div
+      id="onlineStatus"
+      class="online-status"
     >
 
-    <span class="slider"></span>
+      <span class="online-dot"></span>
 
-  </label>
+      <span id="onlineStatusText">
+        Offline Ready
+      </span>
 
-</div>
+    </div>
 
 
-<!-- ONLINE -->
 
-<div
-  class="online-badge"
-  id="onlineBadge"
->
+    <!-- COMMISSION SWITCH -->
 
-  <i class="fa-solid fa-wifi"></i>
+    <div
+      class="commission-switch-wrap"
+    >
 
-  <span>
-    Online
-  </span>
+      <span class="commission-label">
+        Komisi
+      </span>
 
-</div>
-```
+
+      <label
+        class="switch"
+        title="Tampilkan atau sembunyikan nominal komisi"
+      >
+
+        <input
+          type="checkbox"
+          id="commissionVisibilitySwitch"
+          checked
+        >
+
+        <span class="slider"></span>
+
+      </label>
+
+
+    </div>
+
+
+
+    <!-- THEME -->
+
+    <button
+      id="themeBtn"
+      class="icon-button"
+      type="button"
+      aria-label="Ganti tema"
+    >
+      🌙
+    </button>
+
+
+
+    <!-- INSTALL -->
+
+    <button
+      id="installBtn"
+      class="install-button hidden"
+      type="button"
+    >
+      📲 Install
+    </button>
+
 
   </div>
 
+
 </header>
 
-<!-- =====================================================
-     PAGE CONTAINER
-===================================================== -->
+
+
+<!-- =========================================
+     PAGE CONTENT
+========================================= -->
 
 <section
-  id="pageContainer"
-  class="page-container"
+  id="pageContent"
+  class="page-content"
 >
 
-<!-- =====================================================
+
+<!-- =========================================
      DASHBOARD
-===================================================== -->
+========================================= -->
 
-<div
+<section
+  id="page-dashboard"
   class="page active"
-  id="dashboardPage"
 >
+
 
   <!-- WELCOME -->
 
   <div class="welcome-card">
 
-```
-<div>
-
-  <span class="welcome-label">
-    SELAMAT DATANG
-  </span>
-
-  <h2 id="dashboardAppName">
-    Laundry Manager
-  </h2>
-
-  <p>
-    Kelola produksi dan komisi karyawan
-    dengan lebih mudah.
-  </p>
-
-</div>
-
-
-<div class="welcome-icon">
-
-  <i class="fa-solid fa-shirt"></i>
-
-</div>
-```
-
-  </div>
-
-  <!-- STATS -->
-
-  <div class="stats-grid">
-
-```
-<div class="stat-card">
-
-  <div class="stat-icon blue">
-
-    <i class="fa-solid fa-clipboard-list"></i>
-
-  </div>
-
-
-  <div class="stat-info">
-
-    <span>
-      Total Item Hari Ini
-    </span>
-
-    <h3 id="statTotalItems">
-      0
-    </h3>
-
-  </div>
-
-</div>
-
-
-<div class="stat-card">
-
-  <div class="stat-icon green">
-
-    <i class="fa-solid fa-weight-hanging"></i>
-
-  </div>
-
-
-  <div class="stat-info">
-
-    <span>
-      Total Produksi
-    </span>
-
-    <h3 id="statTotalQuantity">
-      0
-    </h3>
-
-  </div>
-
-</div>
-
-
-<div class="stat-card commission-stat">
-
-  <div class="stat-icon orange">
-
-    <i class="fa-solid fa-money-bill-wave"></i>
-
-  </div>
-
-
-  <div class="stat-info">
-
-    <span>
-      Total Komisi
-    </span>
-
-    <h3 id="statTotalCommission">
-      Rp 0
-    </h3>
-
-  </div>
-
-</div>
-
-
-<div class="stat-card">
-
-  <div class="stat-icon purple">
-
-    <i class="fa-solid fa-users"></i>
-
-  </div>
-
-
-  <div class="stat-info">
-
-    <span>
-      Karyawan Aktif
-    </span>
-
-    <h3 id="statEmployees">
-      0
-    </h3>
-
-  </div>
-
-</div>
-```
-
-  </div>
-
-  <!-- DASHBOARD GRID -->
-
-  <div class="dashboard-grid">
-
-```
-<!-- TODAY SUMMARY -->
-
-<div class="card">
-
-  <div class="card-header">
-
     <div>
 
-      <h3>
-        <i class="fa-solid fa-chart-column"></i>
-        Ringkasan Hari Ini
-      </h3>
+      <span class="eyebrow">
+        👋 Selamat datang
+      </span>
+
+      <h2 id="dashboardGreeting">
+        Selamat bekerja!
+      </h2>
 
       <p>
-        Produksi berdasarkan karyawan
+        Kelola pekerjaan laundry dengan cepat,
+        ringan dan tetap berjalan tanpa internet.
       </p>
 
     </div>
 
+
+    <div class="welcome-date">
+
+      <span>
+        📅
+      </span>
+
+      <strong id="currentDate">
+        -
+      </strong>
+
+    </div>
+
+
   </div>
 
+
+
+  <!-- STATISTICS -->
 
   <div
-    id="dashboardEmployeeSummary"
-    class="employee-summary-list"
+    class="stats-grid"
   >
 
-    <div class="empty-state small">
 
-      <i class="fa-solid fa-users"></i>
+    <article class="stat-card">
 
-      <p>
-        Belum ada data hari ini
-      </p>
+      <div class="stat-icon blue">
+        📋
+      </div>
+
+      <div>
+
+        <span>
+          Pekerjaan Hari Ini
+        </span>
+
+        <strong
+          id="statTodayJobs"
+        >
+          0
+        </strong>
+
+      </div>
+
+    </article>
+
+
+
+    <article class="stat-card">
+
+      <div class="stat-icon green">
+        ⚖️
+      </div>
+
+      <div>
+
+        <span>
+          Total Kiloan
+        </span>
+
+        <strong
+          id="statTodayKg"
+        >
+          0 KG
+        </strong>
+
+      </div>
+
+    </article>
+
+
+
+    <article class="stat-card">
+
+      <div class="stat-icon orange">
+        📦
+      </div>
+
+      <div>
+
+        <span>
+          Total Satuan
+        </span>
+
+        <strong
+          id="statTodayUnit"
+        >
+          0
+        </strong>
+
+      </div>
+
+    </article>
+
+
+
+    <article
+      class="stat-card commission-stat"
+    >
+
+      <div class="stat-icon purple">
+        💰
+      </div>
+
+      <div>
+
+        <span>
+          Total Komisi
+        </span>
+
+        <strong
+          id="statTodayCommission"
+        >
+          Rp0
+        </strong>
+
+      </div>
+
+    </article>
+
+
+  </div>
+
+
+
+  <!-- QUICK ACTION -->
+
+  <div class="section-card">
+
+
+    <div class="section-header">
+
+      <div>
+
+        <h3>
+          Aksi Cepat
+        </h3>
+
+        <p>
+          Input pekerjaan lebih cepat
+        </p>
+
+      </div>
+
 
     </div>
 
-  </div>
-
-</div>
 
 
-<!-- QUICK ACTION -->
+    <div class="quick-actions">
 
-<div class="card">
 
-  <div class="card-header">
+      <button
+        class="quick-action"
+        data-action="manual-input"
+        type="button"
+      >
 
-    <div>
+        <span>➕</span>
 
-      <h3>
-        <i class="fa-solid fa-bolt"></i>
-        Aksi Cepat
-      </h3>
+        <strong>
+          Input Manual
+        </strong>
 
-      <p>
-        Akses fitur utama
-      </p>
+        <small>
+          Tambah pekerjaan
+        </small>
+
+      </button>
+
+
+
+      <button
+        class="quick-action"
+        data-action="whatsapp-input"
+        type="button"
+      >
+
+        <span>💬</span>
+
+        <strong>
+          Dari WhatsApp
+        </strong>
+
+        <small>
+          Paste format chat
+        </small>
+
+      </button>
+
+
+
+      <button
+        class="quick-action"
+        data-action="daily-report"
+        type="button"
+      >
+
+        <span>📊</span>
+
+        <strong>
+          Laporan Hari Ini
+        </strong>
+
+        <small>
+          Lihat rekap
+        </small>
+
+      </button>
+
+
+
+      <button
+        class="quick-action"
+        data-action="print-daily"
+        type="button"
+      >
+
+        <span>🖨️</span>
+
+        <strong>
+          Cetak
+        </strong>
+
+        <small>
+          Thermal / PDF
+        </small>
+
+      </button>
+
 
     </div>
 
-  </div>
-
-
-  <div class="quick-actions">
-
-
-    <button
-      class="quick-action primary"
-      data-action="new-input"
-    >
-
-      <i class="fa-solid fa-plus"></i>
-
-      <span>
-        Input Produksi
-      </span>
-
-    </button>
-
-
-    <button
-      class="quick-action whatsapp"
-      data-action="import-wa"
-    >
-
-      <i class="fa-brands fa-whatsapp"></i>
-
-      <span>
-        Import WhatsApp
-      </span>
-
-    </button>
-
-
-    <button
-      class="quick-action"
-      data-action="daily-report"
-    >
-
-      <i class="fa-solid fa-file-lines"></i>
-
-      <span>
-        Laporan Hari Ini
-      </span>
-
-    </button>
-
-
-    <button
-      class="quick-action"
-      data-action="backup"
-    >
-
-      <i class="fa-solid fa-download"></i>
-
-      <span>
-        Backup Data
-      </span>
-
-    </button>
-
-
-  </div>
-
-</div>
-```
-
-  </div>
-
-  <!-- RECENT DATA -->
-
-  <div class="card recent-card">
-
-```
-<div class="card-header">
-
-  <div>
-
-    <h3>
-      <i class="fa-solid fa-clock"></i>
-      Aktivitas Terbaru
-    </h3>
-
-    <p>
-      Data produksi terakhir
-    </p>
 
   </div>
 
 
-  <button
-    class="btn btn-light"
-    data-action="view-history"
-  >
 
-    Lihat Semua
+  <!-- RECENT JOBS -->
 
-    <i class="fa-solid fa-arrow-right"></i>
-
-  </button>
-
-</div>
+  <div class="section-card">
 
 
-<div class="table-responsive">
+    <div class="section-header">
 
-  <table>
+      <div>
 
-    <thead>
+        <h3>
+          Pekerjaan Terbaru
+        </h3>
 
-      <tr>
+        <p>
+          Data pekerjaan terakhir
+        </p>
 
-        <th>
-          Waktu
-        </th>
-
-        <th>
-          Karyawan
-        </th>
-
-        <th>
-          Customer
-        </th>
-
-        <th>
-          Item
-        </th>
-
-        <th>
-          Jumlah
-        </th>
-
-        <th class="commission-column">
-          Komisi
-        </th>
-
-      </tr>
-
-    </thead>
+      </div>
 
 
-    <tbody id="recentActivityBody">
+      <button
+        class="text-button"
+        data-page="transactions"
+        type="button"
+      >
+        Lihat Semua →
+      </button>
 
-      <tr>
 
-        <td
-          colspan="6"
-          class="empty-table"
+    </div>
+
+
+
+    <div
+      id="recentJobs"
+      class="recent-jobs"
+    >
+
+      <div class="empty-state">
+
+        <span>
+          📭
+        </span>
+
+        <p>
+          Belum ada pekerjaan hari ini
+        </p>
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+</section>
+
+
+
+<!-- =========================================
+     INPUT PEKERJAAN
+========================================= -->
+
+<section
+  id="page-input"
+  class="page"
+>
+
+
+  <div class="page-grid two-column">
+
+
+    <!-- INPUT CARD -->
+
+    <div class="section-card">
+
+
+      <div class="section-header">
+
+        <div>
+
+          <h3>
+            ➕ Input Pekerjaan
+          </h3>
+
+          <p>
+            Tambahkan pekerjaan secara manual
+          </p>
+
+        </div>
+
+      </div>
+
+
+
+      <form
+        id="jobForm"
+        autocomplete="off"
+      >
+
+
+        <!-- CUSTOMER -->
+
+        <div class="form-group">
+
+          <label for="customerName">
+
+            Nama Customer
+
+            <small>
+              (Referensi / opsional)
+            </small>
+
+          </label>
+
+          <input
+            id="customerName"
+            name="customerName"
+            type="text"
+            placeholder="Contoh: Desi"
+          >
+
+        </div>
+
+
+
+        <!-- EMPLOYEE -->
+
+        <div class="form-group">
+
+          <label for="employeeSelect">
+            Karyawan
+          </label>
+
+          <select
+            id="employeeSelect"
+            name="employeeId"
+            required
+          >
+
+            <option value="">
+              Pilih karyawan
+            </option>
+
+          </select>
+
+        </div>
+
+
+
+        <!-- ITEM -->
+
+        <div class="form-group">
+
+          <label for="itemSelect">
+            Item
+          </label>
+
+          <select
+            id="itemSelect"
+            name="itemId"
+            required
+          >
+
+            <option value="">
+              Pilih item
+            </option>
+
+          </select>
+
+        </div>
+
+
+
+        <!-- UNIT -->
+
+        <div
+          class="form-row"
         >
 
-          Belum ada aktivitas
 
-        </td>
+          <div class="form-group">
 
-      </tr>
+            <label for="unitType">
+              Jenis
+            </label>
 
-    </tbody>
+            <select
+              id="unitType"
+              name="unitType"
+            >
 
-  </table>
+              <option value="kg">
+                Kiloan (KG)
+              </option>
 
-</div>
-```
+              <option value="unit">
+                Satuan
+              </option>
+
+            </select>
+
+          </div>
+
+
+
+          <div class="form-group">
+
+            <label for="quantity">
+              Jumlah
+            </label>
+
+            <input
+              id="quantity"
+              name="quantity"
+              type="number"
+              min="0.01"
+              step="0.01"
+              placeholder="0"
+              required
+            >
+
+          </div>
+
+
+        </div>
+
+
+
+        <!-- TIER -->
+
+        <div class="form-group">
+
+          <label for="tierSelect">
+            Tier / Parameter
+          </label>
+
+          <select
+            id="tierSelect"
+            name="tierId"
+          >
+
+            <option value="">
+              Tanpa Parameter
+            </option>
+
+          </select>
+
+        </div>
+
+
+
+        <!-- NOTES -->
+
+        <div class="form-group">
+
+          <label for="jobNotes">
+            Catatan
+          </label>
+
+          <textarea
+            id="jobNotes"
+            name="notes"
+            rows="3"
+            placeholder="Catatan tambahan..."
+          ></textarea>
+
+        </div>
+
+
+
+        <!-- BUTTON -->
+
+        <button
+          class="primary-button full-width"
+          type="submit"
+        >
+
+          <span>
+            💾
+          </span>
+
+          Simpan Pekerjaan
+
+        </button>
+
+
+      </form>
+
+
+    </div>
+
+
+
+    <!-- PREVIEW -->
+
+    <div class="section-card preview-card">
+
+
+      <div class="section-header">
+
+        <div>
+
+          <h3>
+            👁 Preview
+          </h3>
+
+          <p>
+            Perkiraan pekerjaan
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="jobPreview"
+        class="job-preview"
+      >
+
+
+        <div class="preview-placeholder">
+
+          <span>
+            📦
+          </span>
+
+          <p>
+            Pilih item dan jumlah
+          </p>
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+
 
   </div>
 
-</div>
 
-<!-- =====================================================
-     INPUT PRODUKSI
-===================================================== -->
 
-<div
+  <!-- WHATSAPP INPUT -->
+
+  <div class="section-card whatsapp-card">
+
+
+    <div class="section-header">
+
+
+      <div>
+
+        <h3>
+          💬 Input dari WhatsApp
+        </h3>
+
+        <p>
+          Paste daftar pekerjaan dari chat WhatsApp
+        </p>
+
+      </div>
+
+
+      <button
+        id="parseWhatsAppBtn"
+        class="secondary-button"
+        type="button"
+      >
+        ⚡ Analisa Chat
+      </button>
+
+
+    </div>
+
+
+
+    <div class="form-group">
+
+      <label for="whatsappInput">
+
+        Format Contoh:
+
+        <small>
+          desi cks 5kg<br>
+          wanto cks 2,5kg<br>
+          yadi spt 2
+        </small>
+
+      </label>
+
+
+      <textarea
+        id="whatsappInput"
+        rows="8"
+        placeholder="Paste chat pekerjaan di sini..."
+      ></textarea>
+
+
+    </div>
+
+
+
+    <!-- PARSE RESULT -->
+
+    <div
+      id="whatsappParseResult"
+      class="parse-result hidden"
+    ></div>
+
+
+    <div
+      class="whatsapp-actions"
+    >
+
+      <button
+        id="saveParsedJobsBtn"
+        class="primary-button hidden"
+        type="button"
+      >
+        💾 Simpan Semua
+      </button>
+
+
+      <button
+        id="clearWhatsAppBtn"
+        class="danger-outline-button"
+        type="button"
+      >
+        🗑 Bersihkan
+      </button>
+
+
+    </div>
+
+
+  </div>
+
+
+</section>
+
+
+
+<!-- =========================================
+     TRANSACTIONS
+========================================= -->
+
+<section
+  id="page-transactions"
   class="page"
-  id="inputPage"
->
-
-  <div class="page-toolbar">
-
-```
-<div>
-
-  <h2>
-    Input Produksi
-  </h2>
-
-  <p>
-    Tambahkan data pekerjaan karyawan
-  </p>
-
-</div>
-
-
-<button
-  id="addProductionRow"
-  class="btn btn-primary"
->
-
-  <i class="fa-solid fa-plus"></i>
-
-  Tambah Baris
-
-</button>
-```
-
-  </div>
-
-  <div class="card input-card">
-
-```
-<!-- INPUT HEADER -->
-
-<div class="input-header-grid">
-
-
-  <div class="form-group">
-
-    <label>
-
-      <i class="fa-solid fa-user"></i>
-
-      Karyawan
-
-    </label>
-
-
-    <select
-      id="productionEmployee"
-      class="form-control"
-    >
-
-      <option value="">
-        Pilih Karyawan
-      </option>
-
-    </select>
-
-  </div>
-
-
-  <div class="form-group">
-
-    <label>
-
-      <i class="fa-solid fa-calendar"></i>
-
-      Tanggal
-
-    </label>
-
-
-    <input
-      type="date"
-      id="productionDate"
-      class="form-control"
-    >
-
-  </div>
-
-
-  <div class="form-group">
-
-    <label>
-
-      <i class="fa-solid fa-user-tag"></i>
-
-      Referensi Customer
-
-    </label>
-
-
-    <input
-      type="text"
-      id="productionCustomer"
-      class="form-control"
-      placeholder="Opsional / referensi WA"
-    >
-
-  </div>
-
-</div>
-
-
-<!-- PRODUCTION ROWS -->
-
-<div
-  id="productionRows"
-  class="production-rows"
 >
 
 
-  <!-- ROW GENERATED JAVASCRIPT -->
+  <div class="section-card">
 
 
-  <div
-    class="production-row"
-    data-row="1"
-  >
+    <div class="section-header">
 
 
-    <div class="row-number">
-      1
-    </div>
+      <div>
+
+        <h3>
+          📋 Data Pekerjaan
+        </h3>
+
+        <p>
+          Semua pekerjaan yang tersimpan
+        </p>
+
+      </div>
 
 
-    <div class="form-group item-group">
-
-      <label>
-        Item
-      </label>
-
-
-      <select
-        class="form-control production-item"
+      <button
+        id="addJobBtn"
+        class="primary-button"
+        type="button"
       >
+        ➕ Tambah
+      </button>
 
-        <option value="">
-          Pilih Item
-        </option>
-
-      </select>
 
     </div>
 
 
-    <div class="form-group unit-group">
 
-      <label>
-        Satuan
-      </label>
+    <!-- FILTER -->
 
-
-      <select
-        class="form-control production-unit"
-      >
-
-        <option value="kg">
-          KG
-        </option>
-
-        <option value="pcs">
-          Satuan
-        </option>
-
-      </select>
-
-    </div>
-
-
-    <div class="form-group quantity-group">
-
-      <label>
-        Jumlah
-      </label>
+    <div class="filter-bar">
 
 
       <input
-        type="text"
-        inputmode="decimal"
-        class="form-control production-quantity"
-        placeholder="0"
+        id="transactionSearch"
+        type="search"
+        placeholder="🔍 Cari customer atau item..."
       >
+
+
+      <input
+        id="transactionDate"
+        type="date"
+      >
+
+
+      <select
+        id="transactionEmployeeFilter"
+      >
+
+        <option value="">
+          Semua Karyawan
+        </option>
+
+      </select>
+
+
+      <button
+        id="resetTransactionFilter"
+        class="secondary-button"
+        type="button"
+      >
+        Reset
+      </button>
+
 
     </div>
 
 
-    <div class="form-group commission-preview">
 
-      <label>
-        Komisi
-      </label>
+    <!-- TABLE -->
+
+    <div class="table-responsive">
 
 
-      <div class="commission-value">
+      <table>
 
-        Rp 0
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Tanggal
+            </th>
+
+            <th>
+              Customer
+            </th>
+
+            <th>
+              Item
+            </th>
+
+            <th>
+              Jumlah
+            </th>
+
+            <th>
+              Karyawan
+            </th>
+
+            <th class="commission-column">
+              Komisi
+            </th>
+
+            <th>
+              Aksi
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody
+          id="transactionTableBody"
+        >
+
+        </tbody>
+
+
+      </table>
+
+
+    </div>
+
+
+
+    <!-- PAGINATION -->
+
+    <div
+      id="transactionPagination"
+      class="pagination"
+    ></div>
+
+
+  </div>
+
+
+</section>
+
+
+
+<!-- =========================================
+     REPORTS
+========================================= -->
+
+<section
+  id="page-reports"
+  class="page"
+>
+
+
+  <!-- REPORT FILTER -->
+
+  <div class="section-card">
+
+
+    <div class="section-header">
+
+      <div>
+
+        <h3>
+          📊 Laporan
+        </h3>
+
+        <p>
+          Rekap pekerjaan dan komisi
+        </p>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="report-controls">
+
+
+      <div class="form-group">
+
+        <label for="reportType">
+          Jenis Laporan
+        </label>
+
+        <select id="reportType">
+
+          <option value="daily">
+            Harian
+          </option>
+
+          <option value="monthly">
+            Bulanan
+          </option>
+
+        </select>
+
+      </div>
+
+
+
+      <div
+        id="dailyReportControl"
+        class="form-group"
+      >
+
+        <label for="reportDate">
+          Tanggal
+        </label>
+
+        <input
+          id="reportDate"
+          type="date"
+        >
+
+      </div>
+
+
+
+      <div
+        id="monthlyReportControl"
+        class="form-group hidden"
+      >
+
+        <label for="reportMonth">
+          Bulan
+        </label>
+
+        <input
+          id="reportMonth"
+          type="month"
+        >
+
+      </div>
+
+
+
+      <div class="form-group">
+
+        <label for="reportEmployee">
+          Karyawan
+        </label>
+
+        <select id="reportEmployee">
+
+          <option value="">
+            Semua Karyawan
+          </option>
+
+        </select>
+
+      </div>
+
+
+
+      <button
+        id="generateReportBtn"
+        class="primary-button"
+        type="button"
+      >
+        🔄 Buat Laporan
+      </button>
+
+
+    </div>
+
+
+  </div>
+
+
+
+  <!-- REPORT SUMMARY -->
+
+  <div
+    id="reportSummary"
+    class="stats-grid report-summary"
+  >
+
+
+    <article class="stat-card">
+
+      <div class="stat-icon blue">
+        📋
+      </div>
+
+      <div>
+
+        <span>
+          Total Pekerjaan
+        </span>
+
+        <strong id="reportTotalJobs">
+          0
+        </strong>
+
+      </div>
+
+    </article>
+
+
+
+    <article class="stat-card">
+
+      <div class="stat-icon green">
+        ⚖️
+      </div>
+
+      <div>
+
+        <span>
+          Total KG
+        </span>
+
+        <strong id="reportTotalKg">
+          0 KG
+        </strong>
+
+      </div>
+
+    </article>
+
+
+
+    <article class="stat-card">
+
+      <div class="stat-icon orange">
+        📦
+      </div>
+
+      <div>
+
+        <span>
+          Total Satuan
+        </span>
+
+        <strong id="reportTotalUnit">
+          0
+        </strong>
+
+      </div>
+
+    </article>
+
+
+
+    <article class="stat-card commission-stat">
+
+      <div class="stat-icon purple">
+        💰
+      </div>
+
+      <div>
+
+        <span>
+          Total Komisi
+        </span>
+
+        <strong id="reportTotalCommission">
+          Rp0
+        </strong>
+
+      </div>
+
+    </article>
+
+
+  </div>
+
+
+
+  <!-- REPORT CONTENT -->
+
+  <div
+    id="reportContent"
+    class="section-card report-content"
+  >
+
+
+    <div class="empty-state">
+
+      <span>
+        📊
+      </span>
+
+      <h3>
+        Buat Laporan
+      </h3>
+
+      <p>
+        Pilih tanggal atau bulan kemudian tekan Buat Laporan
+      </p>
+
+    </div>
+
+
+  </div>
+
+
+
+  <!-- REPORT ACTION -->
+
+  <div class="report-actions">
+
+
+    <button
+      id="printReportBtn"
+      class="secondary-button"
+      type="button"
+    >
+      🖨️ Print
+    </button>
+
+
+
+    <button
+      id="thermalReportBtn"
+      class="secondary-button"
+      type="button"
+    >
+      🧾 Thermal 58mm
+    </button>
+
+
+
+    <button
+      id="pdfReportBtn"
+      class="secondary-button"
+      type="button"
+    >
+      📄 Simpan PDF
+    </button>
+
+
+
+    <button
+      id="imageReportBtn"
+      class="secondary-button"
+      type="button"
+    >
+      🖼️ Simpan JPG
+    </button>
+
+
+
+    <button
+      id="shareWhatsAppBtn"
+      class="whatsapp-button"
+      type="button"
+    >
+      💬 Share WhatsApp
+    </button>
+
+
+  </div>
+
+
+</section>
+
+
+
+<!-- =========================================
+     EMPLOYEES
+========================================= -->
+
+<section
+  id="page-employees"
+  class="page"
+>
+
+
+  <div class="section-card">
+
+
+    <div class="section-header">
+
+      <div>
+
+        <h3>
+          👥 Data Karyawan
+        </h3>
+
+        <p>
+          Kelola karyawan dan komisi masing-masing
+        </p>
+
+      </div>
+
+
+      <button
+        id="addEmployeeBtn"
+        class="primary-button"
+        type="button"
+      >
+        ➕ Tambah Karyawan
+      </button>
+
+
+    </div>
+
+
+
+    <div
+      id="employeeList"
+      class="employee-list"
+    ></div>
+
+
+  </div>
+
+
+</section>
+
+
+
+<!-- =========================================
+     ITEMS
+========================================= -->
+
+<section
+  id="page-items"
+  class="page"
+>
+
+
+  <div class="section-card">
+
+
+    <div class="section-header">
+
+      <div>
+
+        <h3>
+          📦 Master Item
+        </h3>
+
+        <p>
+          Item, kode dan jenis satuan
+        </p>
+
+      </div>
+
+
+      <button
+        id="addItemBtn"
+        class="primary-button"
+        type="button"
+      >
+        ➕ Tambah Item
+      </button>
+
+
+    </div>
+
+
+
+    <div
+      id="itemList"
+      class="item-list"
+    ></div>
+
+
+  </div>
+
+
+</section>
+
+
+
+<!-- =========================================
+     TIERS
+========================================= -->
+
+<section
+  id="page-tiers"
+  class="page"
+>
+
+
+  <div class="section-card">
+
+
+    <div class="section-header">
+
+      <div>
+
+        <h3>
+          🏷️ Tier & Parameter
+        </h3>
+
+        <p>
+          Tambahkan parameter sesuai kebutuhan
+        </p>
+
+      </div>
+
+
+      <button
+        id="addTierBtn"
+        class="primary-button"
+        type="button"
+      >
+        ➕ Tambah Parameter
+      </button>
+
+
+    </div>
+
+
+
+    <div
+      id="tierList"
+      class="tier-list"
+    ></div>
+
+
+  </div>
+
+
+</section>
+
+
+
+<!-- =========================================
+     BACKUP
+========================================= -->
+
+<section
+  id="page-backup"
+  class="page"
+>
+
+
+  <div class="page-grid two-column">
+
+
+    <!-- BACKUP -->
+
+    <div class="section-card">
+
+
+      <div class="section-header">
+
+        <div>
+
+          <h3>
+            💾 Backup Data
+          </h3>
+
+          <p>
+            Simpan semua data aplikasi
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="backup-options">
+
+
+        <button
+          id="backupJsonBtn"
+          class="backup-option"
+          type="button"
+        >
+
+          <span>
+            📦
+          </span>
+
+          <strong>
+            Backup JSON
+          </strong>
+
+          <small>
+            Download semua data
+          </small>
+
+        </button>
+
+
+
+        <button
+          id="backupDataBtn"
+          class="backup-option"
+          type="button"
+        >
+
+          <span>
+            💾
+          </span>
+
+          <strong>
+            Backup Lengkap
+          </strong>
+
+          <small>
+            Data + Pengaturan
+          </small>
+
+        </button>
+
+
+      </div>
+
+
+    </div>
+
+
+
+    <!-- RESTORE -->
+
+    <div class="section-card">
+
+
+      <div class="section-header">
+
+        <div>
+
+          <h3>
+            ♻️ Restore Data
+          </h3>
+
+          <p>
+            Pulihkan dari file backup
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="restore-area">
+
+
+        <input
+          id="restoreFileInput"
+          type="file"
+          accept=".json,application/json"
+          hidden
+        >
+
+
+        <button
+          id="restoreFileBtn"
+          class="primary-button"
+          type="button"
+        >
+          📂 Pilih File Backup
+        </button>
+
+
+        <p class="restore-warning">
+
+          ⚠️ Restore dapat mengganti data saat ini.
+          Sistem akan membuat backup pengaman terlebih dahulu.
+
+        </p>
+
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+
+  <!-- DATABASE INFO -->
+
+  <div class="section-card">
+
+
+    <div class="section-header">
+
+      <div>
+
+        <h3>
+          🗄️ Status Database
+        </h3>
+
+        <p>
+          Informasi penyimpanan lokal
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div
+      id="databaseInfo"
+      class="database-info"
+    >
+
+      Memuat informasi...
+
+    </div>
+
+
+  </div>
+
+
+</section>
+
+
+
+<!-- =========================================
+     SETTINGS
+========================================= -->
+
+<section
+  id="page-settings"
+  class="page"
+>
+
+
+  <div class="page-grid two-column">
+
+
+    <!-- APP SETTINGS -->
+
+    <div class="section-card">
+
+
+      <div class="section-header">
+
+        <div>
+
+          <h3>
+            ⚙️ Pengaturan Aplikasi
+          </h3>
+
+          <p>
+            Ubah identitas aplikasi
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <form
+        id="settingsForm"
+      >
+
+
+        <div class="form-group">
+
+          <label for="settingAppName">
+            Nama Aplikasi
+          </label>
+
+          <input
+            id="settingAppName"
+            type="text"
+            maxlength="50"
+            placeholder="Laundry Manager"
+          >
+
+        </div>
+
+
+
+        <div class="form-group">
+
+          <label for="settingBusinessName">
+            Nama Usaha
+          </label>
+
+          <input
+            id="settingBusinessName"
+            type="text"
+            maxlength="100"
+            placeholder="Nama usaha laundry"
+          >
+
+        </div>
+
+
+
+        <div class="form-group">
+
+          <label for="settingFooterText">
+            Footer Nota / Laporan
+          </label>
+
+          <input
+            id="settingFooterText"
+            type="text"
+            maxlength="150"
+            placeholder="Terima kasih"
+          >
+
+        </div>
+
+
+
+        <button
+          class="primary-button"
+          type="submit"
+        >
+          💾 Simpan Pengaturan
+        </button>
+
+
+      </form>
+
+
+    </div>
+
+
+
+    <!-- DISPLAY SETTINGS -->
+
+    <div class="section-card">
+
+
+      <div class="section-header">
+
+        <div>
+
+          <h3>
+            🎨 Tampilan
+          </h3>
+
+          <p>
+            Atur tampilan aplikasi
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="settings-list">
+
+
+        <div class="setting-row">
+
+          <div>
+
+            <strong>
+              Mode Gelap
+            </strong>
+
+            <small>
+              Gunakan tema gelap
+            </small>
+
+          </div>
+
+
+          <label class="switch">
+
+            <input
+              id="darkModeSwitch"
+              type="checkbox"
+            >
+
+            <span class="slider"></span>
+
+          </label>
+
+
+        </div>
+
+
+
+        <div class="setting-row">
+
+          <div>
+
+            <strong>
+              Tampilkan Komisi
+            </strong>
+
+            <small>
+              Laporan dan cetak
+            </small>
+
+          </div>
+
+
+          <label class="switch">
+
+            <input
+              id="settingCommissionSwitch"
+              type="checkbox"
+              checked
+            >
+
+            <span class="slider"></span>
+
+          </label>
+
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+
+  <!-- DANGER ZONE -->
+
+  <div
+    class="section-card danger-zone"
+  >
+
+
+    <div class="section-header">
+
+      <div>
+
+        <h3>
+          ⚠️ Zona Berbahaya
+        </h3>
+
+        <p>
+          Tindakan berikut tidak dapat dibatalkan
+        </p>
 
       </div>
 
@@ -1042,1580 +2285,164 @@ content="Aplikasi manajemen laundry dan komisi karyawan offline berbasis PWA"
 
 
     <button
-      class="delete-row"
+      id="clearAllDataBtn"
+      class="danger-button"
       type="button"
-      aria-label="Hapus baris"
     >
-
-      <i class="fa-solid fa-trash"></i>
-
+      🗑️ Hapus Semua Data
     </button>
 
 
   </div>
 
-
-</div>
-
-
-<!-- TOTAL -->
-
-<div class="production-total">
-
-
-  <div class="total-info">
-
-    <span>
-      Total Produksi
-    </span>
-
-    <strong id="productionTotalQuantity">
-      0
-    </strong>
-
-  </div>
-
-
-  <div
-    class="total-info commission-total"
-  >
-
-    <span>
-      Estimasi Komisi
-    </span>
-
-    <strong id="productionTotalCommission">
-      Rp 0
-    </strong>
-
-  </div>
-
-
-</div>
-
-
-<!-- SAVE -->
-
-<div class="form-actions">
-
-
-  <button
-    id="clearProduction"
-    class="btn btn-light"
-  >
-
-    <i class="fa-solid fa-rotate-left"></i>
-
-    Reset
-
-  </button>
-
-
-  <button
-    id="saveProduction"
-    class="btn btn-primary btn-large"
-  >
-
-    <i class="fa-solid fa-floppy-disk"></i>
-
-    Simpan Produksi
-
-  </button>
-
-
-</div>
-```
-
-  </div>
-
-</div>
-
-<!-- =====================================================
-     IMPORT WHATSAPP
-===================================================== -->
-
-<div
-  class="page"
-  id="waPage"
->
-
-  <div class="page-toolbar">
-
-```
-<div>
-
-  <h2>
-    Import WhatsApp
-  </h2>
-
-  <p>
-    Paste laporan pekerjaan dari WhatsApp
-  </p>
-
-</div>
-```
-
-  </div>
-
-  <div class="wa-grid">
-
-```
-<!-- INPUT -->
-
-<div class="card">
-
-
-  <div class="card-header">
-
-    <div>
-
-      <h3>
-
-        <i class="fa-brands fa-whatsapp"></i>
-
-        Paste Chat
-
-      </h3>
-
-
-      <p>
-        Sistem membaca customer, kode item dan jumlah
-      </p>
-
-    </div>
-
-  </div>
-
-
-  <div class="form-group">
-
-    <label>
-
-      Karyawan yang Mengirim
-
-    </label>
-
-
-    <select
-      id="waEmployee"
-      class="form-control"
-    >
-
-      <option value="">
-        Pilih Karyawan
-      </option>
-
-    </select>
-
-  </div>
-
-
-  <div class="form-group">
-
-    <label>
-
-      Tanggal Produksi
-
-    </label>
-
-
-    <input
-      type="date"
-      id="waDate"
-      class="form-control"
-    >
-
-  </div>
-
-
-  <div class="form-group">
-
-    <label>
-
-      Isi Chat WhatsApp
-
-    </label>
-
-
-    <textarea
-      id="waInput"
-      class="form-control wa-textarea"
-      placeholder="Contoh:
-```
-
-Desi CKS 5kg
-Wanto CKS 2,5
-Yadi Sepatu 2
-
-Customer1 CKS 5kg
-Customer2 SPT 2"
-></textarea>
-
-```
-  </div>
-
-
-  <div class="form-actions">
-
-    <button
-      id="clearWaInput"
-      class="btn btn-light"
-    >
-
-      Bersihkan
-
-    </button>
-
-
-    <button
-      id="parseWaInput"
-      class="btn btn-whatsapp"
-    >
-
-      <i class="fa-solid fa-wand-magic-sparkles"></i>
-
-      Analisa Chat
-
-    </button>
-
-  </div>
-
-
-</div>
-
-
-<!-- RESULT -->
-
-<div class="card">
-
-
-  <div class="card-header">
-
-    <div>
-
-      <h3>
-
-        <i class="fa-solid fa-list-check"></i>
-
-        Hasil Analisa
-
-      </h3>
-
-
-      <p>
-        Periksa sebelum disimpan
-      </p>
-
-    </div>
-
-  </div>
-
-
-  <div
-    id="waParseResult"
-    class="wa-result"
-  >
-
-    <div class="empty-state">
-
-      <i class="fa-solid fa-message"></i>
-
-      <h4>
-        Belum ada data
-      </h4>
-
-      <p>
-        Paste chat WhatsApp lalu klik Analisa Chat
-      </p>
-
-    </div>
-
-  </div>
-
-
-  <div
-    id="waResultActions"
-    class="form-actions hidden"
-  >
-
-    <button
-      id="saveWaResult"
-      class="btn btn-primary"
-    >
-
-      <i class="fa-solid fa-floppy-disk"></i>
-
-      Simpan Semua
-
-    </button>
-
-  </div>
-
-
-</div>
-```
-
-  </div>
-
-</div>
-
-<!-- =====================================================
-     HISTORY
-===================================================== -->
-
-<div
-  class="page"
-  id="historyPage"
->
-
-  <div class="page-toolbar">
-
-```
-<div>
-
-  <h2>
-    Riwayat Produksi
-  </h2>
-
-  <p>
-    Semua data pekerjaan yang tersimpan
-  </p>
-
-</div>
-
-
-<button
-  id="deleteSelectedHistory"
-  class="btn btn-danger hidden"
->
-
-  <i class="fa-solid fa-trash"></i>
-
-  Hapus Terpilih
-
-</button>
-```
-
-  </div>
-
-  <!-- FILTER -->
-
-  <div class="card filter-card">
-
-```
-<div class="filter-grid">
-
-
-  <div class="form-group">
-
-    <label>
-      Dari Tanggal
-    </label>
-
-
-    <input
-      type="date"
-      id="historyStartDate"
-      class="form-control"
-    >
-
-  </div>
-
-
-  <div class="form-group">
-
-    <label>
-      Sampai Tanggal
-    </label>
-
-
-    <input
-      type="date"
-      id="historyEndDate"
-      class="form-control"
-    >
-
-  </div>
-
-
-  <div class="form-group">
-
-    <label>
-      Karyawan
-    </label>
-
-
-    <select
-      id="historyEmployee"
-      class="form-control"
-    >
-
-      <option value="">
-        Semua Karyawan
-      </option>
-
-    </select>
-
-  </div>
-
-
-  <div class="form-group">
-
-    <label>
-      Cari
-    </label>
-
-
-    <input
-      type="text"
-      id="historySearch"
-      class="form-control"
-      placeholder="Customer atau item"
-    >
-
-  </div>
-
-
-  <button
-    id="filterHistory"
-    class="btn btn-primary"
-  >
-
-    <i class="fa-solid fa-filter"></i>
-
-    Filter
-
-  </button>
-
-
-</div>
-```
-
-  </div>
-
-  <!-- TABLE -->
-
-  <div class="card">
-
-```
-<div class="table-responsive">
-
-  <table>
-
-    <thead>
-
-      <tr>
-
-        <th>
-
-          <input
-            type="checkbox"
-            id="selectAllHistory"
-          >
-
-        </th>
-
-        <th>
-          Tanggal
-        </th>
-
-        <th>
-          Karyawan
-        </th>
-
-        <th>
-          Customer
-        </th>
-
-        <th>
-          Item
-        </th>
-
-        <th>
-          Satuan
-        </th>
-
-        <th>
-          Jumlah
-        </th>
-
-        <th class="commission-column">
-          Komisi
-        </th>
-
-        <th>
-          Aksi
-        </th>
-
-      </tr>
-
-    </thead>
-
-
-    <tbody id="historyTableBody">
-
-      <tr>
-
-        <td
-          colspan="9"
-          class="empty-table"
-        >
-
-          Belum ada data
-
-        </td>
-
-      </tr>
-
-    </tbody>
-
-  </table>
-
-</div>
-
-
-<div
-  id="historyPagination"
-  class="pagination"
-></div>
-```
-
-  </div>
-
-</div>
-
-<!-- =====================================================
-     EMPLOYEES
-===================================================== -->
-
-<div
-  class="page"
-  id="employeesPage"
->
-
-  <div class="page-toolbar">
-
-```
-<div>
-
-  <h2>
-    Data Karyawan
-  </h2>
-
-  <p>
-    Kelola karyawan dan pengaturan komisi
-  </p>
-
-</div>
-
-
-<button
-  id="addEmployeeButton"
-  class="btn btn-primary"
->
-
-  <i class="fa-solid fa-user-plus"></i>
-
-  Tambah Karyawan
-
-</button>
-```
-
-  </div>
-
-  <div
-    id="employeeGrid"
-    class="employee-grid"
-  >
-
-```
-<!-- GENERATED JS -->
-```
-
-  </div>
-
-</div>
-
-<!-- =====================================================
-     ITEMS
-===================================================== -->
-
-<div
-  class="page"
-  id="itemsPage"
->
-
-  <div class="page-toolbar">
-
-```
-<div>
-
-  <h2>
-    Item & Harga Komisi
-  </h2>
-
-  <p>
-    Kelola item, kode, satuan dan komisi
-  </p>
-
-</div>
-
-
-<button
-  id="addItemButton"
-  class="btn btn-primary"
->
-
-  <i class="fa-solid fa-plus"></i>
-
-  Tambah Item
-
-</button>
-```
-
-  </div>
-
-  <!-- ITEM FILTER -->
-
-  <div class="card filter-card">
-
-```
-<div class="filter-grid">
-
-
-  <div class="form-group">
-
-    <label>
-      Kategori
-    </label>
-
-
-    <select
-      id="itemCategoryFilter"
-      class="form-control"
-    >
-
-      <option value="">
-        Semua Kategori
-      </option>
-
-    </select>
-
-  </div>
-
-
-  <div class="form-group">
-
-    <label>
-      Cari Item
-    </label>
-
-
-    <input
-      type="text"
-      id="itemSearch"
-      class="form-control"
-      placeholder="Nama atau kode item"
-    >
-
-  </div>
-
-
-</div>
-```
-
-  </div>
-
-  <!-- ITEMS -->
-
-  <div
-    id="itemGrid"
-    class="item-grid"
-  >
-
-```
-<!-- GENERATED JS -->
-```
-
-  </div>
-
-</div>
-
-<!-- =====================================================
-     CATEGORIES
-===================================================== -->
-
-<div
-  class="page"
-  id="categoriesPage"
->
-
-  <div class="page-toolbar">
-
-```
-<div>
-
-  <h2>
-    Kategori
-  </h2>
-
-  <p>
-    Tambahkan kategori sesuai kebutuhan
-  </p>
-
-</div>
-
-
-<button
-  id="addCategoryButton"
-  class="btn btn-primary"
->
-
-  <i class="fa-solid fa-plus"></i>
-
-  Tambah Kategori
-
-</button>
-```
-
-  </div>
-
-  <div
-    id="categoryList"
-    class="category-list"
-  >
-
-```
-<!-- GENERATED JS -->
-```
-
-  </div>
-
-</div>
-
-<!-- =====================================================
-     TIERS / PARAMETERS
-===================================================== -->
-
-<div
-  class="page"
-  id="tiersPage"
->
-
-  <div class="page-toolbar">
-
-```
-<div>
-
-  <h2>
-    Parameter / Tier
-  </h2>
-
-  <p>
-    Tambahkan parameter tambahan tanpa batas
-  </p>
-
-</div>
-
-
-<button
-  id="addTierButton"
-  class="btn btn-primary"
->
-
-  <i class="fa-solid fa-plus"></i>
-
-  Tambah Parameter
-
-</button>
-```
-
-  </div>
-
-  <div class="card">
-
-```
-<div class="info-box">
-
-  <i class="fa-solid fa-circle-info"></i>
-
-  <div>
-
-    <strong>
-      Parameter Fleksibel
-    </strong>
-
-    <p>
-      Gunakan fitur ini untuk menambahkan parameter
-      tambahan seperti Tier, Level, Bonus, Shift,
-      Target atau kebutuhan lainnya.
-    </p>
-
-  </div>
-
-</div>
-
-
-<div
-  id="tierList"
-  class="tier-list"
->
-
-  <!-- GENERATED JS -->
-
-</div>
-```
-
-  </div>
-
-</div>
-
-<!-- =====================================================
-     DAILY REPORT
-===================================================== -->
-
-<div
-  class="page"
-  id="dailyReportPage"
->
-
-  <div class="page-toolbar">
-
-```
-<div>
-
-  <h2>
-    Laporan Harian
-  </h2>
-
-  <p>
-    Ringkasan produksi dan komisi
-  </p>
-
-</div>
-```
-
-  </div>
-
-  <!-- REPORT FILTER -->
-
-  <div class="card report-filter">
-
-```
-<div class="report-filter-grid">
-
-
-  <div class="form-group">
-
-    <label>
-      Pilih Tanggal
-    </label>
-
-
-    <input
-      type="date"
-      id="dailyReportDate"
-      class="form-control"
-    >
-
-  </div>
-
-
-  <button
-    id="generateDailyReport"
-    class="btn btn-primary"
-  >
-
-    <i class="fa-solid fa-chart-pie"></i>
-
-    Buat Laporan
-
-  </button>
-
-
-  <button
-    id="printDailyReport"
-    class="btn btn-light"
-  >
-
-    <i class="fa-solid fa-print"></i>
-
-    Thermal 58mm
-
-  </button>
-
-
-  <button
-    id="exportDailyJpg"
-    class="btn btn-light"
-  >
-
-    <i class="fa-solid fa-image"></i>
-
-    JPG
-
-  </button>
-
-
-  <button
-    id="exportDailyPdf"
-    class="btn btn-light"
-  >
-
-    <i class="fa-solid fa-file-pdf"></i>
-
-    PDF
-
-  </button>
-
-
-  <button
-    id="shareDailyWhatsapp"
-    class="btn btn-whatsapp"
-  >
-
-    <i class="fa-brands fa-whatsapp"></i>
-
-    WhatsApp
-
-  </button>
-
-
-</div>
-```
-
-  </div>
-
-  <!-- REPORT -->
-
-  <div
-    id="dailyReportContent"
-    class="report-content"
-  >
-
-```
-<div class="empty-state">
-
-  <i class="fa-solid fa-file-lines"></i>
-
-  <h4>
-    Belum ada laporan
-  </h4>
-
-  <p>
-    Pilih tanggal lalu buat laporan
-  </p>
-
-</div>
-```
-
-  </div>
-
-</div>
-
-<!-- =====================================================
-     MONTHLY REPORT
-===================================================== -->
-
-<div
-  class="page"
-  id="monthlyReportPage"
->
-
-  <div class="page-toolbar">
-
-```
-<div>
-
-  <h2>
-    Laporan Bulanan
-  </h2>
-
-  <p>
-    Rekap produksi bulanan
-  </p>
-
-</div>
-```
-
-  </div>
-
-  <div class="card report-filter">
-
-```
-<div class="report-filter-grid">
-
-
-  <div class="form-group">
-
-    <label>
-      Bulan
-    </label>
-
-
-    <input
-      type="month"
-      id="monthlyReportMonth"
-      class="form-control"
-    >
-
-  </div>
-
-
-  <button
-    id="generateMonthlyReport"
-    class="btn btn-primary"
-  >
-
-    <i class="fa-solid fa-chart-column"></i>
-
-    Buat Laporan
-
-  </button>
-
-
-  <button
-    id="exportMonthlyPdf"
-    class="btn btn-light"
-  >
-
-    <i class="fa-solid fa-file-pdf"></i>
-
-    Export PDF
-
-  </button>
-
-
-</div>
-```
-
-  </div>
-
-  <div
-    id="monthlyReportContent"
-    class="report-content"
-  >
-
-```
-<div class="empty-state">
-
-  <i class="fa-solid fa-calendar"></i>
-
-  <h4>
-    Belum ada laporan
-  </h4>
-
-  <p>
-    Pilih bulan untuk melihat laporan
-  </p>
-
-</div>
-```
-
-  </div>
-
-</div>
-
-<!-- =====================================================
-     BACKUP
-===================================================== -->
-
-<div
-  class="page"
-  id="backupPage"
->
-
-  <div class="page-toolbar">
-
-```
-<div>
-
-  <h2>
-    Backup & Restore
-  </h2>
-
-  <p>
-    Lindungi dan pulihkan data aplikasi
-  </p>
-
-</div>
-```
-
-  </div>
-
-  <div class="backup-grid">
-
-```
-<!-- EXPORT -->
-
-<div class="card backup-card">
-
-  <div class="backup-icon blue">
-
-    <i class="fa-solid fa-download"></i>
-
-  </div>
-
-
-  <h3>
-    Backup Data
-  </h3>
-
-
-  <p>
-    Download seluruh data aplikasi
-    dalam format JSON.
-  </p>
-
-
-  <button
-    id="exportBackup"
-    class="btn btn-primary"
-  >
-
-    <i class="fa-solid fa-file-arrow-down"></i>
-
-    Download Backup
-
-  </button>
-
-</div>
-
-
-<!-- RESTORE -->
-
-<div class="card backup-card">
-
-  <div class="backup-icon green">
-
-    <i class="fa-solid fa-upload"></i>
-
-  </div>
-
-
-  <h3>
-    Restore Data
-  </h3>
-
-
-  <p>
-    Pulihkan data dari file backup JSON.
-  </p>
-
-
-  <input
-    type="file"
-    id="restoreBackupFile"
-    accept=".json"
-    hidden
-  >
-
-
-  <button
-    id="restoreBackupButton"
-    class="btn btn-light"
-  >
-
-    <i class="fa-solid fa-file-arrow-up"></i>
-
-    Pilih File Backup
-
-  </button>
-
-</div>
-
-
-<!-- GOOGLE SHEET -->
-
-<div class="card backup-card">
-
-  <div class="backup-icon orange">
-
-    <i class="fa-solid fa-table"></i>
-
-  </div>
-
-
-  <h3>
-    Google Sheets
-  </h3>
-
-
-  <p>
-    Pengaturan sinkronisasi Google Sheets
-    ketika koneksi tersedia.
-  </p>
-
-
-  <button
-    id="googleSheetSettings"
-    class="btn btn-light"
-  >
-
-    <i class="fa-solid fa-gear"></i>
-
-    Pengaturan Sync
-
-  </button>
-
-</div>
-```
-
-  </div>
-
-  <!-- BACKUP INFO -->
-
-  <div class="card">
-
-```
-<div class="card-header">
-
-  <div>
-
-    <h3>
-      <i class="fa-solid fa-shield-halved"></i>
-      Informasi Data
-    </h3>
-
-  </div>
-
-</div>
-
-
-<div
-  id="backupInfo"
-  class="backup-info"
->
-
-  <!-- GENERATED JS -->
-
-</div>
-```
-
-  </div>
-
-</div>
-
-<!-- =====================================================
-     SETTINGS
-===================================================== -->
-
-<div
-  class="page"
-  id="settingsPage"
->
-
-  <div class="page-toolbar">
-
-```
-<div>
-
-  <h2>
-    Pengaturan
-  </h2>
-
-  <p>
-    Konfigurasi aplikasi
-  </p>
-
-</div>
-```
-
-  </div>
-
-  <!-- APP SETTINGS -->
-
-  <div class="card settings-card">
-
-```
-<div class="settings-section-title">
-
-  <i class="fa-solid fa-mobile-screen-button"></i>
-
-  <div>
-
-    <h3>
-      Aplikasi
-    </h3>
-
-    <p>
-      Pengaturan nama dan tampilan
-    </p>
-
-  </div>
-
-</div>
-
-
-<div class="settings-form">
-
-
-  <div class="form-group">
-
-    <label>
-      Nama Aplikasi
-    </label>
-
-
-    <input
-      type="text"
-      id="settingAppName"
-      class="form-control"
-      placeholder="Contoh: Resiq Laundry"
-    >
-
-  </div>
-
-
-  <div class="form-group">
-
-    <label>
-      Nama Pemilik / Usaha
-    </label>
-
-
-    <input
-      type="text"
-      id="settingBusinessName"
-      class="form-control"
-      placeholder="Opsional"
-    >
-
-  </div>
-
-
-  <button
-    id="saveAppSettings"
-    class="btn btn-primary"
-  >
-
-    <i class="fa-solid fa-floppy-disk"></i>
-
-    Simpan Pengaturan
-
-  </button>
-
-
-</div>
-```
-
-  </div>
-
-  <!-- COMMISSION SETTINGS -->
-
-  <div class="card settings-card">
-
-```
-<div class="settings-section-title">
-
-  <i class="fa-solid fa-money-bill-wave"></i>
-
-  <div>
-
-    <h3>
-      Tampilan Komisi
-    </h3>
-
-    <p>
-      Kontrol nominal komisi pada laporan
-    </p>
-
-  </div>
-
-</div>
-
-
-<div class="settings-option">
-
-  <div>
-
-    <strong>
-      Tampilkan Nominal Komisi
-    </strong>
-
-    <p>
-      Aktifkan untuk menampilkan nominal komisi
-      pada laporan dan cetakan.
-    </p>
-
-  </div>
-
-
-  <label class="switch">
-
-    <input
-      type="checkbox"
-      id="settingCommissionVisibility"
-      checked
-    >
-
-    <span class="slider"></span>
-
-  </label>
-
-</div>
-```
-
-  </div>
-
-  <!-- DATA SETTINGS -->
-
-  <div class="card settings-card">
-
-```
-<div class="settings-section-title">
-
-  <i class="fa-solid fa-database"></i>
-
-  <div>
-
-    <h3>
-      Database
-    </h3>
-
-    <p>
-      Pengelolaan data lokal
-    </p>
-
-  </div>
-
-</div>
-
-
-<div class="danger-zone">
-
-
-  <div>
-
-    <strong>
-      Reset Semua Data
-    </strong>
-
-    <p>
-      Menghapus seluruh data aplikasi.
-      Pastikan sudah melakukan backup.
-    </p>
-
-  </div>
-
-
-  <button
-    id="resetAllData"
-    class="btn btn-danger"
-  >
-
-    <i class="fa-solid fa-trash"></i>
-
-    Reset Data
-
-  </button>
-
-
-</div>
-```
-
-  </div>
-
-</div>
 
 </section>
 
-<!-- =====================================================
-     FOOTER
-===================================================== -->
 
-<footer class="app-footer">
+</section>
 
-  <span id="footerAppName">
-    Laundry Manager
-  </span>
-
-  <span>
-    •
-  </span>
-
-  <span>
-    PWA Offline
-  </span>
-
-  <span>
-    •
-  </span>
-
-  <span>
-    v3.0
-  </span>
-
-</footer>
 
 </main>
 
+
 </div>
 
-<!-- =====================================================
+
+
+<!-- =========================================
      MODAL
-===================================================== -->
+========================================= -->
 
 <div
   id="modal"
-  class="modal"
+  class="modal hidden"
   role="dialog"
   aria-modal="true"
   aria-labelledby="modalTitle"
-  aria-hidden="true"
 >
 
-  <div class="modal-backdrop"></div>
+
+  <div
+    id="modalBackdrop"
+    class="modal-backdrop"
+  ></div>
+
 
   <div
     class="modal-dialog"
     role="document"
   >
 
-```
-<div class="modal-header">
 
-  <h3 id="modalTitle">
-    Modal
-  </h3>
+    <div class="modal-header">
 
 
-  <button
-    id="modalClose"
-    class="modal-close"
-    aria-label="Tutup"
-  >
-
-    <i class="fa-solid fa-xmark"></i>
-
-  </button>
-
-</div>
+      <h2 id="modalTitle">
+        Modal
+      </h2>
 
 
-<div
-  id="modalBody"
-  class="modal-body"
->
+      <button
+        id="modalCloseBtn"
+        class="icon-button"
+        type="button"
+        aria-label="Tutup"
+      >
+        ✕
+      </button>
 
-</div>
+
+    </div>
 
 
-<div
-  id="modalFooter"
-  class="modal-footer"
->
 
-</div>
-```
+    <div
+      id="modalBody"
+      class="modal-body"
+    ></div>
+
 
   </div>
 
+
 </div>
 
-<!-- =====================================================
+
+
+<!-- =========================================
+     CONFIRM MODAL
+========================================= -->
+
+<div
+  id="confirmModal"
+  class="modal hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="confirmTitle"
+>
+
+
+  <div
+    id="confirmBackdrop"
+    class="modal-backdrop"
+  ></div>
+
+
+  <div
+    class="modal-dialog small-modal"
+  >
+
+
+    <div class="modal-header">
+
+      <h2 id="confirmTitle">
+        Konfirmasi
+      </h2>
+
+    </div>
+
+
+    <div
+      id="confirmMessage"
+      class="modal-body"
+    >
+    </div>
+
+
+    <div class="modal-footer">
+
+
+      <button
+        id="confirmCancelBtn"
+        class="secondary-button"
+        type="button"
+      >
+        Batal
+      </button>
+
+
+      <button
+        id="confirmOkBtn"
+        class="danger-button"
+        type="button"
+      >
+        Ya, Lanjutkan
+      </button>
+
+
+    </div>
+
+
+  </div>
+
+
+</div>
+
+
+
+<!-- =========================================
      TOAST
-===================================================== -->
+========================================= -->
 
 <div
   id="toastContainer"
@@ -2624,66 +2451,56 @@ Customer2 SPT 2"
   aria-atomic="true"
 ></div>
 
-<!-- =====================================================
+
+
+<!-- =========================================
      PRINT AREA
-===================================================== -->
+========================================= -->
 
 <div
   id="printArea"
   class="print-area"
 ></div>
 
-<!-- =====================================================
-     EXTERNAL LIBRARIES
-===================================================== -->
 
-<!-- HTML TO CANVAS -->
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<!-- =========================================
+     NOSCRIPT
+========================================= -->
 
-<!-- JSPDF -->
+<noscript>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <div
+    style="
+      padding:30px;
+      text-align:center;
+      font-family:Arial,sans-serif;
+    "
+  >
 
-<!-- =====================================================
-     APP SCRIPT
-===================================================== -->
+    <h2>
+      JavaScript diperlukan
+    </h2>
 
-<script src="script.js"></script>
+    <p>
+      Aktifkan JavaScript untuk menjalankan aplikasi.
+    </p>
 
-<!-- =====================================================
-     SERVICE WORKER
-===================================================== -->
+  </div>
 
-<script>
+</noscript>
 
-if ("serviceWorker" in navigator) {
 
-  window.addEventListener("load", () => {
 
-    navigator.serviceWorker
-      .register("service-worker.js")
-      .then(() => {
+<!-- =========================================
+     JAVASCRIPT
+========================================= -->
 
-        console.log(
-          "Service Worker berhasil"
-        );
+<script
+  src="app.js"
+  defer
+></script>
 
-      })
-      .catch((error) => {
-
-        console.error(
-          "Service Worker gagal:",
-          error
-        );
-
-      });
-
-  });
-
-}
-
-</script>
 
 </body>
 </html>
