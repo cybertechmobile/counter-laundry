@@ -2,1224 +2,2688 @@
 
 <html lang="id">
 <head>
-
-```
-<!-- =====================================================
-     BASIC META
-====================================================== -->
-
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
 
 <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
+name="viewport"
+content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+
 >
+
+  <meta name="theme-color" content="#2563eb">
 
 <meta
-    name="theme-color"
-    content="#2563eb"
+name="description"
+content="Aplikasi manajemen laundry dan komisi karyawan offline berbasis PWA"
+
 >
 
-<meta
-    name="description"
-    content="Laundry Work Manager - Aplikasi PWA Manajemen Pekerjaan Laundry Offline"
->
+  <title id="pageTitle">Laundry Manager</title>
 
-<meta
-    name="mobile-web-app-capable"
-    content="yes"
->
+  <!-- PWA -->
 
-<meta
-    name="apple-mobile-web-app-capable"
-    content="yes"
->
+  <link rel="manifest" href="manifest.json">
 
-<meta
-    name="apple-mobile-web-app-status-bar-style"
-    content="default"
->
+  <!-- Icons -->
 
-<meta
-    name="apple-mobile-web-app-title"
-    content="Laundry Manager"
->
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
 
+  <!-- CSS -->
 
-<!-- =====================================================
-     TITLE
-====================================================== -->
+  <link rel="stylesheet" href="style.css">
 
-<title id="documentTitle">
-    Laundry Work Manager
-</title>
+  <!-- Icons -->
 
-
-<!-- =====================================================
-     PWA
-====================================================== -->
-
-<link
-    rel="manifest"
-    href="manifest.json"
->
-
-
-<!-- =====================================================
-     ICON
-====================================================== -->
-
-<link
-    rel="icon"
-    href="icons/icon.svg"
-    type="image/svg+xml"
->
-
-<link
-    rel="apple-touch-icon"
-    href="icons/icon-192.png"
->
-
-
-<!-- =====================================================
-     CSS
-====================================================== -->
-
-<link
+  <link
     rel="stylesheet"
-    href="style.css"
->
-```
-
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  >
 </head>
 
 <body>
 
-<!-- =========================================================
-     NOSCRIPT
-========================================================== -->
+<!-- =====================================================
+     APP LOADER
+===================================================== -->
 
-<noscript>
+<div id="appLoader" class="app-loader">
+  <div class="loader-box">
+    <div class="loader-logo">
+      <i class="fa-solid fa-shirt"></i>
+    </div>
 
 ```
-<div class="noscript-warning">
+<h2 id="loaderAppName">Laundry Manager</h2>
 
-    <h2>
-        JavaScript Dibutuhkan
+<div class="loader-spinner"></div>
+
+<p>Menyiapkan aplikasi...</p>
+```
+
+  </div>
+</div>
+
+<!-- =====================================================
+     APP
+===================================================== -->
+
+<div id="app" class="app">
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="sidebar-header">
+
+```
+<div class="brand">
+
+  <div class="brand-icon">
+    <i class="fa-solid fa-shirt"></i>
+  </div>
+
+  <div class="brand-text">
+
+    <h2 id="appNameHeader">
+      Laundry Manager
     </h2>
 
-    <p>
-        Aplikasi Laundry Work Manager membutuhkan JavaScript
-        untuk dapat berjalan.
-    </p>
-
-</div>
-```
-
-</noscript>
-
-<!-- =========================================================
-     SKIP LINK ACCESSIBILITY
-========================================================== -->
-
-<a
-href="#mainContent"
-class="skip-link"
-
->
-
-```
-Lewati ke konten utama
-```
-
-</a>
-
-<!-- =========================================================
-     APPLICATION SHELL
-========================================================== -->
-
-<div
-    id="appShell"
-    class="app-shell"
->
-
-```
-<!-- =====================================================
-     HEADER
-====================================================== -->
-
-<header
-    class="app-header"
-    role="banner"
->
-
-
-    <!-- HEADER LEFT -->
-
-    <div class="header-left">
-
-
-        <!-- MOBILE MENU -->
-
-        <button
-            id="menuToggle"
-            class="icon-button"
-            type="button"
-            aria-label="Buka menu navigasi"
-            aria-controls="sidebar"
-            aria-expanded="false"
-        >
-            ☰
-        </button>
-
-
-    </div>
-
-
-
-    <!-- HEADER CENTER -->
-
-    <div
-        class="header-center"
-    >
-
-
-        <div
-            class="app-logo"
-            aria-hidden="true"
-        >
-            🧺
-        </div>
-
-
-
-        <div
-            class="app-title-area"
-        >
-
-
-            <h1
-                id="appNameHeader"
-            >
-                Laundry Work Manager
-            </h1>
-
-
-            <span
-                id="appSubtitle"
-            >
-                PWA Offline Manager
-            </span>
-
-
-        </div>
-
-
-    </div>
-
-
-
-    <!-- HEADER RIGHT -->
-
-    <div
-        class="header-right"
-    >
-
-
-        <!-- ONLINE / OFFLINE -->
-
-        <span
-            id="connectionStatus"
-            class="connection-status"
-            role="status"
-            aria-live="polite"
-            title="Status koneksi"
-        >
-
-            <span
-                id="connectionDot"
-                class="connection-dot"
-            ></span>
-
-            <span
-                id="connectionText"
-            >
-                Online
-            </span>
-
-        </span>
-
-
-
-        <!-- DARK MODE -->
-
-        <button
-            id="darkModeToggle"
-            class="icon-button"
-            type="button"
-            aria-label="Ganti mode tampilan"
-            title="Mode tampilan"
-        >
-            ◐
-        </button>
-
-
-    </div>
-
-
-</header>
-
-
-
-<!-- =====================================================
-     APPLICATION LAYOUT
-====================================================== -->
-
-<div
-    class="app-layout"
->
-
-
-
-    <!-- =================================================
-         SIDEBAR
-    ================================================== -->
-
-    <aside
-        id="sidebar"
-        class="sidebar"
-        aria-label="Navigasi utama"
-    >
-
-
-        <!-- SIDEBAR HEADER -->
-
-        <div
-            class="sidebar-header"
-        >
-
-
-            <div
-                class="sidebar-logo"
-                aria-hidden="true"
-            >
-                🧺
-            </div>
-
-
-
-            <div
-                class="sidebar-brand"
-            >
-
-
-                <strong
-                    id="sidebarAppName"
-                >
-                    Laundry Work Manager
-                </strong>
-
-
-                <small>
-                    Offline PWA
-                </small>
-
-
-            </div>
-
-
-        </div>
-
-
-
-        <!-- =============================================
-             NAVIGATION
-        ============================================== -->
-
-        <nav
-            class="sidebar-nav"
-            aria-label="Menu aplikasi"
-        >
-
-
-
-            <!-- DASHBOARD -->
-
-            <button
-                class="nav-button active"
-                type="button"
-                data-page="dashboard"
-                aria-current="page"
-            >
-
-                <span
-                    class="nav-icon"
-                    aria-hidden="true"
-                >
-                    🏠
-                </span>
-
-                <span>
-                    Dashboard
-                </span>
-
-            </button>
-
-
-
-            <!-- INPUT WHATSAPP -->
-
-            <button
-                class="nav-button"
-                type="button"
-                data-page="input"
-            >
-
-                <span
-                    class="nav-icon"
-                    aria-hidden="true"
-                >
-                    ⚡
-                </span>
-
-                <span>
-                    Input WhatsApp
-                </span>
-
-            </button>
-
-
-
-            <!-- TRANSACTIONS -->
-
-            <button
-                class="nav-button"
-                type="button"
-                data-page="transactions"
-            >
-
-                <span
-                    class="nav-icon"
-                    aria-hidden="true"
-                >
-                    🧾
-                </span>
-
-                <span>
-                    Transaksi
-                </span>
-
-            </button>
-
-
-
-            <!-- REPORT -->
-
-            <button
-                class="nav-button"
-                type="button"
-                data-page="reports"
-            >
-
-                <span
-                    class="nav-icon"
-                    aria-hidden="true"
-                >
-                    📊
-                </span>
-
-                <span>
-                    Laporan & Cetak
-                </span>
-
-            </button>
-
-
-
-            <!-- COMMISSION -->
-
-            <button
-                class="nav-button"
-                type="button"
-                data-page="commission"
-            >
-
-                <span
-                    class="nav-icon"
-                    aria-hidden="true"
-                >
-                    💰
-                </span>
-
-                <span>
-                    Komisi Karyawan
-                </span>
-
-            </button>
-
-
-
-            <!-- MASTER -->
-
-            <button
-                class="nav-button"
-                type="button"
-                data-page="master"
-            >
-
-                <span
-                    class="nav-icon"
-                    aria-hidden="true"
-                >
-                    ⚙️
-                </span>
-
-                <span>
-                    Master Data
-                </span>
-
-            </button>
-
-
-
-            <!-- BACKUP -->
-
-            <button
-                class="nav-button"
-                type="button"
-                data-page="backup"
-            >
-
-                <span
-                    class="nav-icon"
-                    aria-hidden="true"
-                >
-                    💾
-                </span>
-
-                <span>
-                    Backup & Restore
-                </span>
-
-            </button>
-
-
-        </nav>
-
-
-
-        <!-- =============================================
-             SIDEBAR FOOTER
-        ============================================== -->
-
-        <div
-            class="sidebar-footer"
-        >
-
-            <small
-                id="sidebarVersion"
-            >
-                Version 3 FINAL
-            </small>
-
-
-            <small>
-                Offline Ready
-            </small>
-
-
-        </div>
-
-
-    </aside>
-
-
-
-    <!-- =================================================
-         MOBILE SIDEBAR OVERLAY
-    ================================================== -->
-
-    <div
-        id="sidebarOverlay"
-        class="sidebar-overlay"
-        hidden
-        aria-hidden="true"
-    ></div>
-
-
-
-    <!-- =================================================
-         MAIN CONTENT
-    ================================================== -->
-
-    <main
-        id="mainContent"
-        class="main-content"
-        tabindex="-1"
-    >
-
-
-
-        <!-- =============================================
-             PAGE HEADER
-        ============================================== -->
-
-        <section
-            class="page-header"
-            aria-labelledby="pageTitle"
-        >
-
-
-            <div
-                class="page-header-text"
-            >
-
-
-                <h2
-                    id="pageTitle"
-                >
-                    Dashboard
-                </h2>
-
-
-                <p
-                    id="pageDescription"
-                    class="page-description"
-                >
-                    Ringkasan aktivitas laundry hari ini
-                </p>
-
-
-            </div>
-
-
-
-            <!-- DYNAMIC ACTION -->
-
-            <div
-                id="pageHeaderAction"
-                class="page-header-action"
-            >
-
-            </div>
-
-
-        </section>
-
-
-
-        <!-- =============================================
-             APPLICATION CONTENT
-        ============================================== -->
-
-        <section
-            id="appContent"
-            class="app-content"
-            aria-live="polite"
-            aria-busy="true"
-        >
-
-
-            <!-- LOADING -->
-
-            <div
-                class="loading-screen"
-                role="status"
-            >
-
-
-                <div
-                    class="loading-spinner"
-                    aria-hidden="true"
-                ></div>
-
-
-                <p>
-                    Memuat aplikasi...
-                </p>
-
-
-            </div>
-
-
-        </section>
-
-
-    </main>
-
-
-</div>
-```
-
-</div>
-
-<!-- =========================================================
-     TOAST NOTIFICATION
-========================================================== -->
-
-<div
-    id="toast"
-    class="toast"
-    role="status"
-    aria-live="polite"
-    aria-atomic="true"
-    hidden
->
-
-```
-<div
-    id="toastIcon"
-    class="toast-icon"
-    aria-hidden="true"
->
-    ✓
-</div>
-
-
-
-<div
-    class="toast-content"
->
-
-
-    <strong
-        id="toastTitle"
-    >
-        Informasi
-    </strong>
-
-
-    <span
-        id="toastMessage"
-    >
+    <span>
+      PWA Offline
     </span>
 
+  </div>
 
 </div>
 
-
-
 <button
-    id="toastClose"
-    class="toast-close"
-    type="button"
-    aria-label="Tutup notifikasi"
+  class="sidebar-close"
+  id="sidebarClose"
+  aria-label="Tutup menu"
 >
-    ×
+  <i class="fa-solid fa-xmark"></i>
 </button>
 ```
 
-</div>
+  </div>
 
-<!-- =========================================================
-     CONFIRM MODAL
-     
-     SECURITY:
-     - hidden by default
-     - role dialog
-     - aria-modal
-     - focus trap handled by app.js
-     - Escape handled by app.js
-     - focus restored when closed
-========================================================== -->
+  <!-- NAVIGATION -->
 
-<div
-    id="confirmModal"
-    class="modal-backdrop"
-    hidden
->
+  <nav class="sidebar-nav">
 
 ```
-<div
-    id="confirmDialog"
-    class="modal-card"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="confirmTitle"
-    aria-describedby="confirmMessage"
-    tabindex="-1"
+<p class="nav-label">
+  MENU UTAMA
+</p>
+
+
+<button
+  class="nav-item active"
+  data-page="dashboard"
 >
 
+  <i class="fa-solid fa-house"></i>
 
-    <!-- HEADER -->
+  <span>
+    Dashboard
+  </span>
 
-    <div
-        class="modal-header"
-    >
-
-
-        <div>
+</button>
 
 
-            <h3
-                id="confirmTitle"
-            >
-                Konfirmasi
-            </h3>
+<button
+  class="nav-item"
+  data-page="input"
+>
+
+  <i class="fa-solid fa-plus"></i>
+
+  <span>
+    Input Produksi
+  </span>
+
+</button>
 
 
-            <p
-                id="confirmMessage"
-                class="modal-description"
-            >
-                Apakah Anda yakin ingin melanjutkan?
-            </p>
+<button
+  class="nav-item"
+  data-page="wa"
+>
+
+  <i class="fa-brands fa-whatsapp"></i>
+
+  <span>
+    Import WhatsApp
+  </span>
+
+</button>
 
 
-        </div>
+<button
+  class="nav-item"
+  data-page="history"
+>
+
+  <i class="fa-solid fa-clock-rotate-left"></i>
+
+  <span>
+    Riwayat
+  </span>
+
+</button>
 
 
-
-        <button
-            id="confirmClose"
-            class="modal-close"
-            type="button"
-            aria-label="Tutup dialog konfirmasi"
-        >
-            ×
-        </button>
+<p class="nav-label">
+  DATA MASTER
+</p>
 
 
-    </div>
+<button
+  class="nav-item"
+  data-page="employees"
+>
+
+  <i class="fa-solid fa-users"></i>
+
+  <span>
+    Karyawan
+  </span>
+
+</button>
 
 
+<button
+  class="nav-item"
+  data-page="items"
+>
 
-    <!-- ACTIONS -->
+  <i class="fa-solid fa-boxes-stacked"></i>
 
-    <div
-        class="modal-actions"
-    >
+  <span>
+    Item & Harga
+  </span>
 
-
-        <button
-            id="confirmCancel"
-            class="btn btn-secondary"
-            type="button"
-        >
-            Batal
-        </button>
+</button>
 
 
+<button
+  class="nav-item"
+  data-page="categories"
+>
 
-        <button
-            id="confirmYes"
-            class="btn btn-danger"
-            type="button"
-        >
-            Ya, Lanjutkan
-        </button>
+  <i class="fa-solid fa-layer-group"></i>
+
+  <span>
+    Kategori
+  </span>
+
+</button>
 
 
-    </div>
+<button
+  class="nav-item"
+  data-page="tiers"
+>
+
+  <i class="fa-solid fa-list-ol"></i>
+
+  <span>
+    Parameter / Tier
+  </span>
+
+</button>
 
 
+<p class="nav-label">
+  LAPORAN
+</p>
+
+
+<button
+  class="nav-item"
+  data-page="daily-report"
+>
+
+  <i class="fa-solid fa-calendar-day"></i>
+
+  <span>
+    Laporan Harian
+  </span>
+
+</button>
+
+
+<button
+  class="nav-item"
+  data-page="monthly-report"
+>
+
+  <i class="fa-solid fa-calendar-days"></i>
+
+  <span>
+    Laporan Bulanan
+  </span>
+
+</button>
+
+
+<p class="nav-label">
+  SISTEM
+</p>
+
+
+<button
+  class="nav-item"
+  data-page="backup"
+>
+
+  <i class="fa-solid fa-database"></i>
+
+  <span>
+    Backup & Restore
+  </span>
+
+</button>
+
+
+<button
+  class="nav-item"
+  data-page="settings"
+>
+
+  <i class="fa-solid fa-gear"></i>
+
+  <span>
+    Pengaturan
+  </span>
+
+</button>
+```
+
+  </nav>
+
+  <!-- SIDEBAR FOOTER -->
+
+  <div class="sidebar-footer">
+
+```
+<div class="offline-status">
+
+  <span
+    id="connectionDot"
+    class="connection-dot"
+  ></span>
+
+  <span id="connectionStatus">
+    Offline Ready
+  </span>
+
+</div>
+
+
+<div class="version">
+  Version 3.0 Final
 </div>
 ```
 
-</div>
+  </div>
 
-<!-- =========================================================
-     FORM MODAL
-========================================================== -->
+</aside>
+
+<!-- =====================================================
+     SIDEBAR OVERLAY
+===================================================== -->
 
 <div
-    id="formModal"
-    class="modal-backdrop"
-    hidden
->
+  id="sidebarOverlay"
+  class="sidebar-overlay"
+></div>
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="main-content">
+
+<!-- =====================================================
+     TOP HEADER
+===================================================== -->
+
+<header class="top-header">
+
+  <div class="header-left">
 
 ```
-<div
-    id="formDialog"
-    class="modal-card modal-large"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="formModalTitle"
-    aria-describedby="formModalDescription"
-    tabindex="-1"
+<button
+  id="sidebarToggle"
+  class="icon-button mobile-menu"
+  aria-label="Buka menu"
 >
 
+  <i class="fa-solid fa-bars"></i>
 
-    <!-- HEADER -->
-
-    <div
-        class="modal-header"
-    >
+</button>
 
 
-        <div>
+<div class="page-heading">
 
+  <h1 id="pageTitleText">
+    Dashboard
+  </h1>
 
-            <h3
-                id="formModalTitle"
-            >
-                Form Data
-            </h3>
-
-
-            <p
-                id="formModalDescription"
-                class="modal-description"
-            >
-            </p>
-
-
-        </div>
-
-
-
-        <button
-            id="formModalClose"
-            class="modal-close"
-            type="button"
-            aria-label="Tutup formulir"
-        >
-            ×
-        </button>
-
-
-    </div>
-
-
-
-    <!-- =============================================
-         MODAL BODY
-
-         Konten dibuat oleh JavaScript.
-
-         Untuk keamanan:
-         Jangan memasukkan input user langsung
-         menggunakan innerHTML.
-
-         Gunakan:
-         - textContent
-         - createElement
-         - setAttribute
-    ============================================== -->
-
-    <div
-        id="formModalBody"
-        class="modal-body"
-    >
-
-    </div>
-
-
-
-    <!-- MODAL FOOTER -->
-
-    <div
-        id="formModalFooter"
-        class="modal-actions"
-    >
-
-    </div>
-
-
-</div>
-```
-
-</div>
-
-<!-- =========================================================
-     DETAIL MODAL
-
-     Untuk:
-     - Detail transaksi
-     - Preview laporan
-     - Detail komisi
-========================================================== -->
-
-<div
-    id="detailModal"
-    class="modal-backdrop"
-    hidden
->
-
-```
-<div
-    id="detailDialog"
-    class="modal-card modal-large"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="detailModalTitle"
-    aria-describedby="detailModalDescription"
-    tabindex="-1"
->
-
-
-    <!-- HEADER -->
-
-    <div
-        class="modal-header"
-    >
-
-
-        <div>
-
-
-            <h3
-                id="detailModalTitle"
-            >
-                Detail
-            </h3>
-
-
-            <p
-                id="detailModalDescription"
-                class="modal-description"
-            >
-                Informasi detail
-            </p>
-
-
-        </div>
-
-
-
-        <button
-            id="detailModalClose"
-            class="modal-close"
-            type="button"
-            aria-label="Tutup detail"
-        >
-            ×
-        </button>
-
-
-    </div>
-
-
-
-    <!-- BODY -->
-
-    <div
-        id="detailModalBody"
-        class="modal-body"
-    >
-
-    </div>
-
-
-
-    <!-- FOOTER -->
-
-    <div
-        id="detailModalFooter"
-        class="modal-actions"
-    >
-
-    </div>
-
+  <p id="pageSubtitle">
+    Ringkasan aktivitas hari ini
+  </p>
 
 </div>
 ```
 
-</div>
+  </div>
 
-<!-- =========================================================
-     PRINT AREA
-
-     Digunakan untuk:
-
-     ✓ Thermal 58mm
-     ✓ Browser Print
-     ✓ Save PDF
-     ✓ Laporan HP
-========================================================== -->
-
-<div
-    id="printArea"
-    class="print-area"
-    aria-hidden="true"
->
-
-</div>
-
-<!-- =========================================================
-     EXPORT AREA
-
-     Digunakan oleh app.js untuk:
-
-     ✓ JPG
-     ✓ PNG
-     ✓ Image Report
-========================================================== -->
-
-<div
-    id="imageExportArea"
-    class="image-export-area"
-    aria-hidden="true"
->
-
-</div>
-
-<!-- =========================================================
-     CANVAS EXPORT
-
-     Disiapkan untuk:
-
-     ✓ Export JPG
-     ✓ Export Image
-========================================================== -->
-
-<canvas
-id="reportCanvas"
-width="800"
-height="1200"
-hidden
-
-> </canvas>
-
-<!-- =========================================================
-     OFFLINE INDICATOR
-========================================================== -->
-
-<div
-    id="offlineIndicator"
-    class="offline-indicator"
-    role="status"
-    aria-live="polite"
-    hidden
->
+  <div class="header-right">
 
 ```
-<span
-    class="offline-dot"
-    aria-hidden="true"
-></span>
+<!-- DATE -->
 
+<div class="header-date">
 
-<span
-    id="offlineText"
->
-    Mode Offline
-</span>
-```
+  <i class="fa-solid fa-calendar"></i>
+
+  <span id="currentDate">
+    -
+  </span>
 
 </div>
 
-<!-- =========================================================
-     PWA INSTALL PROMPT
-========================================================== -->
 
-<div
-    id="installContainer"
-    class="install-container"
-    hidden
->
+<!-- COMMISSION TOGGLE -->
 
-```
-<div
-    class="install-card"
->
+<div class="commission-toggle">
 
+  <span class="toggle-label">
+    Komisi
+  </span>
 
-    <div
-        class="install-icon"
-        aria-hidden="true"
-    >
-        🧺
-    </div>
+  <label class="switch">
 
-
-
-    <div
-        class="install-content"
+    <input
+      type="checkbox"
+      id="commissionVisibility"
+      checked
     >
 
+    <span class="slider"></span>
 
-        <strong>
-            Install Aplikasi
-        </strong>
+  </label>
+
+</div>
 
 
-        <span>
-            Install aplikasi agar dapat digunakan seperti aplikasi Android.
-        </span>
+<!-- ONLINE -->
 
+<div
+  class="online-badge"
+  id="onlineBadge"
+>
+
+  <i class="fa-solid fa-wifi"></i>
+
+  <span>
+    Online
+  </span>
+
+</div>
+```
+
+  </div>
+
+</header>
+
+<!-- =====================================================
+     PAGE CONTAINER
+===================================================== -->
+
+<section
+  id="pageContainer"
+  class="page-container"
+>
+
+<!-- =====================================================
+     DASHBOARD
+===================================================== -->
+
+<div
+  class="page active"
+  id="dashboardPage"
+>
+
+  <!-- WELCOME -->
+
+  <div class="welcome-card">
+
+```
+<div>
+
+  <span class="welcome-label">
+    SELAMAT DATANG
+  </span>
+
+  <h2 id="dashboardAppName">
+    Laundry Manager
+  </h2>
+
+  <p>
+    Kelola produksi dan komisi karyawan
+    dengan lebih mudah.
+  </p>
+
+</div>
+
+
+<div class="welcome-icon">
+
+  <i class="fa-solid fa-shirt"></i>
+
+</div>
+```
+
+  </div>
+
+  <!-- STATS -->
+
+  <div class="stats-grid">
+
+```
+<div class="stat-card">
+
+  <div class="stat-icon blue">
+
+    <i class="fa-solid fa-clipboard-list"></i>
+
+  </div>
+
+
+  <div class="stat-info">
+
+    <span>
+      Total Item Hari Ini
+    </span>
+
+    <h3 id="statTotalItems">
+      0
+    </h3>
+
+  </div>
+
+</div>
+
+
+<div class="stat-card">
+
+  <div class="stat-icon green">
+
+    <i class="fa-solid fa-weight-hanging"></i>
+
+  </div>
+
+
+  <div class="stat-info">
+
+    <span>
+      Total Produksi
+    </span>
+
+    <h3 id="statTotalQuantity">
+      0
+    </h3>
+
+  </div>
+
+</div>
+
+
+<div class="stat-card commission-stat">
+
+  <div class="stat-icon orange">
+
+    <i class="fa-solid fa-money-bill-wave"></i>
+
+  </div>
+
+
+  <div class="stat-info">
+
+    <span>
+      Total Komisi
+    </span>
+
+    <h3 id="statTotalCommission">
+      Rp 0
+    </h3>
+
+  </div>
+
+</div>
+
+
+<div class="stat-card">
+
+  <div class="stat-icon purple">
+
+    <i class="fa-solid fa-users"></i>
+
+  </div>
+
+
+  <div class="stat-info">
+
+    <span>
+      Karyawan Aktif
+    </span>
+
+    <h3 id="statEmployees">
+      0
+    </h3>
+
+  </div>
+
+</div>
+```
+
+  </div>
+
+  <!-- DASHBOARD GRID -->
+
+  <div class="dashboard-grid">
+
+```
+<!-- TODAY SUMMARY -->
+
+<div class="card">
+
+  <div class="card-header">
+
+    <div>
+
+      <h3>
+        <i class="fa-solid fa-chart-column"></i>
+        Ringkasan Hari Ini
+      </h3>
+
+      <p>
+        Produksi berdasarkan karyawan
+      </p>
 
     </div>
 
+  </div>
+
+
+  <div
+    id="dashboardEmployeeSummary"
+    class="employee-summary-list"
+  >
+
+    <div class="empty-state small">
+
+      <i class="fa-solid fa-users"></i>
+
+      <p>
+        Belum ada data hari ini
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- QUICK ACTION -->
+
+<div class="card">
+
+  <div class="card-header">
+
+    <div>
+
+      <h3>
+        <i class="fa-solid fa-bolt"></i>
+        Aksi Cepat
+      </h3>
+
+      <p>
+        Akses fitur utama
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="quick-actions">
 
 
     <button
-        id="installButton"
-        class="btn btn-primary"
-        type="button"
+      class="quick-action primary"
+      data-action="new-input"
     >
-        Install
-    </button>
 
+      <i class="fa-solid fa-plus"></i>
+
+      <span>
+        Input Produksi
+      </span>
+
+    </button>
 
 
     <button
-        id="installClose"
-        class="install-close"
-        type="button"
-        aria-label="Tutup informasi install"
+      class="quick-action whatsapp"
+      data-action="import-wa"
     >
-        ×
+
+      <i class="fa-brands fa-whatsapp"></i>
+
+      <span>
+        Import WhatsApp
+      </span>
+
     </button>
 
 
+    <button
+      class="quick-action"
+      data-action="daily-report"
+    >
+
+      <i class="fa-solid fa-file-lines"></i>
+
+      <span>
+        Laporan Hari Ini
+      </span>
+
+    </button>
+
+
+    <button
+      class="quick-action"
+      data-action="backup"
+    >
+
+      <i class="fa-solid fa-download"></i>
+
+      <span>
+        Backup Data
+      </span>
+
+    </button>
+
+
+  </div>
+
 </div>
 ```
 
+  </div>
+
+  <!-- RECENT DATA -->
+
+  <div class="card recent-card">
+
+```
+<div class="card-header">
+
+  <div>
+
+    <h3>
+      <i class="fa-solid fa-clock"></i>
+      Aktivitas Terbaru
+    </h3>
+
+    <p>
+      Data produksi terakhir
+    </p>
+
+  </div>
+
+
+  <button
+    class="btn btn-light"
+    data-action="view-history"
+  >
+
+    Lihat Semua
+
+    <i class="fa-solid fa-arrow-right"></i>
+
+  </button>
+
 </div>
 
-<!-- =========================================================
-     SCREEN READER ANNOUNCEMENT
-========================================================== -->
+
+<div class="table-responsive">
+
+  <table>
+
+    <thead>
+
+      <tr>
+
+        <th>
+          Waktu
+        </th>
+
+        <th>
+          Karyawan
+        </th>
+
+        <th>
+          Customer
+        </th>
+
+        <th>
+          Item
+        </th>
+
+        <th>
+          Jumlah
+        </th>
+
+        <th class="commission-column">
+          Komisi
+        </th>
+
+      </tr>
+
+    </thead>
+
+
+    <tbody id="recentActivityBody">
+
+      <tr>
+
+        <td
+          colspan="6"
+          class="empty-table"
+        >
+
+          Belum ada aktivitas
+
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>
+```
+
+  </div>
+
+</div>
+
+<!-- =====================================================
+     INPUT PRODUKSI
+===================================================== -->
 
 <div
-    id="screenReaderAnnouncement"
-    class="sr-only"
-    aria-live="assertive"
-    aria-atomic="true"
+  class="page"
+  id="inputPage"
 >
+
+  <div class="page-toolbar">
+
+```
+<div>
+
+  <h2>
+    Input Produksi
+  </h2>
+
+  <p>
+    Tambahkan data pekerjaan karyawan
+  </p>
 
 </div>
 
-<!-- =========================================================
-     APPLICATION FOOTER
-========================================================== -->
 
-<footer
-    class="app-footer"
+<button
+  id="addProductionRow"
+  class="btn btn-primary"
 >
+
+  <i class="fa-solid fa-plus"></i>
+
+  Tambah Baris
+
+</button>
+```
+
+  </div>
+
+  <div class="card input-card">
 
 ```
-<span
-    id="footerAppName"
->
-    Laundry Work Manager
-</span>
+<!-- INPUT HEADER -->
+
+<div class="input-header-grid">
 
 
-<span
-    class="footer-separator"
-    aria-hidden="true"
+  <div class="form-group">
+
+    <label>
+
+      <i class="fa-solid fa-user"></i>
+
+      Karyawan
+
+    </label>
+
+
+    <select
+      id="productionEmployee"
+      class="form-control"
+    >
+
+      <option value="">
+        Pilih Karyawan
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label>
+
+      <i class="fa-solid fa-calendar"></i>
+
+      Tanggal
+
+    </label>
+
+
+    <input
+      type="date"
+      id="productionDate"
+      class="form-control"
+    >
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label>
+
+      <i class="fa-solid fa-user-tag"></i>
+
+      Referensi Customer
+
+    </label>
+
+
+    <input
+      type="text"
+      id="productionCustomer"
+      class="form-control"
+      placeholder="Opsional / referensi WA"
+    >
+
+  </div>
+
+</div>
+
+
+<!-- PRODUCTION ROWS -->
+
+<div
+  id="productionRows"
+  class="production-rows"
 >
+
+
+  <!-- ROW GENERATED JAVASCRIPT -->
+
+
+  <div
+    class="production-row"
+    data-row="1"
+  >
+
+
+    <div class="row-number">
+      1
+    </div>
+
+
+    <div class="form-group item-group">
+
+      <label>
+        Item
+      </label>
+
+
+      <select
+        class="form-control production-item"
+      >
+
+        <option value="">
+          Pilih Item
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="form-group unit-group">
+
+      <label>
+        Satuan
+      </label>
+
+
+      <select
+        class="form-control production-unit"
+      >
+
+        <option value="kg">
+          KG
+        </option>
+
+        <option value="pcs">
+          Satuan
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="form-group quantity-group">
+
+      <label>
+        Jumlah
+      </label>
+
+
+      <input
+        type="text"
+        inputmode="decimal"
+        class="form-control production-quantity"
+        placeholder="0"
+      >
+
+    </div>
+
+
+    <div class="form-group commission-preview">
+
+      <label>
+        Komisi
+      </label>
+
+
+      <div class="commission-value">
+
+        Rp 0
+
+      </div>
+
+    </div>
+
+
+    <button
+      class="delete-row"
+      type="button"
+      aria-label="Hapus baris"
+    >
+
+      <i class="fa-solid fa-trash"></i>
+
+    </button>
+
+
+  </div>
+
+
+</div>
+
+
+<!-- TOTAL -->
+
+<div class="production-total">
+
+
+  <div class="total-info">
+
+    <span>
+      Total Produksi
+    </span>
+
+    <strong id="productionTotalQuantity">
+      0
+    </strong>
+
+  </div>
+
+
+  <div
+    class="total-info commission-total"
+  >
+
+    <span>
+      Estimasi Komisi
+    </span>
+
+    <strong id="productionTotalCommission">
+      Rp 0
+    </strong>
+
+  </div>
+
+
+</div>
+
+
+<!-- SAVE -->
+
+<div class="form-actions">
+
+
+  <button
+    id="clearProduction"
+    class="btn btn-light"
+  >
+
+    <i class="fa-solid fa-rotate-left"></i>
+
+    Reset
+
+  </button>
+
+
+  <button
+    id="saveProduction"
+    class="btn btn-primary btn-large"
+  >
+
+    <i class="fa-solid fa-floppy-disk"></i>
+
+    Simpan Produksi
+
+  </button>
+
+
+</div>
+```
+
+  </div>
+
+</div>
+
+<!-- =====================================================
+     IMPORT WHATSAPP
+===================================================== -->
+
+<div
+  class="page"
+  id="waPage"
+>
+
+  <div class="page-toolbar">
+
+```
+<div>
+
+  <h2>
+    Import WhatsApp
+  </h2>
+
+  <p>
+    Paste laporan pekerjaan dari WhatsApp
+  </p>
+
+</div>
+```
+
+  </div>
+
+  <div class="wa-grid">
+
+```
+<!-- INPUT -->
+
+<div class="card">
+
+
+  <div class="card-header">
+
+    <div>
+
+      <h3>
+
+        <i class="fa-brands fa-whatsapp"></i>
+
+        Paste Chat
+
+      </h3>
+
+
+      <p>
+        Sistem membaca customer, kode item dan jumlah
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label>
+
+      Karyawan yang Mengirim
+
+    </label>
+
+
+    <select
+      id="waEmployee"
+      class="form-control"
+    >
+
+      <option value="">
+        Pilih Karyawan
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label>
+
+      Tanggal Produksi
+
+    </label>
+
+
+    <input
+      type="date"
+      id="waDate"
+      class="form-control"
+    >
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label>
+
+      Isi Chat WhatsApp
+
+    </label>
+
+
+    <textarea
+      id="waInput"
+      class="form-control wa-textarea"
+      placeholder="Contoh:
+```
+
+Desi CKS 5kg
+Wanto CKS 2,5
+Yadi Sepatu 2
+
+Customer1 CKS 5kg
+Customer2 SPT 2"
+></textarea>
+
+```
+  </div>
+
+
+  <div class="form-actions">
+
+    <button
+      id="clearWaInput"
+      class="btn btn-light"
+    >
+
+      Bersihkan
+
+    </button>
+
+
+    <button
+      id="parseWaInput"
+      class="btn btn-whatsapp"
+    >
+
+      <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+      Analisa Chat
+
+    </button>
+
+  </div>
+
+
+</div>
+
+
+<!-- RESULT -->
+
+<div class="card">
+
+
+  <div class="card-header">
+
+    <div>
+
+      <h3>
+
+        <i class="fa-solid fa-list-check"></i>
+
+        Hasil Analisa
+
+      </h3>
+
+
+      <p>
+        Periksa sebelum disimpan
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="waParseResult"
+    class="wa-result"
+  >
+
+    <div class="empty-state">
+
+      <i class="fa-solid fa-message"></i>
+
+      <h4>
+        Belum ada data
+      </h4>
+
+      <p>
+        Paste chat WhatsApp lalu klik Analisa Chat
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="waResultActions"
+    class="form-actions hidden"
+  >
+
+    <button
+      id="saveWaResult"
+      class="btn btn-primary"
+    >
+
+      <i class="fa-solid fa-floppy-disk"></i>
+
+      Simpan Semua
+
+    </button>
+
+  </div>
+
+
+</div>
+```
+
+  </div>
+
+</div>
+
+<!-- =====================================================
+     HISTORY
+===================================================== -->
+
+<div
+  class="page"
+  id="historyPage"
+>
+
+  <div class="page-toolbar">
+
+```
+<div>
+
+  <h2>
+    Riwayat Produksi
+  </h2>
+
+  <p>
+    Semua data pekerjaan yang tersimpan
+  </p>
+
+</div>
+
+
+<button
+  id="deleteSelectedHistory"
+  class="btn btn-danger hidden"
+>
+
+  <i class="fa-solid fa-trash"></i>
+
+  Hapus Terpilih
+
+</button>
+```
+
+  </div>
+
+  <!-- FILTER -->
+
+  <div class="card filter-card">
+
+```
+<div class="filter-grid">
+
+
+  <div class="form-group">
+
+    <label>
+      Dari Tanggal
+    </label>
+
+
+    <input
+      type="date"
+      id="historyStartDate"
+      class="form-control"
+    >
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label>
+      Sampai Tanggal
+    </label>
+
+
+    <input
+      type="date"
+      id="historyEndDate"
+      class="form-control"
+    >
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label>
+      Karyawan
+    </label>
+
+
+    <select
+      id="historyEmployee"
+      class="form-control"
+    >
+
+      <option value="">
+        Semua Karyawan
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label>
+      Cari
+    </label>
+
+
+    <input
+      type="text"
+      id="historySearch"
+      class="form-control"
+      placeholder="Customer atau item"
+    >
+
+  </div>
+
+
+  <button
+    id="filterHistory"
+    class="btn btn-primary"
+  >
+
+    <i class="fa-solid fa-filter"></i>
+
+    Filter
+
+  </button>
+
+
+</div>
+```
+
+  </div>
+
+  <!-- TABLE -->
+
+  <div class="card">
+
+```
+<div class="table-responsive">
+
+  <table>
+
+    <thead>
+
+      <tr>
+
+        <th>
+
+          <input
+            type="checkbox"
+            id="selectAllHistory"
+          >
+
+        </th>
+
+        <th>
+          Tanggal
+        </th>
+
+        <th>
+          Karyawan
+        </th>
+
+        <th>
+          Customer
+        </th>
+
+        <th>
+          Item
+        </th>
+
+        <th>
+          Satuan
+        </th>
+
+        <th>
+          Jumlah
+        </th>
+
+        <th class="commission-column">
+          Komisi
+        </th>
+
+        <th>
+          Aksi
+        </th>
+
+      </tr>
+
+    </thead>
+
+
+    <tbody id="historyTableBody">
+
+      <tr>
+
+        <td
+          colspan="9"
+          class="empty-table"
+        >
+
+          Belum ada data
+
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>
+
+
+<div
+  id="historyPagination"
+  class="pagination"
+></div>
+```
+
+  </div>
+
+</div>
+
+<!-- =====================================================
+     EMPLOYEES
+===================================================== -->
+
+<div
+  class="page"
+  id="employeesPage"
+>
+
+  <div class="page-toolbar">
+
+```
+<div>
+
+  <h2>
+    Data Karyawan
+  </h2>
+
+  <p>
+    Kelola karyawan dan pengaturan komisi
+  </p>
+
+</div>
+
+
+<button
+  id="addEmployeeButton"
+  class="btn btn-primary"
+>
+
+  <i class="fa-solid fa-user-plus"></i>
+
+  Tambah Karyawan
+
+</button>
+```
+
+  </div>
+
+  <div
+    id="employeeGrid"
+    class="employee-grid"
+  >
+
+```
+<!-- GENERATED JS -->
+```
+
+  </div>
+
+</div>
+
+<!-- =====================================================
+     ITEMS
+===================================================== -->
+
+<div
+  class="page"
+  id="itemsPage"
+>
+
+  <div class="page-toolbar">
+
+```
+<div>
+
+  <h2>
+    Item & Harga Komisi
+  </h2>
+
+  <p>
+    Kelola item, kode, satuan dan komisi
+  </p>
+
+</div>
+
+
+<button
+  id="addItemButton"
+  class="btn btn-primary"
+>
+
+  <i class="fa-solid fa-plus"></i>
+
+  Tambah Item
+
+</button>
+```
+
+  </div>
+
+  <!-- ITEM FILTER -->
+
+  <div class="card filter-card">
+
+```
+<div class="filter-grid">
+
+
+  <div class="form-group">
+
+    <label>
+      Kategori
+    </label>
+
+
+    <select
+      id="itemCategoryFilter"
+      class="form-control"
+    >
+
+      <option value="">
+        Semua Kategori
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label>
+      Cari Item
+    </label>
+
+
+    <input
+      type="text"
+      id="itemSearch"
+      class="form-control"
+      placeholder="Nama atau kode item"
+    >
+
+  </div>
+
+
+</div>
+```
+
+  </div>
+
+  <!-- ITEMS -->
+
+  <div
+    id="itemGrid"
+    class="item-grid"
+  >
+
+```
+<!-- GENERATED JS -->
+```
+
+  </div>
+
+</div>
+
+<!-- =====================================================
+     CATEGORIES
+===================================================== -->
+
+<div
+  class="page"
+  id="categoriesPage"
+>
+
+  <div class="page-toolbar">
+
+```
+<div>
+
+  <h2>
+    Kategori
+  </h2>
+
+  <p>
+    Tambahkan kategori sesuai kebutuhan
+  </p>
+
+</div>
+
+
+<button
+  id="addCategoryButton"
+  class="btn btn-primary"
+>
+
+  <i class="fa-solid fa-plus"></i>
+
+  Tambah Kategori
+
+</button>
+```
+
+  </div>
+
+  <div
+    id="categoryList"
+    class="category-list"
+  >
+
+```
+<!-- GENERATED JS -->
+```
+
+  </div>
+
+</div>
+
+<!-- =====================================================
+     TIERS / PARAMETERS
+===================================================== -->
+
+<div
+  class="page"
+  id="tiersPage"
+>
+
+  <div class="page-toolbar">
+
+```
+<div>
+
+  <h2>
+    Parameter / Tier
+  </h2>
+
+  <p>
+    Tambahkan parameter tambahan tanpa batas
+  </p>
+
+</div>
+
+
+<button
+  id="addTierButton"
+  class="btn btn-primary"
+>
+
+  <i class="fa-solid fa-plus"></i>
+
+  Tambah Parameter
+
+</button>
+```
+
+  </div>
+
+  <div class="card">
+
+```
+<div class="info-box">
+
+  <i class="fa-solid fa-circle-info"></i>
+
+  <div>
+
+    <strong>
+      Parameter Fleksibel
+    </strong>
+
+    <p>
+      Gunakan fitur ini untuk menambahkan parameter
+      tambahan seperti Tier, Level, Bonus, Shift,
+      Target atau kebutuhan lainnya.
+    </p>
+
+  </div>
+
+</div>
+
+
+<div
+  id="tierList"
+  class="tier-list"
+>
+
+  <!-- GENERATED JS -->
+
+</div>
+```
+
+  </div>
+
+</div>
+
+<!-- =====================================================
+     DAILY REPORT
+===================================================== -->
+
+<div
+  class="page"
+  id="dailyReportPage"
+>
+
+  <div class="page-toolbar">
+
+```
+<div>
+
+  <h2>
+    Laporan Harian
+  </h2>
+
+  <p>
+    Ringkasan produksi dan komisi
+  </p>
+
+</div>
+```
+
+  </div>
+
+  <!-- REPORT FILTER -->
+
+  <div class="card report-filter">
+
+```
+<div class="report-filter-grid">
+
+
+  <div class="form-group">
+
+    <label>
+      Pilih Tanggal
+    </label>
+
+
+    <input
+      type="date"
+      id="dailyReportDate"
+      class="form-control"
+    >
+
+  </div>
+
+
+  <button
+    id="generateDailyReport"
+    class="btn btn-primary"
+  >
+
+    <i class="fa-solid fa-chart-pie"></i>
+
+    Buat Laporan
+
+  </button>
+
+
+  <button
+    id="printDailyReport"
+    class="btn btn-light"
+  >
+
+    <i class="fa-solid fa-print"></i>
+
+    Thermal 58mm
+
+  </button>
+
+
+  <button
+    id="exportDailyJpg"
+    class="btn btn-light"
+  >
+
+    <i class="fa-solid fa-image"></i>
+
+    JPG
+
+  </button>
+
+
+  <button
+    id="exportDailyPdf"
+    class="btn btn-light"
+  >
+
+    <i class="fa-solid fa-file-pdf"></i>
+
+    PDF
+
+  </button>
+
+
+  <button
+    id="shareDailyWhatsapp"
+    class="btn btn-whatsapp"
+  >
+
+    <i class="fa-brands fa-whatsapp"></i>
+
+    WhatsApp
+
+  </button>
+
+
+</div>
+```
+
+  </div>
+
+  <!-- REPORT -->
+
+  <div
+    id="dailyReportContent"
+    class="report-content"
+  >
+
+```
+<div class="empty-state">
+
+  <i class="fa-solid fa-file-lines"></i>
+
+  <h4>
+    Belum ada laporan
+  </h4>
+
+  <p>
+    Pilih tanggal lalu buat laporan
+  </p>
+
+</div>
+```
+
+  </div>
+
+</div>
+
+<!-- =====================================================
+     MONTHLY REPORT
+===================================================== -->
+
+<div
+  class="page"
+  id="monthlyReportPage"
+>
+
+  <div class="page-toolbar">
+
+```
+<div>
+
+  <h2>
+    Laporan Bulanan
+  </h2>
+
+  <p>
+    Rekap produksi bulanan
+  </p>
+
+</div>
+```
+
+  </div>
+
+  <div class="card report-filter">
+
+```
+<div class="report-filter-grid">
+
+
+  <div class="form-group">
+
+    <label>
+      Bulan
+    </label>
+
+
+    <input
+      type="month"
+      id="monthlyReportMonth"
+      class="form-control"
+    >
+
+  </div>
+
+
+  <button
+    id="generateMonthlyReport"
+    class="btn btn-primary"
+  >
+
+    <i class="fa-solid fa-chart-column"></i>
+
+    Buat Laporan
+
+  </button>
+
+
+  <button
+    id="exportMonthlyPdf"
+    class="btn btn-light"
+  >
+
+    <i class="fa-solid fa-file-pdf"></i>
+
+    Export PDF
+
+  </button>
+
+
+</div>
+```
+
+  </div>
+
+  <div
+    id="monthlyReportContent"
+    class="report-content"
+  >
+
+```
+<div class="empty-state">
+
+  <i class="fa-solid fa-calendar"></i>
+
+  <h4>
+    Belum ada laporan
+  </h4>
+
+  <p>
+    Pilih bulan untuk melihat laporan
+  </p>
+
+</div>
+```
+
+  </div>
+
+</div>
+
+<!-- =====================================================
+     BACKUP
+===================================================== -->
+
+<div
+  class="page"
+  id="backupPage"
+>
+
+  <div class="page-toolbar">
+
+```
+<div>
+
+  <h2>
+    Backup & Restore
+  </h2>
+
+  <p>
+    Lindungi dan pulihkan data aplikasi
+  </p>
+
+</div>
+```
+
+  </div>
+
+  <div class="backup-grid">
+
+```
+<!-- EXPORT -->
+
+<div class="card backup-card">
+
+  <div class="backup-icon blue">
+
+    <i class="fa-solid fa-download"></i>
+
+  </div>
+
+
+  <h3>
+    Backup Data
+  </h3>
+
+
+  <p>
+    Download seluruh data aplikasi
+    dalam format JSON.
+  </p>
+
+
+  <button
+    id="exportBackup"
+    class="btn btn-primary"
+  >
+
+    <i class="fa-solid fa-file-arrow-down"></i>
+
+    Download Backup
+
+  </button>
+
+</div>
+
+
+<!-- RESTORE -->
+
+<div class="card backup-card">
+
+  <div class="backup-icon green">
+
+    <i class="fa-solid fa-upload"></i>
+
+  </div>
+
+
+  <h3>
+    Restore Data
+  </h3>
+
+
+  <p>
+    Pulihkan data dari file backup JSON.
+  </p>
+
+
+  <input
+    type="file"
+    id="restoreBackupFile"
+    accept=".json"
+    hidden
+  >
+
+
+  <button
+    id="restoreBackupButton"
+    class="btn btn-light"
+  >
+
+    <i class="fa-solid fa-file-arrow-up"></i>
+
+    Pilih File Backup
+
+  </button>
+
+</div>
+
+
+<!-- GOOGLE SHEET -->
+
+<div class="card backup-card">
+
+  <div class="backup-icon orange">
+
+    <i class="fa-solid fa-table"></i>
+
+  </div>
+
+
+  <h3>
+    Google Sheets
+  </h3>
+
+
+  <p>
+    Pengaturan sinkronisasi Google Sheets
+    ketika koneksi tersedia.
+  </p>
+
+
+  <button
+    id="googleSheetSettings"
+    class="btn btn-light"
+  >
+
+    <i class="fa-solid fa-gear"></i>
+
+    Pengaturan Sync
+
+  </button>
+
+</div>
+```
+
+  </div>
+
+  <!-- BACKUP INFO -->
+
+  <div class="card">
+
+```
+<div class="card-header">
+
+  <div>
+
+    <h3>
+      <i class="fa-solid fa-shield-halved"></i>
+      Informasi Data
+    </h3>
+
+  </div>
+
+</div>
+
+
+<div
+  id="backupInfo"
+  class="backup-info"
+>
+
+  <!-- GENERATED JS -->
+
+</div>
+```
+
+  </div>
+
+</div>
+
+<!-- =====================================================
+     SETTINGS
+===================================================== -->
+
+<div
+  class="page"
+  id="settingsPage"
+>
+
+  <div class="page-toolbar">
+
+```
+<div>
+
+  <h2>
+    Pengaturan
+  </h2>
+
+  <p>
+    Konfigurasi aplikasi
+  </p>
+
+</div>
+```
+
+  </div>
+
+  <!-- APP SETTINGS -->
+
+  <div class="card settings-card">
+
+```
+<div class="settings-section-title">
+
+  <i class="fa-solid fa-mobile-screen-button"></i>
+
+  <div>
+
+    <h3>
+      Aplikasi
+    </h3>
+
+    <p>
+      Pengaturan nama dan tampilan
+    </p>
+
+  </div>
+
+</div>
+
+
+<div class="settings-form">
+
+
+  <div class="form-group">
+
+    <label>
+      Nama Aplikasi
+    </label>
+
+
+    <input
+      type="text"
+      id="settingAppName"
+      class="form-control"
+      placeholder="Contoh: Resiq Laundry"
+    >
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label>
+      Nama Pemilik / Usaha
+    </label>
+
+
+    <input
+      type="text"
+      id="settingBusinessName"
+      class="form-control"
+      placeholder="Opsional"
+    >
+
+  </div>
+
+
+  <button
+    id="saveAppSettings"
+    class="btn btn-primary"
+  >
+
+    <i class="fa-solid fa-floppy-disk"></i>
+
+    Simpan Pengaturan
+
+  </button>
+
+
+</div>
+```
+
+  </div>
+
+  <!-- COMMISSION SETTINGS -->
+
+  <div class="card settings-card">
+
+```
+<div class="settings-section-title">
+
+  <i class="fa-solid fa-money-bill-wave"></i>
+
+  <div>
+
+    <h3>
+      Tampilan Komisi
+    </h3>
+
+    <p>
+      Kontrol nominal komisi pada laporan
+    </p>
+
+  </div>
+
+</div>
+
+
+<div class="settings-option">
+
+  <div>
+
+    <strong>
+      Tampilkan Nominal Komisi
+    </strong>
+
+    <p>
+      Aktifkan untuk menampilkan nominal komisi
+      pada laporan dan cetakan.
+    </p>
+
+  </div>
+
+
+  <label class="switch">
+
+    <input
+      type="checkbox"
+      id="settingCommissionVisibility"
+      checked
+    >
+
+    <span class="slider"></span>
+
+  </label>
+
+</div>
+```
+
+  </div>
+
+  <!-- DATA SETTINGS -->
+
+  <div class="card settings-card">
+
+```
+<div class="settings-section-title">
+
+  <i class="fa-solid fa-database"></i>
+
+  <div>
+
+    <h3>
+      Database
+    </h3>
+
+    <p>
+      Pengelolaan data lokal
+    </p>
+
+  </div>
+
+</div>
+
+
+<div class="danger-zone">
+
+
+  <div>
+
+    <strong>
+      Reset Semua Data
+    </strong>
+
+    <p>
+      Menghapus seluruh data aplikasi.
+      Pastikan sudah melakukan backup.
+    </p>
+
+  </div>
+
+
+  <button
+    id="resetAllData"
+    class="btn btn-danger"
+  >
+
+    <i class="fa-solid fa-trash"></i>
+
+    Reset Data
+
+  </button>
+
+
+</div>
+```
+
+  </div>
+
+</div>
+
+</section>
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="app-footer">
+
+  <span id="footerAppName">
+    Laundry Manager
+  </span>
+
+  <span>
     •
-</span>
+  </span>
 
+  <span>
+    PWA Offline
+  </span>
 
-<span>
-    PWA Offline Ready
-</span>
-```
+  <span>
+    •
+  </span>
+
+  <span>
+    v3.0
+  </span>
 
 </footer>
 
-<!-- =========================================================
-     JAVASCRIPT APPLICATION
-========================================================== -->
+</main>
 
-<script
-    src="app.js"
-    defer
-></script>
+</div>
+
+<!-- =====================================================
+     MODAL
+===================================================== -->
+
+<div
+  id="modal"
+  class="modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modalTitle"
+  aria-hidden="true"
+>
+
+  <div class="modal-backdrop"></div>
+
+  <div
+    class="modal-dialog"
+    role="document"
+  >
+
+```
+<div class="modal-header">
+
+  <h3 id="modalTitle">
+    Modal
+  </h3>
+
+
+  <button
+    id="modalClose"
+    class="modal-close"
+    aria-label="Tutup"
+  >
+
+    <i class="fa-solid fa-xmark"></i>
+
+  </button>
+
+</div>
+
+
+<div
+  id="modalBody"
+  class="modal-body"
+>
+
+</div>
+
+
+<div
+  id="modalFooter"
+  class="modal-footer"
+>
+
+</div>
+```
+
+  </div>
+
+</div>
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
+<div
+  id="toastContainer"
+  class="toast-container"
+  aria-live="polite"
+  aria-atomic="true"
+></div>
+
+<!-- =====================================================
+     PRINT AREA
+===================================================== -->
+
+<div
+  id="printArea"
+  class="print-area"
+></div>
+
+<!-- =====================================================
+     EXTERNAL LIBRARIES
+===================================================== -->
+
+<!-- HTML TO CANVAS -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<!-- JSPDF -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- =====================================================
+     APP SCRIPT
+===================================================== -->
+
+<script src="script.js"></script>
+
+<!-- =====================================================
+     SERVICE WORKER
+===================================================== -->
+
+<script>
+
+if ("serviceWorker" in navigator) {
+
+  window.addEventListener("load", () => {
+
+    navigator.serviceWorker
+      .register("service-worker.js")
+      .then(() => {
+
+        console.log(
+          "Service Worker berhasil"
+        );
+
+      })
+      .catch((error) => {
+
+        console.error(
+          "Service Worker gagal:",
+          error
+        );
+
+      });
+
+  });
+
+}
+
+</script>
 
 </body>
 </html>
