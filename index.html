@@ -1,1 +1,636 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#2563eb"><title>Laundry Work Manager</title><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="css/app.css"></head><body><div id="app"><aside class="sidebar"><div class="brand"><div>🧺</div><div><b id="brandName">Laundry Work Manager</b><small>Offline First PWA</small></div></div><nav><button data-page="dashboard">🏠 Dashboard</button><button data-page="input">➕ Input</button><button data-page="transactions">🧾 Transaksi</button><button data-page="reports">📊 Rekap</button><button data-page="commission">🏆 Komisi</button><button data-page="settings">⚙️ Pengaturan</button><button data-page="backup">💾 Backup</button></nav><div class="sync">💾 Database lokal aktif</div></aside><main><header><button id="menu">☰</button><div><h1 id="title">Dashboard</h1><p id="today"></p></div><button id="theme">🌙</button></header><section id="content"></section></main></div><nav class="bottom"><button data-page="dashboard">🏠<small>Home</small></button><button data-page="input">➕<small>Input</small></button><button data-page="reports">📊<small>Rekap</small></button><button data-page="settings">⚙️<small>Menu</small></button></nav><div id="toast"></div><script type="module" src="js/app.js"></script></body></html>
+<!DOCTYPE html>
+
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+
+```
+<!-- Responsive Mobile -->
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
+
+<!-- PWA -->
+<meta name="theme-color" content="#2563eb">
+<meta
+    name="description"
+    content="Laundry Work Manager - Aplikasi Manajemen Pekerjaan Laundry"
+>
+
+<title>Laundry Work Manager</title>
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="manifest.json">
+
+<!-- Icons -->
+<link rel="icon" href="icons/icon.svg">
+
+<!-- CSS -->
+<link rel="stylesheet" href="style.css">
+```
+
+</head>
+
+<body>
+
+<!-- =====================================================
+     APP HEADER
+===================================================== -->
+
+<header class="app-header">
+
+```
+<div class="header-left">
+
+    <button
+        id="menuToggle"
+        class="icon-button"
+        aria-label="Menu"
+    >
+        ☰
+    </button>
+
+</div>
+
+
+<div class="header-center">
+
+    <div class="app-logo">
+        🧺
+    </div>
+
+    <div class="app-title-area">
+
+        <h1 id="appNameHeader">
+            Laundry Work Manager
+        </h1>
+
+        <span id="appSubtitle">
+            PWA Offline Manager
+        </span>
+
+    </div>
+
+</div>
+
+
+<div class="header-right">
+
+    <button
+        id="darkModeToggle"
+        class="icon-button"
+        title="Mode Tampilan"
+    >
+        ◐
+    </button>
+
+</div>
+```
+
+</header>
+
+<!-- =====================================================
+     MAIN APPLICATION
+===================================================== -->
+
+<div class="app-layout">
+
+```
+<!-- =================================================
+     SIDEBAR
+================================================= -->
+
+<aside
+    id="sidebar"
+    class="sidebar"
+>
+
+    <!-- Sidebar Header -->
+
+    <div class="sidebar-header">
+
+        <div class="sidebar-logo">
+            🧺
+        </div>
+
+        <div>
+
+            <strong id="sidebarAppName">
+                Laundry Work Manager
+            </strong>
+
+            <small>
+                Offline PWA
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <!-- Navigation -->
+
+    <nav class="sidebar-nav">
+
+
+        <button
+            class="nav-button active"
+            data-page="dashboard"
+        >
+            <span class="nav-icon">🏠</span>
+
+            <span>
+                Dashboard
+            </span>
+
+        </button>
+
+
+
+        <button
+            class="nav-button"
+            data-page="input"
+        >
+            <span class="nav-icon">⚡</span>
+
+            <span>
+                Input WhatsApp
+            </span>
+
+        </button>
+
+
+
+        <button
+            class="nav-button"
+            data-page="transactions"
+        >
+            <span class="nav-icon">🧾</span>
+
+            <span>
+                Transaksi
+            </span>
+
+        </button>
+
+
+
+        <button
+            class="nav-button"
+            data-page="reports"
+        >
+            <span class="nav-icon">📊</span>
+
+            <span>
+                Laporan & Cetak
+            </span>
+
+        </button>
+
+
+
+        <button
+            class="nav-button"
+            data-page="commission"
+        >
+            <span class="nav-icon">💰</span>
+
+            <span>
+                Komisi Karyawan
+            </span>
+
+        </button>
+
+
+
+        <button
+            class="nav-button"
+            data-page="master"
+        >
+            <span class="nav-icon">⚙️</span>
+
+            <span>
+                Master Data
+            </span>
+
+        </button>
+
+
+
+        <button
+            class="nav-button"
+            data-page="backup"
+        >
+            <span class="nav-icon">💾</span>
+
+            <span>
+                Backup & Restore
+            </span>
+
+        </button>
+
+
+    </nav>
+
+
+
+    <!-- Sidebar Footer -->
+
+    <div class="sidebar-footer">
+
+        <small>
+            Laundry Work Manager
+        </small>
+
+        <small>
+            Version 3 FINAL
+        </small>
+
+    </div>
+
+
+</aside>
+
+
+
+<!-- =================================================
+     SIDEBAR OVERLAY MOBILE
+================================================= -->
+
+<div
+    id="sidebarOverlay"
+    class="sidebar-overlay"
+></div>
+
+
+
+<!-- =================================================
+     MAIN CONTENT
+================================================= -->
+
+<main class="main-content">
+
+
+    <!-- Page Header -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h2 id="pageTitle">
+                Dashboard
+            </h2>
+
+            <p
+                id="pageDescription"
+                class="page-description"
+            >
+                Ringkasan aktivitas laundry hari ini
+            </p>
+
+        </div>
+
+
+        <div
+            id="pageHeaderAction"
+            class="page-header-action"
+        >
+
+            <!-- Dynamic Action -->
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =============================================
+         APPLICATION CONTENT
+    ============================================= -->
+
+    <div
+        id="appContent"
+        class="app-content"
+    >
+
+
+        <!-- =========================================
+             LOADING
+        ========================================= -->
+
+        <div class="loading-screen">
+
+            <div class="loading-spinner"></div>
+
+            <p>
+                Memuat aplikasi...
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+</main>
+```
+
+</div>
+
+<!-- =====================================================
+     TOAST NOTIFICATION
+===================================================== -->
+
+<div
+    id="toast"
+    class="toast"
+>
+
+```
+<div
+    id="toastIcon"
+    class="toast-icon"
+>
+    ✓
+</div>
+
+
+<div
+    class="toast-content"
+>
+
+    <strong
+        id="toastTitle"
+    >
+        Berhasil
+    </strong>
+
+    <span
+        id="toastMessage"
+    >
+        Data berhasil disimpan
+    </span>
+
+</div>
+
+
+<button
+    id="toastClose"
+    class="toast-close"
+>
+    ×
+</button>
+```
+
+</div>
+
+<!-- =====================================================
+     CONFIRM MODAL
+===================================================== -->
+
+<div
+    id="confirmModal"
+    class="modal-backdrop"
+>
+
+```
+<div
+    class="modal-card"
+>
+
+
+    <div class="modal-header">
+
+        <div>
+
+            <h3 id="confirmTitle">
+                Konfirmasi
+            </h3>
+
+            <p
+                id="confirmMessage"
+                class="modal-description"
+            >
+                Apakah Anda yakin?
+            </p>
+
+        </div>
+
+
+        <button
+            id="confirmClose"
+            class="modal-close"
+        >
+            ×
+        </button>
+
+
+    </div>
+
+
+
+    <div
+        class="modal-actions"
+    >
+
+        <button
+            id="confirmCancel"
+            class="btn btn-secondary"
+        >
+            Batal
+        </button>
+
+
+        <button
+            id="confirmYes"
+            class="btn btn-danger"
+        >
+            Ya, Lanjutkan
+        </button>
+
+
+    </div>
+
+
+</div>
+```
+
+</div>
+
+<!-- =====================================================
+     FORM MODAL
+===================================================== -->
+
+<div
+    id="formModal"
+    class="modal-backdrop"
+>
+
+```
+<div
+    class="modal-card modal-large"
+>
+
+
+    <div class="modal-header">
+
+        <div>
+
+            <h3 id="formModalTitle">
+                Form Data
+            </h3>
+
+            <p
+                id="formModalDescription"
+                class="modal-description"
+            >
+            </p>
+
+        </div>
+
+
+        <button
+            id="formModalClose"
+            class="modal-close"
+        >
+            ×
+        </button>
+
+
+    </div>
+
+
+
+    <div
+        id="formModalBody"
+        class="modal-body"
+    >
+
+    </div>
+
+
+
+    <div
+        id="formModalFooter"
+        class="modal-actions"
+    >
+
+    </div>
+
+
+</div>
+```
+
+</div>
+
+<!-- =====================================================
+     PRINT AREA
+     
+     Digunakan untuk:
+     - Thermal 58mm
+     - Print Browser
+     - Save PDF
+===================================================== -->
+
+<div
+    id="printArea"
+    class="print-area"
+>
+
+</div>
+
+<!-- =====================================================
+     IMAGE EXPORT CANVAS
+     
+     Digunakan untuk:
+     - Export JPG
+     - Share Image
+===================================================== -->
+
+<canvas
+id="reportCanvas"
+style="display:none"
+
+> </canvas>
+
+<!-- =====================================================
+     OFFLINE INDICATOR
+===================================================== -->
+
+<div
+    id="offlineIndicator"
+    class="offline-indicator"
+>
+
+```
+<span class="offline-dot"></span>
+
+<span id="offlineText">
+    Offline Mode
+</span>
+```
+
+</div>
+
+<!-- =====================================================
+     INSTALL PWA BUTTON
+===================================================== -->
+
+<div
+    id="installContainer"
+    class="install-container hidden"
+>
+
+```
+<div
+    class="install-card"
+>
+
+    <div class="install-icon">
+        🧺
+    </div>
+
+
+    <div class="install-content">
+
+        <strong>
+            Install Aplikasi
+        </strong>
+
+        <span>
+            Install aplikasi agar dapat digunakan seperti aplikasi Android.
+        </span>
+
+    </div>
+
+
+    <button
+        id="installButton"
+        class="btn btn-primary"
+    >
+        Install
+    </button>
+
+
+    <button
+        id="installClose"
+        class="install-close"
+    >
+        ×
+    </button>
+
+
+</div>
+```
+
+</div>
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script src="app.js"></script>
+
+</body>
+</html>
