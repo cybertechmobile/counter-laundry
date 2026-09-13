@@ -1,2799 +1,113 @@
 /* =========================================================
    LAUNDRY MANAGER PWA
-   FILE 2 — style.css
+   FILE 3 — app.js
    VERSION 4.0.0
 ========================================================= */
 
+"use strict";
 
 /* =========================================================
-   RESET & VARIABLES
+   CONFIG
 ========================================================= */
 
-:root {
-  --primary: #2563eb;
-  --primary-dark: #1d4ed8;
-  --primary-light: #dbeafe;
+const APP_VERSION = "4.0.0";
+const DB_NAME = "LaundryManagerDB";
+const DB_VERSION = 1;
 
-  --success: #16a34a;
-  --success-light: #dcfce7;
+let db = null;
 
-  --warning: #f59e0b;
-  --warning-light: #fef3c7;
+let state = {
+  settings: {
+    appName: "Laundry Manager",
+    showCommission: true,
+    darkMode: false
+  },
 
-  --danger: #dc2626;
-  --danger-light: #fee2e2;
+  employees: [],
+  items: [],
+  tiers: [],
+  jobs: [],
 
-  --purple: #7c3aed;
-  --purple-light: #ede9fe;
-
-  --bg: #f4f7fb;
-  --surface: #ffffff;
-  --surface-alt: #f8fafc;
-
-  --text: #172033;
-  --text-secondary: #64748b;
-  --border: #e2e8f0;
-
-  --sidebar-width: 270px;
-  --header-height: 76px;
-
-  --radius-sm: 10px;
-  --radius: 16px;
-  --radius-lg: 24px;
-
-  --shadow-sm:
-    0 2px 8px rgba(15, 23, 42, 0.05);
-
-  --shadow:
-    0 8px 30px rgba(15, 23, 42, 0.08);
-
-  --shadow-lg:
-    0 20px 50px rgba(15, 23, 42, 0.15);
-
-  --transition:
-    0.25s ease;
-
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-}
-
-
-* {
-  box-sizing: border-box;
-}
-
-
-html {
-  scroll-behavior: smooth;
-}
-
-
-body {
-  margin: 0;
-  min-height: 100vh;
-
-  background: var(--bg);
-
-  color: var(--text);
-
-  font-family: inherit;
-
-  overflow-x: hidden;
-
-  -webkit-font-smoothing: antialiased;
-
-  -webkit-tap-highlight-color: transparent;
-}
-
-
-body.dark-mode {
-
-  --bg: #0f172a;
-
-  --surface: #162033;
-
-  --surface-alt: #1e293b;
-
-  --text: #f1f5f9;
-
-  --text-secondary: #94a3b8;
-
-  --border: #334155;
-
-  --primary-light: #1e3a8a;
-
-  --success-light: #14532d;
-
-  --warning-light: #78350f;
-
-  --danger-light: #7f1d1d;
-
-  --purple-light: #4c1d95;
-}
-
-
-button,
-input,
-select,
-textarea {
-  font: inherit;
-}
-
-
-button {
-  cursor: pointer;
-}
-
-
-button:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-
-img {
-  max-width: 100%;
-  display: block;
-}
-
-
-.hidden {
-  display: none !important;
-}
-
-
-.mobile-only {
-  display: none;
-}
+  editingEmployeeId: null,
+  editingItemId: null,
+  editingTierId: null
+};
 
 
 /* =========================================================
-   SPLASH SCREEN
+   HELPER
 ========================================================= */
 
-.splash-screen {
-
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 9999;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  background:
-    radial-gradient(
-      circle at top right,
-      #3b82f6,
-      #1e3a8a 45%,
-      #0f172a 100%
-    );
-
-  color: white;
-
-  transition:
-    opacity 0.45s ease,
-    visibility 0.45s ease;
-}
-
-
-.splash-screen.hide {
-
-  opacity: 0;
-
-  visibility: hidden;
-
-  pointer-events: none;
-}
-
-
-.splash-content {
-
-  width: min(90%, 400px);
-
-  text-align: center;
-
-  padding: 35px 25px;
-
-  animation:
-    splashEnter 0.7s ease;
-}
-
-
-.splash-logo {
-
-  width: 120px;
-
-  height: 120px;
-
-  margin: 0 auto 25px;
-
-  padding: 14px;
-
-  border-radius: 32px;
-
-  background: rgba(255,255,255,0.12);
-
-  backdrop-filter: blur(10px);
-
-  box-shadow:
-    0 15px 40px rgba(0,0,0,0.25);
-
-  animation:
-    splashFloat 2.8s ease-in-out infinite;
-}
-
-
-.splash-logo img {
-
-  width: 100%;
-
-  height: 100%;
-
-  object-fit: contain;
-
-  border-radius: 22px;
-}
-
-
-.splash-content h1 {
-
-  margin: 0;
-
-  font-size: 28px;
-
-  font-weight: 800;
-
-  letter-spacing: -0.5px;
-}
-
-
-.splash-content p {
-
-  margin: 10px 0 24px;
-
-  opacity: 0.75;
-
-  font-size: 14px;
-}
-
-
-.loader {
-
-  display: flex;
-
-  justify-content: center;
-
-  align-items: center;
-
-  gap: 8px;
-}
-
-
-.loader span {
-
-  width: 10px;
-
-  height: 10px;
-
-  border-radius: 50%;
-
-  background: white;
-
-  animation:
-    loaderBounce 1.2s infinite ease-in-out;
-}
-
-
-.loader span:nth-child(2) {
-  animation-delay: 0.15s;
-}
-
-
-.loader span:nth-child(3) {
-  animation-delay: 0.3s;
-}
-
-
-@keyframes splashEnter {
-
-  from {
-
-    opacity: 0;
-
-    transform: translateY(25px);
-
-  }
-
-  to {
-
-    opacity: 1;
-
-    transform: translateY(0);
-
-  }
-}
-
-
-@keyframes splashFloat {
-
-  0%,
-  100% {
-
-    transform:
-      translateY(0);
-
-  }
-
-  50% {
-
-    transform:
-      translateY(-8px);
-
-  }
-}
-
-
-@keyframes loaderBounce {
-
-  0%,
-  80%,
-  100% {
-
-    transform: scale(0.65);
-
-    opacity: 0.45;
-
-  }
-
-  40% {
-
-    transform: scale(1);
-
-    opacity: 1;
-
-  }
-}
-
-
-/* =========================================================
-   APP SHELL
-========================================================= */
-
-.app-shell {
-
-  display: flex;
-
-  min-height: 100vh;
-}
-
-
-/* =========================================================
-   SIDEBAR
-========================================================= */
-
-.sidebar {
-
-  position: fixed;
-
-  top: 0;
-
-  left: 0;
-
-  bottom: 0;
-
-  width: var(--sidebar-width);
-
-  display: flex;
-
-  flex-direction: column;
-
-  z-index: 1000;
-
-  background:
-    linear-gradient(
-      180deg,
-      #172554,
-      #1e3a8a
-    );
-
-  color: white;
-
-  box-shadow:
-    10px 0 30px rgba(15,23,42,0.1);
-
-  transition:
-    transform var(--transition);
-}
-
-
-.sidebar-brand {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 12px;
-
-  padding: 22px 18px;
-
-  border-bottom:
-    1px solid rgba(255,255,255,0.1);
-}
-
-
-.brand-icon {
-
-  width: 48px;
-
-  height: 48px;
-
-  flex-shrink: 0;
-
-  padding: 5px;
-
-  background:
-    rgba(255,255,255,0.12);
-
-  border-radius: 14px;
-}
-
-
-.brand-icon img {
-
-  width: 100%;
-
-  height: 100%;
-
-  object-fit: contain;
-
-  border-radius: 10px;
-}
-
-
-.brand-text {
-
-  min-width: 0;
-
-  display: flex;
-
-  flex-direction: column;
-}
-
-
-.brand-text strong {
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-
-  white-space: nowrap;
-
-  font-size: 16px;
-}
-
-
-.brand-text small {
-
-  margin-top: 3px;
-
-  color: rgba(255,255,255,0.65);
-
-  font-size: 11px;
-}
-
-
-.sidebar-nav {
-
-  flex: 1;
-
-  padding: 15px 12px;
-
-  overflow-y: auto;
-}
-
-
-.nav-item {
-
-  width: 100%;
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 13px;
-
-  margin-bottom: 5px;
-
-  padding: 13px 14px;
-
-  border: none;
-
-  border-radius: 13px;
-
-  background: transparent;
-
-  color: rgba(255,255,255,0.75);
-
-  text-align: left;
-
-  transition:
-    background var(--transition),
-    color var(--transition),
-    transform var(--transition);
-}
-
-
-.nav-item:hover {
-
-  background:
-    rgba(255,255,255,0.09);
-
-  color: white;
-
-  transform:
-    translateX(3px);
-}
-
-
-.nav-item.active {
-
-  background:
-    rgba(255,255,255,0.16);
-
-  color: white;
-
-  box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,0.08);
-}
-
-
-.nav-icon {
-
-  width: 25px;
-
-  text-align: center;
-
-  font-size: 18px;
-}
-
-
-.nav-label {
-
-  font-size: 14px;
-
-  font-weight: 600;
-}
-
-
-.sidebar-footer {
-
-  padding: 16px 18px;
-
-  border-top:
-    1px solid rgba(255,255,255,0.1);
-
-  color:
-    rgba(255,255,255,0.65);
-
-  font-size: 12px;
-}
-
-
-.database-status {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 8px;
-
-  margin-bottom: 8px;
-}
-
-
-.status-dot {
-
-  width: 9px;
-
-  height: 9px;
-
-  border-radius: 50%;
-
-  background: #4ade80;
-
-  box-shadow:
-    0 0 0 4px rgba(74,222,128,0.15);
-}
-
-
-/* =========================================================
-   SIDEBAR OVERLAY
-========================================================= */
-
-.sidebar-overlay {
-
-  display: none;
-
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 900;
-
-  background:
-    rgba(15,23,42,0.55);
-
-  backdrop-filter:
-    blur(2px);
-}
-
-
-.sidebar-overlay.show {
-
-  display: block;
-}
-
-
-/* =========================================================
-   MAIN CONTENT
-========================================================= */
-
-.main-content {
-
-  width: 100%;
-
-  min-height: 100vh;
-
-  margin-left: var(--sidebar-width);
-
-  background: var(--bg);
-}
-
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-.top-header {
-
-  position: sticky;
-
-  top: 0;
-
-  z-index: 500;
-
-  min-height: var(--header-height);
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  gap: 20px;
-
-  padding:
-    12px 28px;
-
-  background:
-    rgba(255,255,255,0.9);
-
-  backdrop-filter:
-    blur(16px);
-
-  border-bottom:
-    1px solid var(--border);
-}
-
-
-.dark-mode .top-header {
-
-  background:
-    rgba(22,32,51,0.9);
-}
-
-
-.header-left {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 15px;
-}
-
-
-.header-right {
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: flex-end;
-
-  gap: 12px;
-
-  flex-wrap: wrap;
-}
-
-
-.page-heading h1 {
-
-  margin: 0;
-
-  font-size: 21px;
-
-  font-weight: 800;
-}
-
-
-.page-heading p {
-
-  margin: 3px 0 0;
-
-  color: var(--text-secondary);
-
-  font-size: 13px;
-}
-
-
-/* =========================================================
-   BUTTONS
-========================================================= */
-
-.icon-button {
-
-  width: 42px;
-
-  height: 42px;
-
-  display: inline-flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  flex-shrink: 0;
-
-  border: 1px solid var(--border);
-
-  border-radius: 12px;
-
-  background: var(--surface);
-
-  color: var(--text);
-
-  font-size: 18px;
-
-  transition:
-    transform var(--transition),
-    box-shadow var(--transition),
-    background var(--transition);
-}
-
-
-.icon-button:hover {
-
-  transform:
-    translateY(-2px);
-
-  box-shadow:
-    var(--shadow-sm);
-
-  background:
-    var(--surface-alt);
-}
-
-
-.primary-button {
-
-  display: inline-flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 8px;
-
-  min-height: 44px;
-
-  padding:
-    11px 18px;
-
-  border: none;
-
-  border-radius: 12px;
-
-  background:
-    linear-gradient(
-      135deg,
-      var(--primary),
-      var(--primary-dark)
-    );
-
-  color: white;
-
-  font-weight: 700;
-
-  box-shadow:
-    0 8px 18px rgba(37,99,235,0.22);
-
-  transition:
-    transform var(--transition),
-    box-shadow var(--transition);
-}
-
-
-.primary-button:hover {
-
-  transform:
-    translateY(-2px);
-
-  box-shadow:
-    0 12px 24px rgba(37,99,235,0.3);
-}
-
-
-.secondary-button {
-
-  display: inline-flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 7px;
-
-  min-height: 42px;
-
-  padding:
-    10px 16px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius: 11px;
-
-  background:
-    var(--surface);
-
-  color:
-    var(--text);
-
-  font-weight: 600;
-
-  transition:
-    background var(--transition),
-    transform var(--transition);
-}
-
-
-.secondary-button:hover {
-
-  background:
-    var(--surface-alt);
-
-  transform:
-    translateY(-1px);
-}
-
-
-.danger-button {
-
-  min-height: 42px;
-
-  padding:
-    10px 17px;
-
-  border: none;
-
-  border-radius: 11px;
-
-  background:
-    var(--danger);
-
-  color: white;
-
-  font-weight: 700;
-}
-
-
-.danger-outline-button {
-
-  min-height: 42px;
-
-  padding:
-    10px 16px;
-
-  border:
-    1px solid var(--danger);
-
-  border-radius: 11px;
-
-  background:
-    transparent;
-
-  color:
-    var(--danger);
-
-  font-weight: 600;
-}
-
-
-.whatsapp-button {
-
-  display: inline-flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 8px;
-
-  min-height: 44px;
-
-  padding:
-    11px 18px;
-
-  border: none;
-
-  border-radius: 12px;
-
-  background:
-    #25d366;
-
-  color: white;
-
-  font-weight: 700;
-}
-
-
-.text-button {
-
-  padding: 8px;
-
-  border: none;
-
-  background: transparent;
-
-  color: var(--primary);
-
-  font-weight: 700;
-}
-
-
-.full-width {
-
-  width: 100%;
-}
-
-
-.install-button {
-
-  min-height: 40px;
-
-  padding:
-    9px 14px;
-
-  border: none;
-
-  border-radius: 10px;
-
-  background:
-    var(--primary);
-
-  color: white;
-
-  font-weight: 700;
-}
-
-
-/* =========================================================
-   COMMISSION SWITCH
-========================================================= */
-
-.commission-switch-wrap {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 8px;
-
-  padding:
-    7px 10px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius: 12px;
-
-  background:
-    var(--surface);
-}
-
-
-.commission-label {
-
-  font-size: 12px;
-
-  font-weight: 600;
-
-  color:
-    var(--text-secondary);
-}
-
-
-.switch {
-
-  position: relative;
-
-  display: inline-block;
-
-  width: 46px;
-
-  height: 25px;
-}
-
-
-.switch input {
-
-  width: 0;
-
-  height: 0;
-
-  opacity: 0;
-}
-
-
-.slider {
-
-  position: absolute;
-
-  inset: 0;
-
-  border-radius: 50px;
-
-  background:
-    #cbd5e1;
-
-  transition:
-    0.25s ease;
-}
-
-
-.slider::before {
-
-  content: "";
-
-  position: absolute;
-
-  width: 19px;
-
-  height: 19px;
-
-  left: 3px;
-
-  top: 3px;
-
-  border-radius: 50%;
-
-  background: white;
-
-  box-shadow:
-    0 2px 5px rgba(0,0,0,0.2);
-
-  transition:
-    0.25s ease;
-}
-
-
-.switch input:checked + .slider {
-
-  background:
-    var(--primary);
-}
-
-
-.switch input:checked + .slider::before {
-
-  transform:
-    translateX(21px);
-}
-
-
-/* =========================================================
-   ONLINE STATUS
-========================================================= */
-
-.online-status {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 7px;
-
-  padding:
-    8px 11px;
-
-  border-radius: 20px;
-
-  background:
-    var(--success-light);
-
-  color:
-    var(--success);
-
-  font-size: 12px;
-
-  font-weight: 700;
-}
-
-
-.online-dot {
-
-  width: 8px;
-
-  height: 8px;
-
-  border-radius: 50%;
-
-  background:
-    currentColor;
-}
-
-
-/* =========================================================
-   PAGE CONTENT
-========================================================= */
-
-.page-content {
-
-  padding:
-    28px;
-}
-
-
-.page {
-
-  display: none;
-
-  animation:
-    pageFade 0.3s ease;
-}
-
-
-.page.active {
-
-  display: block;
-}
-
-
-@keyframes pageFade {
-
-  from {
-
-    opacity: 0;
-
-    transform:
-      translateY(8px);
-
-  }
-
-  to {
-
-    opacity: 1;
-
-    transform:
-      translateY(0);
-
-  }
-}
-
-
-/* =========================================================
-   PAGE GRID
-========================================================= */
-
-.page-grid {
-
-  display: grid;
-
-  gap: 22px;
-}
-
-
-.two-column {
-
-  grid-template-columns:
-    minmax(0,1fr)
-    minmax(0,1fr);
-}
-
-
-/* =========================================================
-   WELCOME CARD
-========================================================= */
-
-.welcome-card {
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  gap: 25px;
-
-  margin-bottom: 24px;
-
-  padding:
-    30px;
-
-  border-radius:
-    var(--radius-lg);
-
-  background:
-    linear-gradient(
-      135deg,
-      #2563eb,
-      #1e40af
-    );
-
-  color: white;
-
-  box-shadow:
-    0 15px 40px rgba(37,99,235,0.22);
-}
-
-
-.eyebrow {
-
-  display: inline-block;
-
-  margin-bottom: 8px;
-
-  font-size: 13px;
-
-  font-weight: 700;
-
-  opacity: 0.8;
-}
-
-
-.welcome-card h2 {
-
-  margin: 0;
-
-  font-size: 27px;
-}
-
-
-.welcome-card p {
-
-  max-width: 600px;
-
-  margin:
-    9px 0 0;
-
-  color:
-    rgba(255,255,255,0.8);
-
-  line-height: 1.6;
-}
-
-
-.welcome-date {
-
-  min-width: 130px;
-
-  padding:
-    18px;
-
-  border-radius:
-    var(--radius);
-
-  background:
-    rgba(255,255,255,0.13);
-
-  text-align: center;
-
-  backdrop-filter:
-    blur(8px);
-}
-
-
-.welcome-date span {
-
-  display: block;
-
-  margin-bottom: 7px;
-
-  font-size: 24px;
-}
-
-
-.welcome-date strong {
-
-  display: block;
-
-  font-size: 13px;
-}
-
-
-/* =========================================================
-   STATS
-========================================================= */
-
-.stats-grid {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(4, minmax(0,1fr));
-
-  gap: 18px;
-
-  margin-bottom: 24px;
-}
-
-
-.stat-card {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 14px;
-
-  min-width: 0;
-
-  padding:
-    20px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:
-    var(--radius);
-
-  background:
-    var(--surface);
-
-  box-shadow:
-    var(--shadow-sm);
-
-  transition:
-    transform var(--transition),
-    box-shadow var(--transition);
-}
-
-
-.stat-card:hover {
-
-  transform:
-    translateY(-3px);
-
-  box-shadow:
-    var(--shadow);
-}
-
-
-.stat-card > div:last-child {
-
-  min-width: 0;
-}
-
-
-.stat-card span {
-
-  display: block;
-
-  margin-bottom: 6px;
-
-  color:
-    var(--text-secondary);
-
-  font-size: 12px;
-}
-
-
-.stat-card strong {
-
-  display: block;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-
-  white-space: nowrap;
-
-  font-size: 21px;
-}
-
-
-.stat-icon {
-
-  width: 48px;
-
-  height: 48px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  flex-shrink: 0;
-
-  border-radius: 14px;
-
-  font-size: 22px;
-}
-
-
-.stat-icon.blue {
-
-  background:
-    var(--primary-light);
-}
-
-
-.stat-icon.green {
-
-  background:
-    var(--success-light);
-}
-
-
-.stat-icon.orange {
-
-  background:
-    var(--warning-light);
-}
-
-
-.stat-icon.purple {
-
-  background:
-    var(--purple-light);
-}
-
-
-/* =========================================================
-   SECTION CARD
-========================================================= */
-
-.section-card {
-
-  margin-bottom: 24px;
-
-  padding:
-    24px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:
-    var(--radius);
-
-  background:
-    var(--surface);
-
-  box-shadow:
-    var(--shadow-sm);
-}
-
-
-.section-header {
-
-  display: flex;
-
-  align-items: flex-start;
-
-  justify-content: space-between;
-
-  gap: 20px;
-
-  margin-bottom: 22px;
-}
-
-
-.section-header h3 {
-
-  margin: 0;
-
-  font-size: 18px;
-}
-
-
-.section-header p {
-
-  margin:
-    5px 0 0;
-
-  color:
-    var(--text-secondary);
-
-  font-size: 13px;
-}
-
-
-/* =========================================================
-   QUICK ACTIONS
-========================================================= */
-
-.quick-actions {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(4, minmax(0,1fr));
-
-  gap: 14px;
-}
-
-
-.quick-action {
-
-  min-height: 145px;
-
-  padding:
-    20px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:
-    var(--radius);
-
-  background:
-    var(--surface-alt);
-
-  color:
-    var(--text);
-
-  text-align: left;
-
-  transition:
-    transform var(--transition),
-    border-color var(--transition),
-    box-shadow var(--transition);
-}
-
-
-.quick-action:hover {
-
-  transform:
-    translateY(-4px);
-
-  border-color:
-    var(--primary);
-
-  box-shadow:
-    var(--shadow);
-}
-
-
-.quick-action span {
-
-  display: block;
-
-  margin-bottom: 12px;
-
-  font-size: 28px;
-}
-
-
-.quick-action strong {
-
-  display: block;
-
-  margin-bottom: 5px;
-
-  font-size: 14px;
-}
-
-
-.quick-action small {
-
-  color:
-    var(--text-secondary);
-
-  font-size: 12px;
-}
-
-
-/* =========================================================
-   RECENT JOBS
-========================================================= */
-
-.recent-jobs {
-
-  display: grid;
-
-  gap: 10px;
-}
-
-
-.recent-job {
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  gap: 15px;
-
-  padding:
-    15px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:
-    13px;
-
-  background:
-    var(--surface-alt);
-}
-
-
-.recent-job-left {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 12px;
-}
-
-
-.recent-job-icon {
-
-  width: 42px;
-
-  height: 42px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  border-radius: 12px;
-
-  background:
-    var(--primary-light);
-}
-
-
-.recent-job strong {
-
-  display: block;
-
-  font-size: 14px;
-}
-
-
-.recent-job small {
-
-  display: block;
-
-  margin-top: 3px;
-
-  color:
-    var(--text-secondary);
-
-  font-size: 12px;
-}
-
-
-/* =========================================================
-   EMPTY STATE
-========================================================= */
-
-.empty-state {
-
-  padding:
-    45px 20px;
-
-  text-align: center;
-
-  color:
-    var(--text-secondary);
-}
-
-
-.empty-state > span {
-
-  display: block;
-
-  margin-bottom: 12px;
-
-  font-size: 42px;
-}
-
-
-.empty-state h3 {
-
-  margin: 0 0 8px;
-
-  color:
-    var(--text);
-}
-
-
-.empty-state p {
-
-  margin: 0;
-
-  font-size: 14px;
-}
-
-
-/* =========================================================
-   FORM
-========================================================= */
-
-.form-group {
-
-  margin-bottom: 18px;
-}
-
-
-.form-group label {
-
-  display: block;
-
-  margin-bottom: 8px;
-
-  color:
-    var(--text);
-
-  font-size: 13px;
-
-  font-weight: 700;
-}
-
-
-.form-group label small {
-
-  display: block;
-
-  margin-top: 5px;
-
-  color:
-    var(--text-secondary);
-
-  font-size: 11px;
-
-  font-weight: 500;
-
-  line-height: 1.5;
-}
-
-
-.form-row {
-
-  display: grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap: 16px;
-}
-
-
-input,
-select,
-textarea {
-
-  width: 100%;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:
-    11px;
-
-  outline: none;
-
-  background:
-    var(--surface);
-
-  color:
-    var(--text);
-
-  transition:
-    border-color var(--transition),
-    box-shadow var(--transition);
-}
-
-
-input,
-select {
-
-  min-height: 45px;
-
-  padding:
-    10px 13px;
-}
-
-
-textarea {
-
-  min-height: 100px;
-
-  padding:
-    12px 13px;
-
-  resize:
-    vertical;
-}
-
-
-input::placeholder,
-textarea::placeholder {
-
-  color:
-    #94a3b8;
-}
-
-
-input:focus,
-select:focus,
-textarea:focus {
-
-  border-color:
-    var(--primary);
-
-  box-shadow:
-    0 0 0 4px rgba(37,99,235,0.1);
-}
-
-
-/* =========================================================
-   PREVIEW
-========================================================= */
-
-.preview-card {
-
-  min-height: 450px;
-}
-
-
-.job-preview {
-
-  min-height: 330px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  border:
-    2px dashed var(--border);
-
-  border-radius:
-    var(--radius);
-
-  background:
-    var(--surface-alt);
-}
-
-
-.preview-placeholder {
-
-  text-align: center;
-
-  color:
-    var(--text-secondary);
-}
-
-
-.preview-placeholder span {
-
-  display: block;
-
-  margin-bottom: 10px;
-
-  font-size: 45px;
-}
-
-
-/* =========================================================
-   WHATSAPP
-========================================================= */
-
-.whatsapp-card {
-
-  border-top:
-    4px solid #25d366;
-}
-
-
-.parse-result {
-
-  margin-top: 18px;
-
-  padding:
-    15px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:
-    var(--radius);
-
-  background:
-    var(--surface-alt);
-
-  overflow-x: auto;
-}
-
-
-.whatsapp-actions {
-
-  display: flex;
-
-  justify-content: flex-end;
-
-  gap: 10px;
-
-  margin-top: 18px;
-
-  flex-wrap: wrap;
-}
-
-
-/* =========================================================
-   FILTER BAR
-========================================================= */
-
-.filter-bar {
-
-  display: grid;
-
-  grid-template-columns:
-    2fr 1fr 1fr auto;
-
-  gap: 12px;
-
-  margin-bottom: 20px;
-}
-
-
-/* =========================================================
-   TABLE
-========================================================= */
-
-.table-responsive {
-
-  width: 100%;
-
-  overflow-x: auto;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:
-    var(--radius);
-}
-
-
-table {
-
-  width: 100%;
-
-  border-collapse:
-    collapse;
-
-  min-width:
-    760px;
-}
-
-
-thead {
-
-  background:
-    var(--surface-alt);
-}
-
-
-th,
-td {
-
-  padding:
-    14px;
-
-  border-bottom:
-    1px solid var(--border);
-
-  text-align: left;
-
-  font-size: 13px;
-}
-
-
-th {
-
-  color:
-    var(--text-secondary);
-
-  font-weight: 700;
-
-  white-space: nowrap;
-}
-
-
-td {
-
-  color:
-    var(--text);
-}
-
-
-tbody tr:hover {
-
-  background:
-    var(--surface-alt);
-}
-
-
-tbody tr:last-child td {
-
-  border-bottom: none;
-}
-
-
-.table-actions {
-
-  display: flex;
-
-  gap: 7px;
-}
-
-
-.table-action {
-
-  width: 34px;
-
-  height: 34px;
-
-  display: inline-flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  border:
-    1px solid var(--border);
-
-  border-radius: 9px;
-
-  background:
-    var(--surface);
-
-  font-size: 14px;
-}
-
-
-/* =========================================================
-   PAGINATION
-========================================================= */
-
-.pagination {
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 7px;
-
-  margin-top: 20px;
-
-  flex-wrap: wrap;
-}
-
-
-.pagination button {
-
-  min-width: 36px;
-
-  height: 36px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius: 9px;
-
-  background:
-    var(--surface);
-
-  color:
-    var(--text);
-}
-
-
-.pagination button.active {
-
-  background:
-    var(--primary);
-
-  color: white;
-
-  border-color:
-    var(--primary);
-}
-
-
-/* =========================================================
-   REPORT CONTROLS
-========================================================= */
-
-.report-controls {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(4, minmax(0,1fr))
-    auto;
-
-  align-items: end;
-
-  gap: 15px;
-}
-
-
-.report-controls .form-group {
-
-  margin-bottom: 0;
-}
-
-
-.report-summary {
-
-  margin-bottom: 24px;
-}
-
-
-.report-content {
-
-  min-height: 250px;
-}
-
-
-.report-actions {
-
-  display: flex;
-
-  justify-content: flex-end;
-
-  gap: 10px;
-
-  margin-bottom: 24px;
-
-  flex-wrap: wrap;
-}
-
-
-/* =========================================================
-   EMPLOYEE LIST
-========================================================= */
-
-.employee-list {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(auto-fill,minmax(280px,1fr));
-
-  gap: 16px;
-}
-
-
-.employee-card {
-
-  padding:
-    20px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:
-    var(--radius);
-
-  background:
-    var(--surface-alt);
-}
-
-
-.employee-card-header {
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  gap: 12px;
-
-  margin-bottom: 15px;
+function $(selector) {
+  return document.querySelector(selector);
 }
 
-
-.employee-avatar {
-
-  width: 48px;
-
-  height: 48px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background:
-    var(--primary-light);
-
-  font-size: 21px;
-}
-
-
-.employee-info {
-
-  flex: 1;
-}
-
-
-.employee-info strong {
-
-  display: block;
-}
-
-
-.employee-info small {
-
-  display: block;
-
-  margin-top: 4px;
-
-  color:
-    var(--text-secondary);
-}
-
-
-.employee-commission {
-
-  padding:
-    12px;
-
-  border-radius:
-    12px;
-
-  background:
-    var(--purple-light);
-}
-
-
-.employee-commission span {
-
-  display: block;
-
-  margin-bottom: 4px;
-
-  color:
-    var(--text-secondary);
-
-  font-size: 11px;
-}
-
-
-.employee-commission strong {
-
-  font-size: 17px;
-}
-
-
-/* =========================================================
-   ITEM LIST
-========================================================= */
-
-.item-list {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(auto-fill,minmax(260px,1fr));
-
-  gap: 15px;
-}
-
-
-.item-card {
-
-  position: relative;
-
-  padding:
-    20px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:
-    var(--radius);
-
-  background:
-    var(--surface-alt);
-}
-
-
-.item-card h4 {
-
-  margin:
-    0 0 8px;
-}
-
-
-.item-meta {
-
-  display: flex;
-
-  gap: 7px;
-
-  flex-wrap: wrap;
-
-  margin-bottom: 15px;
-}
-
-
-.badge {
-
-  display: inline-flex;
-
-  align-items: center;
-
-  padding:
-    5px 9px;
-
-  border-radius:
-    20px;
-
-  background:
-    var(--primary-light);
-
-  color:
-    var(--primary);
-
-  font-size: 11px;
-
-  font-weight: 700;
-}
-
-
-.badge.success {
-
-  background:
-    var(--success-light);
-
-  color:
-    var(--success);
-}
-
-
-.badge.warning {
-
-  background:
-    var(--warning-light);
-
-  color:
-    var(--warning);
-}
-
-
-/* =========================================================
-   TIER LIST
-========================================================= */
-
-.tier-list {
-
-  display: grid;
-
-  gap: 12px;
-}
-
-
-.tier-card {
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  gap: 15px;
-
-  padding:
-    17px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:
-    var(--radius);
-
-  background:
-    var(--surface-alt);
-}
-
-
-.tier-card strong {
-
-  display: block;
-
-  margin-bottom: 4px;
-}
-
-
-.tier-card small {
-
-  color:
-    var(--text-secondary);
-}
-
-
-/* =========================================================
-   BACKUP
-========================================================= */
-
-.backup-options {
-
-  display: grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap: 15px;
-}
-
-
-.backup-option {
-
-  min-height: 170px;
-
-  padding:
-    20px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:
-    var(--radius);
-
-  background:
-    var(--surface-alt);
-
-  color:
-    var(--text);
-
-  text-align: center;
-
-  transition:
-    transform var(--transition),
-    border-color var(--transition);
-}
-
-
-.backup-option:hover {
-
-  transform:
-    translateY(-3px);
-
-  border-color:
-    var(--primary);
-}
-
-
-.backup-option span {
-
-  display: block;
-
-  margin-bottom: 12px;
-
-  font-size: 35px;
-}
-
-
-.backup-option strong {
-
-  display: block;
-
-  margin-bottom: 6px;
-}
-
-
-.backup-option small {
-
-  color:
-    var(--text-secondary);
-}
-
-
-.restore-area {
-
-  min-height: 170px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 15px;
-
-  padding:
-    20px;
-
-  border:
-    2px dashed var(--border);
-
-  border-radius:
-    var(--radius);
-
-  text-align: center;
-}
-
-
-.restore-warning {
-
-  margin: 0;
-
-  color:
-    var(--text-secondary);
-
-  font-size: 12px;
-
-  line-height: 1.6;
-}
-
-
-.database-info {
-
-  padding:
-    20px;
-
-  border-radius:
-    var(--radius);
-
-  background:
-    var(--surface-alt);
-}
-
-
-/* =========================================================
-   SETTINGS
-========================================================= */
-
-.settings-list {
-
-  display: grid;
-
-  gap: 5px;
-}
-
-
-.setting-row {
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  gap: 20px;
-
-  padding:
-    16px 0;
-
-  border-bottom:
-    1px solid var(--border);
+function $all(selector) {
+  return document.querySelectorAll(selector);
 }
 
-
-.setting-row:last-child {
-
-  border-bottom: none;
-}
-
-
-.setting-row strong {
-
-  display: block;
-
-  font-size: 14px;
-}
-
-
-.setting-row small {
-
-  display: block;
-
-  margin-top: 5px;
-
-  color:
-    var(--text-secondary);
-
-  font-size: 12px;
-}
-
-
-.danger-zone {
-
-  border-color:
-    rgba(220,38,38,0.25);
-}
-
-
-/* =========================================================
-   MODAL
-========================================================= */
-
-.modal {
-
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 3000;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  padding:
-    20px;
-}
-
-
-.modal-backdrop {
-
-  position: absolute;
-
-  inset: 0;
-
-  background:
-    rgba(15,23,42,0.65);
-
-  backdrop-filter:
-    blur(4px);
+function generateId(prefix = "id") {
+  return `${prefix}_${Date.now()}_${Math.random()
+    .toString(36)
+    .substring(2, 8)}`;
 }
-
-
-.modal-dialog {
-
-  position: relative;
-
-  z-index: 1;
 
-  width: min(100%, 600px);
-
-  max-height: 90vh;
-
-  overflow-y: auto;
-
-  border-radius:
-    var(--radius-lg);
-
-  background:
-    var(--surface);
-
-  box-shadow:
-    var(--shadow-lg);
-
-  animation:
-    modalEnter 0.25s ease;
+function todayISO() {
+  return new Date().toISOString().split("T")[0];
 }
 
+function formatDate(dateValue) {
+  if (!dateValue) return "-";
 
-.small-modal {
+  const date = new Date(dateValue);
 
-  width: min(100%, 430px);
+  return date.toLocaleDateString("id-ID", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
 }
-
-
-.modal-header {
 
-  display: flex;
+function formatCurrency(value) {
 
-  align-items: center;
+  const number = Number(value || 0);
 
-  justify-content: space-between;
-
-  gap: 15px;
-
-  padding:
-    20px 22px;
-
-  border-bottom:
-    1px solid var(--border);
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0
+  }).format(number);
 }
-
 
-.modal-header h2 {
+function formatNumber(value) {
 
-  margin: 0;
-
-  font-size: 18px;
+  return new Intl.NumberFormat("id-ID", {
+    maximumFractionDigits: 2
+  }).format(Number(value || 0));
 }
-
 
-.modal-body {
+function escapeHTML(value = "") {
 
-  padding:
-    22px;
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
-
-
-.modal-footer {
 
-  display: flex;
+function showElement(element) {
 
-  justify-content: flex-end;
+  if (!element) return;
 
-  gap: 10px;
-
-  padding:
-    16px 22px;
-
-  border-top:
-    1px solid var(--border);
+  element.classList.remove("hidden");
 }
-
-
-@keyframes modalEnter {
-
-  from {
-
-    opacity: 0;
-
-    transform:
-      translateY(15px)
-      scale(0.98);
-
-  }
-
-  to {
 
-    opacity: 1;
+function hideElement(element) {
 
-    transform:
-      translateY(0)
-      scale(1);
+  if (!element) return;
 
-  }
+  element.classList.add("hidden");
 }
 
 
@@ -2801,756 +115,3443 @@ tbody tr:last-child td {
    TOAST
 ========================================================= */
 
-.toast-container {
+function showToast(message, type = "info") {
 
-  position: fixed;
+  let container = $("#toastContainer");
 
-  right: 20px;
+  if (!container) {
 
-  bottom: 20px;
+    container = document.createElement("div");
 
-  z-index: 5000;
+    container.id = "toastContainer";
 
-  display: grid;
+    container.className = "toast-container";
 
-  gap: 10px;
-
-  width:
-    min(360px, calc(100vw - 40px));
-}
-
-
-.toast {
-
-  display: flex;
-
-  align-items: flex-start;
-
-  gap: 12px;
-
-  padding:
-    15px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:
-    14px;
-
-  background:
-    var(--surface);
-
-  color:
-    var(--text);
-
-  box-shadow:
-    var(--shadow-lg);
-
-  animation:
-    toastEnter 0.3s ease;
-}
-
-
-.toast.success {
-
-  border-left:
-    4px solid var(--success);
-}
-
-
-.toast.error {
-
-  border-left:
-    4px solid var(--danger);
-}
-
-
-.toast.warning {
-
-  border-left:
-    4px solid var(--warning);
-}
-
-
-.toast.info {
-
-  border-left:
-    4px solid var(--primary);
-}
-
-
-@keyframes toastEnter {
-
-  from {
-
-    opacity: 0;
-
-    transform:
-      translateX(20px);
-
+    document.body.appendChild(container);
   }
 
-  to {
+  const icons = {
+    success: "✅",
+    error: "❌",
+    warning: "⚠️",
+    info: "ℹ️"
+  };
 
-    opacity: 1;
+  const toast = document.createElement("div");
 
-    transform:
-      translateX(0);
+  toast.className = `toast ${type}`;
 
+  toast.innerHTML = `
+    <span>${icons[type] || "ℹ️"}</span>
+    <div>${escapeHTML(message)}</div>
+  `;
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+
+    toast.style.opacity = "0";
+
+    toast.style.transform = "translateX(20px)";
+
+    setTimeout(() => toast.remove(), 300);
+
+  }, 3500);
+}
+
+
+/* =========================================================
+   INDEXED DB
+========================================================= */
+
+function openDatabase() {
+
+  return new Promise((resolve, reject) => {
+
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+    request.onerror = () => {
+      reject(request.error);
+    };
+
+    request.onupgradeneeded = (event) => {
+
+      db = event.target.result;
+
+      if (!db.objectStoreNames.contains("settings")) {
+
+        db.createObjectStore("settings", {
+          keyPath: "key"
+        });
+      }
+
+      if (!db.objectStoreNames.contains("employees")) {
+
+        db.createObjectStore("employees", {
+          keyPath: "id"
+        });
+      }
+
+      if (!db.objectStoreNames.contains("items")) {
+
+        db.createObjectStore("items", {
+          keyPath: "id"
+        });
+      }
+
+      if (!db.objectStoreNames.contains("tiers")) {
+
+        db.createObjectStore("tiers", {
+          keyPath: "id"
+        });
+      }
+
+      if (!db.objectStoreNames.contains("jobs")) {
+
+        db.createObjectStore("jobs", {
+          keyPath: "id"
+        });
+      }
+    };
+
+    request.onsuccess = () => {
+
+      db = request.result;
+
+      resolve(db);
+    };
+  });
+}
+
+
+function dbGetAll(storeName) {
+
+  return new Promise((resolve, reject) => {
+
+    const transaction = db.transaction(storeName, "readonly");
+
+    const store = transaction.objectStore(storeName);
+
+    const request = store.getAll();
+
+    request.onsuccess = () => resolve(request.result);
+
+    request.onerror = () => reject(request.error);
+  });
+}
+
+
+function dbGet(storeName, key) {
+
+  return new Promise((resolve, reject) => {
+
+    const transaction = db.transaction(storeName, "readonly");
+
+    const store = transaction.objectStore(storeName);
+
+    const request = store.get(key);
+
+    request.onsuccess = () => resolve(request.result);
+
+    request.onerror = () => reject(request.error);
+  });
+}
+
+
+function dbPut(storeName, data) {
+
+  return new Promise((resolve, reject) => {
+
+    const transaction = db.transaction(storeName, "readwrite");
+
+    const store = transaction.objectStore(storeName);
+
+    const request = store.put(data);
+
+    request.onsuccess = () => resolve(true);
+
+    request.onerror = () => reject(request.error);
+  });
+}
+
+
+function dbDelete(storeName, key) {
+
+  return new Promise((resolve, reject) => {
+
+    const transaction = db.transaction(storeName, "readwrite");
+
+    const store = transaction.objectStore(storeName);
+
+    const request = store.delete(key);
+
+    request.onsuccess = () => resolve(true);
+
+    request.onerror = () => reject(request.error);
+  });
+}
+
+
+function dbClear(storeName) {
+
+  return new Promise((resolve, reject) => {
+
+    const transaction = db.transaction(storeName, "readwrite");
+
+    const store = transaction.objectStore(storeName);
+
+    const request = store.clear();
+
+    request.onsuccess = () => resolve(true);
+
+    request.onerror = () => reject(request.error);
+  });
+}
+
+
+/* =========================================================
+   LOAD DATA
+========================================================= */
+
+async function loadData() {
+
+  try {
+
+    const settingsData = await dbGetAll("settings");
+
+    settingsData.forEach(item => {
+
+      if (item.key === "appSettings") {
+
+        state.settings = {
+          ...state.settings,
+          ...item.value
+        };
+      }
+    });
+
+    state.employees = await dbGetAll("employees");
+
+    state.items = await dbGetAll("items");
+
+    state.tiers = await dbGetAll("tiers");
+
+    state.jobs = await dbGetAll("jobs");
+
+  } catch (error) {
+
+    console.error(error);
+
+    showToast(
+      "Gagal membaca database",
+      "error"
+    );
   }
 }
 
 
 /* =========================================================
-   PRINT AREA
+   SAVE SETTINGS
 ========================================================= */
 
-.print-area {
+async function saveSettings() {
 
-  display: none;
+  await dbPut("settings", {
+    key: "appSettings",
+    value: state.settings
+  });
 }
 
 
 /* =========================================================
-   COMMISSION HIDDEN
+   DEFAULT DATA
 ========================================================= */
 
-.hide-commission
-.commission-stat {
+async function createDefaultData() {
 
-  display: none !important;
-}
+  if (state.tiers.length === 0) {
 
+    const defaultTier = {
+      id: generateId("tier"),
+      name: "Tier 1",
+      description: "Parameter standar",
+      createdAt: new Date().toISOString()
+    };
 
-.hide-commission
-.commission-column {
+    state.tiers.push(defaultTier);
 
-  display: none !important;
+    await dbPut("tiers", defaultTier);
+  }
 }
 
 
 /* =========================================================
-   SCROLLBAR
+   APP NAME
 ========================================================= */
 
-::-webkit-scrollbar {
+function updateAppName() {
 
-  width: 8px;
+  const appName = state.settings.appName || "Laundry Manager";
 
-  height: 8px;
-}
+  document.title = appName;
 
+  const appNameElements = $all("[data-app-name]");
 
-::-webkit-scrollbar-track {
+  appNameElements.forEach(element => {
+    element.textContent = appName;
+  });
 
-  background:
-    transparent;
-}
+  const settingInput = $("#settingAppName");
 
+  if (settingInput) {
 
-::-webkit-scrollbar-thumb {
-
-  border-radius: 20px;
-
-  background:
-    #cbd5e1;
-}
-
-
-.dark-mode
-::-webkit-scrollbar-thumb {
-
-  background:
-    #475569;
+    settingInput.value = appName;
+  }
 }
 
 
 /* =========================================================
-   ACCESSIBILITY
+   DARK MODE
 ========================================================= */
 
-button:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
+function updateDarkMode() {
 
-  outline:
-    3px solid rgba(37,99,235,0.35);
+  document.body.classList.toggle(
+    "dark-mode",
+    Boolean(state.settings.darkMode)
+  );
 
-  outline-offset:
-    2px;
-}
+  const toggle = $("#darkModeToggle");
 
+  if (toggle) {
 
-@media (prefers-reduced-motion: reduce) {
-
-  *,
-  *::before,
-  *::after {
-
-    animation-duration:
-      0.01ms !important;
-
-    animation-iteration-count:
-      1 !important;
-
-    scroll-behavior:
-      auto !important;
-
-    transition-duration:
-      0.01ms !important;
-
+    toggle.checked = Boolean(
+      state.settings.darkMode
+    );
   }
-
 }
 
 
 /* =========================================================
-   TABLET
+   COMMISSION VISIBILITY
 ========================================================= */
 
-@media (max-width: 1200px) {
+function updateCommissionVisibility() {
 
-  .stats-grid {
+  const show = Boolean(
+    state.settings.showCommission
+  );
 
-    grid-template-columns:
-      repeat(2, minmax(0,1fr));
+  document.body.classList.toggle(
+    "hide-commission",
+    !show
+  );
+
+  const toggle = $("#commissionSwitch");
+
+  if (toggle) {
+
+    toggle.checked = show;
   }
-
-
-  .quick-actions {
-
-    grid-template-columns:
-      repeat(2, minmax(0,1fr));
-  }
-
-
-  .report-controls {
-
-    grid-template-columns:
-      repeat(2, minmax(0,1fr));
-  }
-
 }
 
 
 /* =========================================================
-   MOBILE SIDEBAR
+   NAVIGATION
 ========================================================= */
 
-@media (max-width: 992px) {
+function showPage(pageName) {
 
-  .sidebar {
+  $all(".page").forEach(page => {
 
-    transform:
-      translateX(-100%);
+    page.classList.remove("active");
+  });
+
+  const targetPage = $(`#page-${pageName}`);
+
+  if (targetPage) {
+
+    targetPage.classList.add("active");
   }
 
+  $all(".nav-item").forEach(button => {
 
-  .sidebar.open {
+    button.classList.toggle(
+      "active",
+      button.dataset.page === pageName
+    );
+  });
 
-    transform:
-      translateX(0);
+  const titles = {
+
+    dashboard: "Dashboard",
+
+    input: "Input Laundry",
+
+    whatsapp: "Import WhatsApp",
+
+    jobs: "Data Pekerjaan",
+
+    reports: "Laporan",
+
+    employees: "Karyawan",
+
+    items: "Item Laundry",
+
+    tiers: "Tier / Parameter",
+
+    backup: "Backup & Restore",
+
+    settings: "Pengaturan"
+  };
+
+  const title = titles[pageName] || "Laundry Manager";
+
+  const pageTitle = $("#pageTitle");
+
+  if (pageTitle) {
+
+    pageTitle.textContent = title;
   }
 
+  closeSidebar();
 
-  .main-content {
+  if (pageName === "dashboard") {
 
-    margin-left: 0;
+    renderDashboard();
   }
 
+  if (pageName === "jobs") {
 
-  .mobile-only {
-
-    display:
-      inline-flex;
+    renderJobs();
   }
 
+  if (pageName === "employees") {
 
-  .top-header {
-
-    padding:
-      12px 18px;
+    renderEmployees();
   }
 
+  if (pageName === "items") {
 
-  .page-content {
-
-    padding:
-      20px;
+    renderItems();
   }
 
+  if (pageName === "tiers") {
 
-  .two-column {
-
-    grid-template-columns:
-      1fr;
+    renderTiers();
   }
 
+  if (pageName === "reports") {
+
+    renderReports();
+  }
 }
 
 
 /* =========================================================
-   MOBILE
+   SIDEBAR
 ========================================================= */
 
-@media (max-width: 700px) {
+function openSidebar() {
 
-  body {
+  const sidebar = $("#sidebar");
 
-    font-size:
-      14px;
+  const overlay = $("#sidebarOverlay");
+
+  if (sidebar) {
+
+    sidebar.classList.add("open");
   }
 
+  if (overlay) {
 
-  .top-header {
+    overlay.classList.add("show");
+  }
+}
 
-    min-height: auto;
 
-    align-items:
-      flex-start;
+function closeSidebar() {
 
-    gap: 12px;
+  const sidebar = $("#sidebar");
 
-    padding:
-      12px;
+  const overlay = $("#sidebarOverlay");
+
+  if (sidebar) {
+
+    sidebar.classList.remove("open");
   }
 
+  if (overlay) {
 
-  .header-left {
-
-    flex: 1;
-
-    min-width: 0;
+    overlay.classList.remove("show");
   }
-
-
-  .header-right {
-
-    gap: 7px;
-  }
-
-
-  .page-heading h1 {
-
-    font-size:
-      17px;
-  }
-
-
-  .page-heading p {
-
-    display: none;
-  }
-
-
-  .online-status {
-
-    padding:
-      8px;
-  }
-
-
-  #onlineStatusText {
-
-    display: none;
-  }
-
-
-  .commission-label {
-
-    display: none;
-  }
-
-
-  .commission-switch-wrap {
-
-    padding:
-      5px;
-  }
-
-
-  .page-content {
-
-    padding:
-      14px;
-  }
-
-
-  .welcome-card {
-
-    flex-direction:
-      column;
-
-    align-items:
-      flex-start;
-
-    padding:
-      22px;
-  }
-
-
-  .welcome-card h2 {
-
-    font-size:
-      22px;
-  }
-
-
-  .welcome-date {
-
-    width: 100%;
-  }
-
-
-  .stats-grid {
-
-    grid-template-columns:
-      1fr 1fr;
-
-    gap:
-      10px;
-  }
-
-
-  .stat-card {
-
-    align-items:
-      flex-start;
-
-    flex-direction:
-      column;
-
-    gap:
-      10px;
-
-    padding:
-      15px;
-  }
-
-
-  .stat-icon {
-
-    width:
-      42px;
-
-    height:
-      42px;
-  }
-
-
-  .stat-card strong {
-
-    font-size:
-      17px;
-  }
-
-
-  .section-card {
-
-    padding:
-      17px;
-
-    margin-bottom:
-      16px;
-  }
-
-
-  .section-header {
-
-    align-items:
-      flex-start;
-
-    flex-direction:
-      column;
-
-    gap:
-      12px;
-  }
-
-
-  .quick-actions {
-
-    grid-template-columns:
-      1fr 1fr;
-
-    gap:
-      10px;
-  }
-
-
-  .quick-action {
-
-    min-height:
-      120px;
-
-    padding:
-      15px;
-  }
-
-
-  .quick-action span {
-
-    font-size:
-      24px;
-  }
-
-
-  .form-row {
-
-    grid-template-columns:
-      1fr;
-  }
-
-
-  .filter-bar {
-
-    grid-template-columns:
-      1fr;
-  }
-
-
-  .report-controls {
-
-    grid-template-columns:
-      1fr;
-  }
-
-
-  .report-controls
-  .primary-button {
-
-    width: 100%;
-  }
-
-
-  .backup-options {
-
-    grid-template-columns:
-      1fr;
-  }
-
-
-  .employee-list,
-  .item-list {
-
-    grid-template-columns:
-      1fr;
-  }
-
-
-  .tier-card {
-
-    align-items:
-      flex-start;
-
-    flex-direction:
-      column;
-  }
-
-
-  .report-actions {
-
-    display:
-      grid;
-
-    grid-template-columns:
-      1fr 1fr;
-  }
-
-
-  .report-actions button {
-
-    width:
-      100%;
-  }
-
-
-  .modal {
-
-    align-items:
-      flex-end;
-
-    padding: 0;
-  }
-
-
-  .modal-dialog {
-
-    width: 100%;
-
-    max-height:
-      88vh;
-
-    border-radius:
-      24px 24px 0 0;
-  }
-
-
-  .toast-container {
-
-    right:
-      12px;
-
-    bottom:
-      12px;
-
-    width:
-      calc(100vw - 24px);
-  }
-
 }
 
 
 /* =========================================================
-   SMALL MOBILE
+   DASHBOARD
 ========================================================= */
 
-@media (max-width: 420px) {
+function renderDashboard() {
 
-  .stats-grid {
+  const today = todayISO();
 
-    grid-template-columns:
-      1fr;
+  const todayJobs = state.jobs.filter(job => {
+
+    return job.date === today;
+  });
+
+  const totalQty = todayJobs.reduce(
+    (total, job) => total + Number(job.qty || 0),
+    0
+  );
+
+  const totalCommission = todayJobs.reduce(
+    (total, job) => total + Number(job.commission || 0),
+    0
+  );
+
+  setText(
+    "#statTodayJobs",
+    todayJobs.length
+  );
+
+  setText(
+    "#statTodayQty",
+    formatNumber(totalQty)
+  );
+
+  setText(
+    "#statEmployees",
+    state.employees.length
+  );
+
+  setText(
+    "#statCommission",
+    formatCurrency(totalCommission)
+  );
+
+  renderRecentJobs();
+}
+
+
+function renderRecentJobs() {
+
+  const container = $("#recentJobs");
+
+  if (!container) return;
+
+  const jobs = [...state.jobs]
+    .sort((a, b) => {
+
+      return new Date(b.createdAt)
+        - new Date(a.createdAt);
+    })
+    .slice(0, 5);
+
+  if (jobs.length === 0) {
+
+    container.innerHTML = `
+      <div class="empty-state">
+        <span>📭</span>
+        <h3>Belum ada pekerjaan</h3>
+        <p>Masukkan data laundry untuk mulai.</p>
+      </div>
+    `;
+
+    return;
   }
 
+  container.innerHTML = jobs.map(job => {
 
-  .quick-actions {
+    return `
+      <div class="recent-job">
 
-    grid-template-columns:
-      1fr;
-  }
+        <div class="recent-job-left">
 
+          <div class="recent-job-icon">
+            🧺
+          </div>
 
-  .report-actions {
+          <div>
 
-    grid-template-columns:
-      1fr;
-  }
+            <strong>
+              ${escapeHTML(job.itemName)}
+            </strong>
 
+            <small>
+              ${formatDate(job.date)}
+              •
+              ${formatNumber(job.qty)}
+              ${escapeHTML(job.unit || "")}
+            </small>
 
-  .header-right
-  .install-button {
+          </div>
 
-    display: none;
-  }
+        </div>
 
+        <strong>
+          ${formatNumber(job.qty)}
+          ${escapeHTML(job.unit || "")}
+        </strong>
 
-  .splash-logo {
+      </div>
+    `;
 
-    width:
-      100px;
-
-    height:
-      100px;
-  }
-
-
-  .splash-content h1 {
-
-    font-size:
-      24px;
-  }
-
+  }).join("");
 }
 
 
 /* =========================================================
-   PRINT
+   EMPLOYEE
 ========================================================= */
 
-@media print {
+function renderEmployeeOptions() {
 
-  body {
+  const select = $("#jobEmployee");
 
-    background:
-      white !important;
+  if (!select) return;
+
+  select.innerHTML = `
+    <option value="">
+      Pilih Karyawan
+    </option>
+  `;
+
+  state.employees.forEach(employee => {
+
+    const option = document.createElement("option");
+
+    option.value = employee.id;
+
+    option.textContent = employee.name;
+
+    select.appendChild(option);
+  });
+}
+
+
+function renderEmployees() {
+
+  const container = $("#employeeList");
+
+  if (!container) return;
+
+  if (state.employees.length === 0) {
+
+    container.innerHTML = `
+      <div class="empty-state">
+        <span>👷</span>
+        <h3>Belum ada karyawan</h3>
+        <p>Tambahkan karyawan terlebih dahulu.</p>
+      </div>
+    `;
+
+    return;
   }
 
+  container.innerHTML = state.employees.map(employee => {
 
-  .sidebar,
-  .top-header,
-  .page-content,
-  .modal,
-  .toast-container,
-  .splash-screen {
+    return `
+      <div class="employee-card">
 
-    display:
-      none !important;
+        <div class="employee-card-header">
+
+          <div class="employee-avatar">
+            👤
+          </div>
+
+          <div class="employee-info">
+
+            <strong>
+              ${escapeHTML(employee.name)}
+            </strong>
+
+            <small>
+              ${escapeHTML(
+                employee.description || "-"
+              )}
+            </small>
+
+          </div>
+
+          <div class="table-actions">
+
+            <button
+              class="table-action"
+              onclick="editEmployee('${employee.id}')"
+              title="Edit"
+            >
+              ✏️
+            </button>
+
+            <button
+              class="table-action"
+              onclick="deleteEmployee('${employee.id}')"
+              title="Hapus"
+            >
+              🗑️
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="employee-commission">
+
+          <span>
+            Komisi Default
+          </span>
+
+          <strong>
+            ${formatCurrency(employee.commission || 0)}
+          </strong>
+
+        </div>
+
+      </div>
+    `;
+
+  }).join("");
+}
+
+
+async function saveEmployee() {
+
+  const nameInput = $("#employeeName");
+
+  if (!nameInput) return;
+
+  const name = nameInput.value.trim();
+
+  if (!name) {
+
+    showToast(
+      "Nama karyawan wajib diisi",
+      "warning"
+    );
+
+    return;
   }
 
+  const commission = Number(
+    $("#employeeCommission")?.value || 0
+  );
 
-  .print-area {
+  const description =
+    $("#employeeDescription")?.value.trim() || "";
 
-    display:
-      block !important;
+  let employee;
+
+  if (state.editingEmployeeId) {
+
+    employee = state.employees.find(
+      item => item.id === state.editingEmployeeId
+    );
+
+    if (!employee) return;
+
+    employee.name = name;
+
+    employee.commission = commission;
+
+    employee.description = description;
+
+    employee.updatedAt =
+      new Date().toISOString();
+
+  } else {
+
+    employee = {
+
+      id: generateId("emp"),
+
+      name,
+
+      commission,
+
+      description,
+
+      createdAt:
+        new Date().toISOString()
+    };
+
+    state.employees.push(employee);
   }
 
+  await dbPut(
+    "employees",
+    employee
+  );
+
+  closeEmployeeModal();
+
+  renderEmployees();
+
+  renderEmployeeOptions();
+
+  showToast(
+    "Data karyawan berhasil disimpan",
+    "success"
+  );
+}
+
+
+function openEmployeeModal() {
+
+  state.editingEmployeeId = null;
+
+  setValue("#employeeName", "");
+
+  setValue("#employeeCommission", 0);
+
+  setValue("#employeeDescription", "");
+
+  setText(
+    "#employeeModalTitle",
+    "Tambah Karyawan"
+  );
+
+  showElement($("#employeeModal"));
+}
+
+
+function closeEmployeeModal() {
+
+  hideElement($("#employeeModal"));
+
+  state.editingEmployeeId = null;
+}
+
+
+window.editEmployee = function(id) {
+
+  const employee = state.employees.find(
+    item => item.id === id
+  );
+
+  if (!employee) return;
+
+  state.editingEmployeeId = id;
+
+  setValue(
+    "#employeeName",
+    employee.name
+  );
+
+  setValue(
+    "#employeeCommission",
+    employee.commission
+  );
+
+  setValue(
+    "#employeeDescription",
+    employee.description
+  );
+
+  setText(
+    "#employeeModalTitle",
+    "Edit Karyawan"
+  );
+
+  showElement($("#employeeModal"));
+};
+
+
+window.deleteEmployee = async function(id) {
+
+  const employee = state.employees.find(
+    item => item.id === id
+  );
+
+  if (!employee) return;
+
+  const confirmDelete = confirm(
+    `Hapus karyawan "${employee.name}"?`
+  );
+
+  if (!confirmDelete) return;
+
+  await dbDelete("employees", id);
+
+  state.employees =
+    state.employees.filter(
+      item => item.id !== id
+    );
+
+  renderEmployees();
+
+  renderEmployeeOptions();
+
+  showToast(
+    "Karyawan berhasil dihapus",
+    "success"
+  );
+};
+
+
+/* =========================================================
+   ITEMS
+========================================================= */
+
+function renderItemOptions() {
+
+  const select = $("#jobItem");
+
+  if (!select) return;
+
+  select.innerHTML = `
+    <option value="">
+      Pilih Item
+    </option>
+  `;
+
+  state.items.forEach(item => {
+
+    const option =
+      document.createElement("option");
+
+    option.value = item.id;
+
+    option.textContent =
+      `${item.name} (${item.unit})`;
+
+    select.appendChild(option);
+  });
+}
+
+
+function renderItems() {
+
+  const container = $("#itemList");
+
+  if (!container) return;
+
+  if (state.items.length === 0) {
+
+    container.innerHTML = `
+      <div class="empty-state">
+        <span>🧺</span>
+        <h3>Belum ada item</h3>
+        <p>Tambahkan jenis laundry dan kode.</p>
+      </div>
+    `;
+
+    return;
+  }
+
+  container.innerHTML = state.items.map(item => {
+
+    const codes =
+      Array.isArray(item.codes)
+        ? item.codes.join(", ")
+        : item.codes;
+
+    return `
+      <div class="item-card">
+
+        <div class="table-actions"
+             style="position:absolute;right:15px;top:15px">
+
+          <button
+            class="table-action"
+            onclick="editItem('${item.id}')"
+          >
+            ✏️
+          </button>
+
+          <button
+            class="table-action"
+            onclick="deleteItem('${item.id}')"
+          >
+            🗑️
+          </button>
+
+        </div>
+
+        <h4>
+          ${escapeHTML(item.name)}
+        </h4>
+
+        <div class="item-meta">
+
+          <span class="badge">
+            ${escapeHTML(item.unit)}
+          </span>
+
+          <span class="badge success">
+            ${escapeHTML(codes)}
+          </span>
+
+        </div>
+
+        <strong>
+          Komisi:
+          ${formatCurrency(item.commission || 0)}
+        </strong>
+
+      </div>
+    `;
+
+  }).join("");
+}
+
+
+async function saveItem() {
+
+  const name =
+    $("#itemName")?.value.trim();
+
+  if (!name) {
+
+    showToast(
+      "Nama item wajib diisi",
+      "warning"
+    );
+
+    return;
+  }
+
+  const codeText =
+    $("#itemCodes")?.value || "";
+
+  const codes = codeText
+    .split(",")
+    .map(code => code.trim().toLowerCase())
+    .filter(Boolean);
+
+  const unit =
+    $("#itemUnit")?.value || "KG";
+
+  const commission =
+    Number($("#itemCommission")?.value || 0);
+
+  const tierId =
+    $("#itemTier")?.value || "";
+
+  let item;
+
+  if (state.editingItemId) {
+
+    item = state.items.find(
+      data => data.id === state.editingItemId
+    );
+
+    if (!item) return;
+
+    item.name = name;
+
+    item.codes = codes;
+
+    item.unit = unit;
+
+    item.commission = commission;
+
+    item.tierId = tierId;
+
+    item.updatedAt =
+      new Date().toISOString();
+
+  } else {
+
+    item = {
+
+      id: generateId("item"),
+
+      name,
+
+      codes,
+
+      unit,
+
+      commission,
+
+      tierId,
+
+      createdAt:
+        new Date().toISOString()
+    };
+
+    state.items.push(item);
+  }
+
+  await dbPut(
+    "items",
+    item
+  );
+
+  closeItemModal();
+
+  renderItems();
+
+  renderItemOptions();
+
+  showToast(
+    "Item berhasil disimpan",
+    "success"
+  );
+}
+
+
+function renderTierOptions() {
+
+  const select = $("#itemTier");
+
+  if (!select) return;
+
+  select.innerHTML = `
+    <option value="">
+      Tanpa Tier
+    </option>
+  `;
+
+  state.tiers.forEach(tier => {
+
+    const option =
+      document.createElement("option");
+
+    option.value = tier.id;
+
+    option.textContent = tier.name;
+
+    select.appendChild(option);
+  });
+}
+
+
+function openItemModal() {
+
+  state.editingItemId = null;
+
+  setValue("#itemName", "");
+
+  setValue("#itemCodes", "");
+
+  setValue("#itemCommission", 0);
+
+  setValue("#itemUnit", "KG");
+
+  renderTierOptions();
+
+  setText(
+    "#itemModalTitle",
+    "Tambah Item"
+  );
+
+  showElement($("#itemModal"));
+}
+
+
+function closeItemModal() {
+
+  hideElement($("#itemModal"));
+
+  state.editingItemId = null;
+}
+
+
+window.editItem = function(id) {
+
+  const item = state.items.find(
+    data => data.id === id
+  );
+
+  if (!item) return;
+
+  state.editingItemId = id;
+
+  renderTierOptions();
+
+  setValue("#itemName", item.name);
+
+  setValue(
+    "#itemCodes",
+    Array.isArray(item.codes)
+      ? item.codes.join(", ")
+      : item.codes
+  );
+
+  setValue("#itemUnit", item.unit);
+
+  setValue(
+    "#itemCommission",
+    item.commission
+  );
+
+  setValue(
+    "#itemTier",
+    item.tierId || ""
+  );
+
+  setText(
+    "#itemModalTitle",
+    "Edit Item"
+  );
+
+  showElement($("#itemModal"));
+};
+
+
+window.deleteItem = async function(id) {
+
+  const item = state.items.find(
+    data => data.id === id
+  );
+
+  if (!item) return;
+
+  if (!confirm(
+    `Hapus item "${item.name}"?`
+  )) return;
+
+  await dbDelete(
+    "items",
+    id
+  );
+
+  state.items =
+    state.items.filter(
+      data => data.id !== id
+    );
+
+  renderItems();
+
+  renderItemOptions();
+
+  showToast(
+    "Item berhasil dihapus",
+    "success"
+  );
+};
+
+
+/* =========================================================
+   TIER
+========================================================= */
+
+function renderTiers() {
+
+  const container = $("#tierList");
+
+  if (!container) return;
+
+  if (state.tiers.length === 0) {
+
+    container.innerHTML = `
+      <div class="empty-state">
+        <span>📊</span>
+        <h3>Belum ada tier</h3>
+        <p>Tambahkan parameter sesuai kebutuhan.</p>
+      </div>
+    `;
+
+    return;
+  }
+
+  container.innerHTML = state.tiers.map(tier => {
+
+    return `
+      <div class="tier-card">
+
+        <div>
+
+          <strong>
+            ${escapeHTML(tier.name)}
+          </strong>
+
+          <small>
+            ${escapeHTML(
+              tier.description || "-"
+            )}
+          </small>
+
+        </div>
+
+        <div class="table-actions">
+
+          <button
+            class="table-action"
+            onclick="editTier('${tier.id}')"
+          >
+            ✏️
+          </button>
+
+          <button
+            class="table-action"
+            onclick="deleteTier('${tier.id}')"
+          >
+            🗑️
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+  }).join("");
+}
+
+
+async function saveTier() {
+
+  const name =
+    $("#tierName")?.value.trim();
+
+  if (!name) {
+
+    showToast(
+      "Nama tier wajib diisi",
+      "warning"
+    );
+
+    return;
+  }
+
+  const description =
+    $("#tierDescription")?.value.trim() || "";
+
+  let tier;
+
+  if (state.editingTierId) {
+
+    tier = state.tiers.find(
+      item => item.id === state.editingTierId
+    );
+
+    if (!tier) return;
+
+    tier.name = name;
+
+    tier.description = description;
+
+    tier.updatedAt =
+      new Date().toISOString();
+
+  } else {
+
+    tier = {
+
+      id: generateId("tier"),
+
+      name,
+
+      description,
+
+      createdAt:
+        new Date().toISOString()
+    };
+
+    state.tiers.push(tier);
+  }
+
+  await dbPut(
+    "tiers",
+    tier
+  );
+
+  closeTierModal();
+
+  renderTiers();
+
+  renderTierOptions();
+
+  showToast(
+    "Tier berhasil disimpan",
+    "success"
+  );
+}
+
+
+function openTierModal() {
+
+  state.editingTierId = null;
+
+  setValue("#tierName", "");
+
+  setValue("#tierDescription", "");
+
+  setText(
+    "#tierModalTitle",
+    "Tambah Tier"
+  );
+
+  showElement($("#tierModal"));
+}
+
+
+function closeTierModal() {
+
+  hideElement($("#tierModal"));
+
+  state.editingTierId = null;
+}
+
+
+window.editTier = function(id) {
+
+  const tier = state.tiers.find(
+    item => item.id === id
+  );
+
+  if (!tier) return;
+
+  state.editingTierId = id;
+
+  setValue("#tierName", tier.name);
+
+  setValue(
+    "#tierDescription",
+    tier.description
+  );
+
+  setText(
+    "#tierModalTitle",
+    "Edit Tier"
+  );
+
+  showElement($("#tierModal"));
+};
+
+
+window.deleteTier = async function(id) {
+
+  if (state.tiers.length <= 1) {
+
+    showToast(
+      "Minimal harus ada 1 tier",
+      "warning"
+    );
+
+    return;
+  }
+
+  const tier = state.tiers.find(
+    item => item.id === id
+  );
+
+  if (!tier) return;
+
+  if (!confirm(
+    `Hapus tier "${tier.name}"?`
+  )) return;
+
+  await dbDelete(
+    "tiers",
+    id
+  );
+
+  state.tiers =
+    state.tiers.filter(
+      item => item.id !== id
+    );
+
+  renderTiers();
+
+  renderTierOptions();
+
+  showToast(
+    "Tier berhasil dihapus",
+    "success"
+  );
+};
+
+
+/* =========================================================
+   COMMISSION CALCULATION
+========================================================= */
+
+function calculateCommission(
+  employee,
+  item,
+  qty
+) {
+
+  let commission = 0;
+
+  const employeeCommission =
+    Number(employee?.commission || 0);
+
+  const itemCommission =
+    Number(item?.commission || 0);
+
+  /*
+    LOGIKA KOMISI:
+
+    1. Komisi Item
+    2. Komisi Karyawan
+    3. Digabung
+  */
+
+  commission =
+    (employeeCommission + itemCommission)
+    * Number(qty || 0);
+
+  return commission;
 }
 
 
 /* =========================================================
-   THERMAL 58MM
+   JOB
 ========================================================= */
 
-@media print {
+async function saveJob() {
 
-  .thermal-print {
+  const employeeId =
+    $("#jobEmployee")?.value;
 
-    width:
-      58mm;
+  const itemId =
+    $("#jobItem")?.value;
 
-    padding:
-      4mm;
+  const qty =
+    Number($("#jobQty")?.value || 0);
 
-    font-family:
-      monospace;
+  const date =
+    $("#jobDate")?.value || todayISO();
 
-    font-size:
-      11px;
+  const customer =
+    $("#jobCustomer")?.value.trim() || "";
 
-    color:
-      black;
+  if (!employeeId) {
 
-    background:
-      white;
+    showToast(
+      "Pilih karyawan",
+      "warning"
+    );
+
+    return;
   }
 
+  if (!itemId) {
 
-  .thermal-print h1,
-  .thermal-print h2,
-  .thermal-print h3 {
+    showToast(
+      "Pilih item",
+      "warning"
+    );
 
-    margin:
-      0 0 5px;
-
-    text-align:
-      center;
-
-    font-size:
-      14px;
+    return;
   }
 
+  if (!qty || qty <= 0) {
 
-  .thermal-print table {
+    showToast(
+      "Jumlah harus lebih dari 0",
+      "warning"
+    );
 
-    width: 100%;
-
-    min-width: 0;
-
-    font-size:
-      10px;
+    return;
   }
 
+  const employee =
+    state.employees.find(
+      item => item.id === employeeId
+    );
 
-  .thermal-print th,
-  .thermal-print td {
+  const item =
+    state.items.find(
+      data => data.id === itemId
+    );
 
-    padding:
-      4px 2px;
+  if (!employee || !item) {
 
-    border-bottom:
-      1px dashed #000;
+    showToast(
+      "Data tidak ditemukan",
+      "error"
+    );
+
+    return;
   }
 
+  const commission =
+    calculateCommission(
+      employee,
+      item,
+      qty
+    );
+
+  const job = {
+
+    id: generateId("job"),
+
+    employeeId,
+
+    employeeName:
+      employee.name,
+
+    itemId,
+
+    itemName:
+      item.name,
+
+    unit:
+      item.unit,
+
+    qty,
+
+    customer,
+
+    commission,
+
+    date,
+
+    createdAt:
+      new Date().toISOString()
+  };
+
+  state.jobs.push(job);
+
+  await dbPut(
+    "jobs",
+    job
+  );
+
+  resetJobForm();
+
+  renderDashboard();
+
+  renderJobs();
+
+  showToast(
+    "Pekerjaan berhasil ditambahkan",
+    "success"
+  );
 }
+
+
+function resetJobForm() {
+
+  setValue("#jobEmployee", "");
+
+  setValue("#jobItem", "");
+
+  setValue("#jobQty", "");
+
+  setValue("#jobCustomer", "");
+
+  setValue("#jobDate", todayISO());
+}
+
+
+/* =========================================================
+   JOBS TABLE
+========================================================= */
+
+function renderJobs() {
+
+  const tbody = $("#jobsTableBody");
+
+  if (!tbody) return;
+
+  const jobs = [...state.jobs]
+    .sort((a, b) => {
+
+      return new Date(b.createdAt)
+        - new Date(a.createdAt);
+    });
+
+  if (jobs.length === 0) {
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8">
+          <div class="empty-state">
+            <span>📭</span>
+            <h3>Belum ada data</h3>
+          </div>
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  tbody.innerHTML = jobs.map(job => {
+
+    return `
+      <tr>
+
+        <td>
+          ${formatDate(job.date)}
+        </td>
+
+        <td>
+          ${escapeHTML(job.employeeName)}
+        </td>
+
+        <td>
+          ${escapeHTML(job.customer || "-")}
+        </td>
+
+        <td>
+          ${escapeHTML(job.itemName)}
+        </td>
+
+        <td>
+          ${formatNumber(job.qty)}
+          ${escapeHTML(job.unit)}
+        </td>
+
+        <td class="commission-column">
+          ${formatCurrency(job.commission)}
+        </td>
+
+        <td>
+
+          <button
+            class="table-action"
+            onclick="deleteJob('${job.id}')"
+          >
+            🗑️
+          </button>
+
+        </td>
+
+      </tr>
+    `;
+
+  }).join("");
+}
+
+
+window.deleteJob = async function(id) {
+
+  const job = state.jobs.find(
+    item => item.id === id
+  );
+
+  if (!job) return;
+
+  if (!confirm(
+    "Hapus data pekerjaan ini?"
+  )) return;
+
+  await dbDelete(
+    "jobs",
+    id
+  );
+
+  state.jobs =
+    state.jobs.filter(
+      item => item.id !== id
+    );
+
+  renderJobs();
+
+  renderDashboard();
+
+  showToast(
+    "Data berhasil dihapus",
+    "success"
+  );
+};
+
+
+/* =========================================================
+   WHATSAPP PARSER
+========================================================= */
+
+function parseWhatsAppText(text) {
+
+  const lines =
+    text.split("\n")
+      .map(line => line.trim())
+      .filter(Boolean);
+
+  const results = [];
+
+  lines.forEach(line => {
+
+    const normalized =
+      line.toLowerCase()
+        .replace(/,/g, ".");
+
+    /*
+      Contoh:
+
+      desi cks 5kg
+      wanto cks 5
+      yadi sepatu 2
+      andi spt 2
+    */
+
+    const parts =
+      normalized.split(/\s+/);
+
+    if (parts.length < 3) return;
+
+    const customer =
+      parts[0];
+
+    const code =
+      parts[1];
+
+    const qtyText =
+      parts.slice(2).join(" ");
+
+    const qtyMatch =
+      qtyText.match(
+        /(\d+(?:\.\d+)?)/
+      );
+
+    if (!qtyMatch) return;
+
+    const qty =
+      Number(qtyMatch[1]);
+
+    const item =
+      findItemByCode(code);
+
+    if (!item) {
+
+      results.push({
+
+        line,
+
+        status: "error",
+
+        customer,
+
+        code,
+
+        qty,
+
+        message:
+          "Kode item tidak ditemukan"
+      });
+
+      return;
+    }
+
+    results.push({
+
+      line,
+
+      status: "success",
+
+      customer,
+
+      itemId:
+        item.id,
+
+      itemName:
+        item.name,
+
+      code,
+
+      qty,
+
+      unit:
+        item.unit
+    });
+
+  });
+
+  return results;
+}
+
+
+function findItemByCode(code) {
+
+  const normalizedCode =
+    String(code)
+      .toLowerCase()
+      .trim();
+
+  return state.items.find(item => {
+
+    const codes =
+      Array.isArray(item.codes)
+        ? item.codes
+        : String(item.codes)
+            .split(",");
+
+    return codes.some(itemCode => {
+
+      return String(itemCode)
+        .trim()
+        .toLowerCase()
+        === normalizedCode;
+
+    });
+
+  });
+}
+
+
+function previewWhatsApp() {
+
+  const text =
+    $("#whatsappInput")?.value || "";
+
+  if (!text.trim()) {
+
+    showToast(
+      "Masukkan teks WhatsApp",
+      "warning"
+    );
+
+    return;
+  }
+
+  const results =
+    parseWhatsAppText(text);
+
+  renderWhatsAppPreview(results);
+
+  window.whatsappParsedData =
+    results;
+}
+
+
+function renderWhatsAppPreview(results) {
+
+  const container =
+    $("#whatsappPreview");
+
+  if (!container) return;
+
+  if (results.length === 0) {
+
+    container.innerHTML = `
+      <div class="empty-state">
+        <span>⚠️</span>
+        <h3>Format tidak ditemukan</h3>
+        <p>
+          Contoh:
+          desi cks 5kg
+        </p>
+      </div>
+    `;
+
+    return;
+  }
+
+  container.innerHTML = `
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>Status</th>
+
+          <th>Customer</th>
+
+          <th>Item</th>
+
+          <th>Jumlah</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        ${results.map(result => {
+
+          if (result.status === "error") {
+
+            return `
+              <tr>
+
+                <td>❌</td>
+
+                <td>
+                  ${escapeHTML(
+                    result.customer
+                  )}
+                </td>
+
+                <td>
+                  ${escapeHTML(
+                    result.code
+                  )}
+                </td>
+
+                <td>
+                  ${formatNumber(
+                    result.qty
+                  )}
+                </td>
+
+              </tr>
+            `;
+          }
+
+          return `
+            <tr>
+
+              <td>✅</td>
+
+              <td>
+                ${escapeHTML(
+                  result.customer
+                )}
+              </td>
+
+              <td>
+                ${escapeHTML(
+                  result.itemName
+                )}
+              </td>
+
+              <td>
+                ${formatNumber(
+                  result.qty
+                )}
+                ${escapeHTML(
+                  result.unit
+                )}
+              </td>
+
+            </tr>
+          `;
+
+        }).join("")}
+
+      </tbody>
+
+    </table>
+  `;
+}
+
+
+async function importWhatsApp() {
+
+  const employeeId =
+    $("#whatsappEmployee")?.value;
+
+  if (!employeeId) {
+
+    showToast(
+      "Pilih karyawan terlebih dahulu",
+      "warning"
+    );
+
+    return;
+  }
+
+  const employee =
+    state.employees.find(
+      item => item.id === employeeId
+    );
+
+  if (!employee) return;
+
+  const results =
+    window.whatsappParsedData || [];
+
+  const successResults =
+    results.filter(
+      result =>
+        result.status === "success"
+    );
+
+  if (successResults.length === 0) {
+
+    showToast(
+      "Tidak ada data valid",
+      "warning"
+    );
+
+    return;
+  }
+
+  const date =
+    $("#whatsappDate")?.value
+    || todayISO();
+
+  for (const result of successResults) {
+
+    const item =
+      state.items.find(
+        data => data.id === result.itemId
+      );
+
+    if (!item) continue;
+
+    const commission =
+      calculateCommission(
+        employee,
+        item,
+        result.qty
+      );
+
+    const job = {
+
+      id: generateId("job"),
+
+      employeeId,
+
+      employeeName:
+        employee.name,
+
+      itemId:
+        item.id,
+
+      itemName:
+        item.name,
+
+      customer:
+        result.customer,
+
+      qty:
+        result.qty,
+
+      unit:
+        item.unit,
+
+      commission,
+
+      date,
+
+      createdAt:
+        new Date().toISOString()
+    };
+
+    state.jobs.push(job);
+
+    await dbPut(
+      "jobs",
+      job
+    );
+  }
+
+  renderDashboard();
+
+  renderJobs();
+
+  showToast(
+    `${successResults.length} pekerjaan berhasil diimport`,
+    "success"
+  );
+}
+
+
+/* =========================================================
+   REPORT
+========================================================= */
+
+function getReportJobs(
+  startDate,
+  endDate,
+  employeeId
+) {
+
+  return state.jobs.filter(job => {
+
+    if (
+      startDate
+      && job.date < startDate
+    ) return false;
+
+    if (
+      endDate
+      && job.date > endDate
+    ) return false;
+
+    if (
+      employeeId
+      && job.employeeId !== employeeId
+    ) return false;
+
+    return true;
+  });
+}
+
+
+function renderReports() {
+
+  renderReportEmployeeOptions();
+
+  const today = todayISO();
+
+  setValue(
+    "#reportStartDate",
+    today
+  );
+
+  setValue(
+    "#reportEndDate",
+    today
+  );
+}
+
+
+function renderReportEmployeeOptions() {
+
+  const select =
+    $("#reportEmployee");
+
+  if (!select) return;
+
+  select.innerHTML = `
+    <option value="">
+      Semua Karyawan
+    </option>
+  `;
+
+  state.employees.forEach(employee => {
+
+    const option =
+      document.createElement("option");
+
+    option.value = employee.id;
+
+    option.textContent =
+      employee.name;
+
+    select.appendChild(option);
+  });
+}
+
+
+function generateReport() {
+
+  const startDate =
+    $("#reportStartDate")?.value;
+
+  const endDate =
+    $("#reportEndDate")?.value;
+
+  const employeeId =
+    $("#reportEmployee")?.value;
+
+  const jobs =
+    getReportJobs(
+      startDate,
+      endDate,
+      employeeId
+    );
+
+  renderReportSummary(jobs);
+
+  renderReportTable(jobs);
+
+  window.currentReportJobs =
+    jobs;
+}
+
+
+function renderReportSummary(jobs) {
+
+  const totalQty =
+    jobs.reduce(
+      (total, job) =>
+        total + Number(job.qty || 0),
+      0
+    );
+
+  const totalCommission =
+    jobs.reduce(
+      (total, job) =>
+        total + Number(job.commission || 0),
+      0
+    );
+
+  setText(
+    "#reportTotalJobs",
+    jobs.length
+  );
+
+  setText(
+    "#reportTotalQty",
+    formatNumber(totalQty)
+  );
+
+  setText(
+    "#reportTotalCommission",
+    formatCurrency(totalCommission)
+  );
+}
+
+
+function renderReportTable(jobs) {
+
+  const container =
+    $("#reportContent");
+
+  if (!container) return;
+
+  if (jobs.length === 0) {
+
+    container.innerHTML = `
+      <div class="empty-state">
+        <span>📊</span>
+        <h3>Tidak ada data</h3>
+        <p>Belum ada pekerjaan pada periode ini.</p>
+      </div>
+    `;
+
+    return;
+  }
+
+  const showCommission =
+    state.settings.showCommission;
+
+  container.innerHTML = `
+    <div class="table-responsive">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>Tanggal</th>
+
+            <th>Karyawan</th>
+
+            <th>Item</th>
+
+            <th>Jumlah</th>
+
+            ${
+              showCommission
+                ? "<th>Komisi</th>"
+                : ""
+            }
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          ${jobs.map(job => {
+
+            return `
+              <tr>
+
+                <td>
+                  ${formatDate(job.date)}
+                </td>
+
+                <td>
+                  ${escapeHTML(
+                    job.employeeName
+                  )}
+                </td>
+
+                <td>
+                  ${escapeHTML(
+                    job.itemName
+                  )}
+                </td>
+
+                <td>
+                  ${formatNumber(job.qty)}
+                  ${escapeHTML(job.unit)}
+                </td>
+
+                ${
+                  showCommission
+                    ? `
+                      <td>
+                        ${formatCurrency(
+                          job.commission
+                        )}
+                      </td>
+                    `
+                    : ""
+                }
+
+              </tr>
+            `;
+
+          }).join("")}
+
+        </tbody>
+
+      </table>
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   THERMAL PRINT
+========================================================= */
+
+function printThermal() {
+
+  const jobs =
+    window.currentReportJobs || [];
+
+  if (jobs.length === 0) {
+
+    showToast(
+      "Generate laporan terlebih dahulu",
+      "warning"
+    );
+
+    return;
+  }
+
+  const totalCommission =
+    jobs.reduce(
+      (total, job) =>
+        total + Number(job.commission || 0),
+      0
+    );
+
+  const showCommission =
+    state.settings.showCommission;
+
+  let rows = "";
+
+  jobs.forEach(job => {
+
+    rows += `
+      <tr>
+
+        <td>
+          ${escapeHTML(job.itemName)}
+        </td>
+
+        <td style="text-align:right">
+          ${formatNumber(job.qty)}
+          ${escapeHTML(job.unit)}
+        </td>
+
+      </tr>
+    `;
+  });
+
+  const printArea =
+    $("#printArea");
+
+  if (!printArea) return;
+
+  printArea.innerHTML = `
+
+    <div class="thermal-print">
+
+      <h2>
+        ${escapeHTML(
+          state.settings.appName
+        )}
+      </h2>
+
+      <p style="text-align:center">
+        LAPORAN HARIAN
+      </p>
+
+      <hr>
+
+      <table>
+
+        <tbody>
+
+          ${rows}
+
+        </tbody>
+
+      </table>
+
+      <hr>
+
+      ${
+        showCommission
+          ? `
+            <p>
+              Komisi:
+              <strong>
+                ${formatCurrency(
+                  totalCommission
+                )}
+              </strong>
+            </p>
+          `
+          : ""
+      }
+
+      <p style="text-align:center">
+        Terima Kasih
+      </p>
+
+    </div>
+  `;
+
+  window.print();
+}
+
+
+/* =========================================================
+   WHATSAPP SHARE REPORT
+========================================================= */
+
+function shareReportWhatsApp() {
+
+  const jobs =
+    window.currentReportJobs || [];
+
+  if (jobs.length === 0) {
+
+    showToast(
+      "Generate laporan terlebih dahulu",
+      "warning"
+    );
+
+    return;
+  }
+
+  const grouped = {};
+
+  jobs.forEach(job => {
+
+    const key =
+      `${job.itemName}|${job.unit}`;
+
+    if (!grouped[key]) {
+
+      grouped[key] = {
+
+        itemName:
+          job.itemName,
+
+        unit:
+          job.unit,
+
+        qty: 0
+      };
+    }
+
+    grouped[key].qty +=
+      Number(job.qty || 0);
+  });
+
+  let text =
+    `🧺 ${state.settings.appName}\n`;
+
+  text +=
+    `📅 Laporan Laundry\n\n`;
+
+  Object.values(grouped).forEach(item => {
+
+    text +=
+      `${item.itemName}: `
+      + `${formatNumber(item.qty)} `
+      + `${item.unit}\n`;
+  });
+
+  if (state.settings.showCommission) {
+
+    const totalCommission =
+      jobs.reduce(
+        (total, job) =>
+          total
+          + Number(job.commission || 0),
+        0
+      );
+
+    text +=
+      `\n💰 Komisi: `
+      + formatCurrency(totalCommission);
+  }
+
+  const url =
+    `https://wa.me/?text=`
+    + encodeURIComponent(text);
+
+  window.open(
+    url,
+    "_blank"
+  );
+}
+
+
+/* =========================================================
+   EXPORT JSON BACKUP
+========================================================= */
+
+function exportBackup() {
+
+  const backup = {
+
+    app:
+      state.settings.appName,
+
+    version:
+      APP_VERSION,
+
+    createdAt:
+      new Date().toISOString(),
+
+    settings:
+      state.settings,
+
+    employees:
+      state.employees,
+
+    items:
+      state.items,
+
+    tiers:
+      state.tiers,
+
+    jobs:
+      state.jobs
+  };
+
+  const json =
+    JSON.stringify(
+      backup,
+      null,
+      2
+    );
+
+  const blob =
+    new Blob(
+      [json],
+      {
+        type:
+          "application/json"
+      }
+    );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const link =
+    document.createElement("a");
+
+  const date =
+    new Date()
+      .toISOString()
+      .split("T")[0];
+
+  link.href = url;
+
+  link.download =
+    `LAUNDRY_MANAGER_BACKUP_${date}.json`;
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  link.remove();
+
+  URL.revokeObjectURL(url);
+
+  showToast(
+    "Backup berhasil dibuat",
+    "success"
+  );
+}
+
+
+/* =========================================================
+   RESTORE BACKUP
+========================================================= */
+
+function restoreBackup(file) {
+
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = async event => {
+
+    try {
+
+      const backup =
+        JSON.parse(
+          event.target.result
+        );
+
+      if (!backup) {
+
+        throw new Error(
+          "File backup tidak valid"
+        );
+      }
+
+      if (!confirm(
+        "Restore akan mengganti data saat ini. Lanjutkan?"
+      )) {
+
+        return;
+      }
+
+      await dbClear("settings");
+
+      await dbClear("employees");
+
+      await dbClear("items");
+
+      await dbClear("tiers");
+
+      await dbClear("jobs");
+
+      state.settings =
+        backup.settings
+        || state.settings;
+
+      state.employees =
+        backup.employees
+        || [];
+
+      state.items =
+        backup.items
+        || [];
+
+      state.tiers =
+        backup.tiers
+        || [];
+
+      state.jobs =
+        backup.jobs
+        || [];
+
+      await saveSettings();
+
+      for (const employee of state.employees) {
+
+        await dbPut(
+          "employees",
+          employee
+        );
+      }
+
+      for (const item of state.items) {
+
+        await dbPut(
+          "items",
+          item
+        );
+      }
+
+      for (const tier of state.tiers) {
+
+        await dbPut(
+          "tiers",
+          tier
+        );
+      }
+
+      for (const job of state.jobs) {
+
+        await dbPut(
+          "jobs",
+          job
+        );
+      }
+
+      updateAppName();
+
+      updateDarkMode();
+
+      updateCommissionVisibility();
+
+      renderAll();
+
+      showToast(
+        "Restore berhasil",
+        "success"
+      );
+
+    } catch (error) {
+
+      console.error(error);
+
+      showToast(
+        "File backup tidak valid atau gagal diproses",
+        "error"
+      );
+    }
+  };
+
+  reader.readAsText(file);
+}
+
+
+/* =========================================================
+   DATABASE INFO
+========================================================= */
+
+async function updateDatabaseInfo() {
+
+  const element =
+    $("#databaseInfo");
+
+  if (!element) return;
+
+  try {
+
+    const estimate =
+      await navigator.storage?.estimate();
+
+    if (!estimate) {
+
+      element.innerHTML =
+        "IndexedDB aktif";
+
+      return;
+    }
+
+    const used =
+      estimate.usage || 0;
+
+    const quota =
+      estimate.quota || 0;
+
+    element.innerHTML = `
+      <strong>IndexedDB Aktif</strong>
+      <br>
+      Data digunakan:
+      ${formatBytes(used)}
+      /
+      ${formatBytes(quota)}
+    `;
+
+  } catch {
+
+    element.textContent =
+      "IndexedDB Aktif";
+  }
+}
+
+
+function formatBytes(bytes) {
+
+  if (!bytes) return "0 KB";
+
+  const units =
+    ["B", "KB", "MB", "GB"];
+
+  const index =
+    Math.floor(
+      Math.log(bytes)
+      / Math.log(1024)
+    );
+
+  return (
+    bytes
+      / Math.pow(1024, index)
+  ).toFixed(2)
+  + " "
+  + units[index];
+}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+async function saveAppName() {
+
+  const input =
+    $("#settingAppName");
+
+  if (!input) return;
+
+  const name =
+    input.value.trim();
+
+  if (!name) {
+
+    showToast(
+      "Nama aplikasi tidak boleh kosong",
+      "warning"
+    );
+
+    return;
+  }
+
+  state.settings.appName = name;
+
+  await saveSettings();
+
+  updateAppName();
+
+  showToast(
+    "Nama aplikasi berhasil diubah",
+    "success"
+  );
+}
+
+
+async function toggleDarkMode() {
+
+  state.settings.darkMode =
+    !state.settings.darkMode;
+
+  await saveSettings();
+
+  updateDarkMode();
+}
+
+
+async function toggleCommission() {
+
+  state.settings.showCommission =
+    !state.settings.showCommission;
+
+  await saveSettings();
+
+  updateCommissionVisibility();
+
+  renderDashboard();
+
+  showToast(
+    state.settings.showCommission
+      ? "Komisi ditampilkan"
+      : "Komisi disembunyikan",
+    "info"
+  );
+}
+
+
+/* =========================================================
+   CLEAR ALL DATA
+========================================================= */
+
+async function clearAllData() {
+
+  const confirmation =
+    prompt(
+      "Ketik HAPUS untuk menghapus semua data:"
+    );
+
+  if (confirmation !== "HAPUS") {
+
+    showToast(
+      "Penghapusan dibatalkan",
+      "info"
+    );
+
+    return;
+  }
+
+  await dbClear("employees");
+
+  await dbClear("items");
+
+  await dbClear("tiers");
+
+  await dbClear("jobs");
+
+  state.employees = [];
+
+  state.items = [];
+
+  state.tiers = [];
+
+  state.jobs = [];
+
+  await createDefaultData();
+
+  renderAll();
+
+  showToast(
+    "Semua data berhasil dihapus",
+    "success"
+  );
+}
+
+
+/* =========================================================
+   ONLINE STATUS
+========================================================= */
+
+function updateOnlineStatus() {
+
+  const online =
+    navigator.onLine;
+
+  const text =
+    $("#onlineStatusText");
+
+  const status =
+    $("#onlineStatus");
+
+  if (text) {
+
+    text.textContent =
+      online
+        ? "Online"
+        : "Offline";
+  }
+
+  if (status) {
+
+    status.classList.toggle(
+      "offline",
+      !online
+    );
+  }
+}
+
+
+/* =========================================================
+   PWA INSTALL
+========================================================= */
+
+let deferredPrompt = null;
+
+window.addEventListener(
+  "beforeinstallprompt",
+  event => {
+
+    event.preventDefault();
+
+    deferredPrompt = event;
+
+    showElement(
+      $("#installButton")
+    );
+  }
+);
+
+
+async function installPWA() {
+
+  if (!deferredPrompt) {
+
+    showToast(
+      "Gunakan menu browser untuk install aplikasi",
+      "info"
+    );
+
+    return;
+  }
+
+  deferredPrompt.prompt();
+
+  await deferredPrompt.userChoice;
+
+  deferredPrompt = null;
+
+  hideElement(
+    $("#installButton")
+  );
+}
+
+
+/* =========================================================
+   SERVICE WORKER
+========================================================= */
+
+function registerServiceWorker() {
+
+  if (
+    "serviceWorker"
+    in navigator
+  ) {
+
+    navigator.serviceWorker
+      .register("./service-worker.js")
+      .then(() => {
+
+        console.log(
+          "Service Worker aktif"
+        );
+
+      })
+      .catch(error => {
+
+        console.error(
+          "Service Worker gagal:",
+          error
+        );
+
+      });
+  }
+}
+
+
+/* =========================================================
+   HELPER DOM
+========================================================= */
+
+function setText(
+  selector,
+  value
+) {
+
+  const element =
+    $(selector);
+
+  if (element) {
+
+    element.textContent = value;
+  }
+}
+
+
+function setValue(
+  selector,
+  value
+) {
+
+  const element =
+    $(selector);
+
+  if (element) {
+
+    element.value =
+      value ?? "";
+  }
+}
+
+
+/* =========================================================
+   RENDER ALL
+========================================================= */
+
+function renderAll() {
+
+  updateAppName();
+
+  updateDarkMode();
+
+  updateCommissionVisibility();
+
+  renderEmployeeOptions();
+
+  renderItemOptions();
+
+  renderTierOptions();
+
+  renderEmployees();
+
+  renderItems();
+
+  renderTiers();
+
+  renderJobs();
+
+  renderDashboard();
+
+  renderReports();
+
+  updateDatabaseInfo();
+}
+
+
+/* =========================================================
+   EVENT LISTENER
+========================================================= */
+
+function setupEventListeners() {
+
+  /* NAVIGATION */
+
+  $all(".nav-item").forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        showPage(
+          button.dataset.page
+        );
+
+      }
+    );
+  });
+
+
+  /* SIDEBAR */
+
+  $("#menuButton")
+    ?.addEventListener(
+      "click",
+      openSidebar
+    );
+
+  $("#sidebarOverlay")
+    ?.addEventListener(
+      "click",
+      closeSidebar
+    );
+
+
+  /* COMMISSION */
+
+  $("#commissionSwitch")
+    ?.addEventListener(
+      "change",
+      toggleCommission
+    );
+
+
+  /* DARK MODE */
+
+  $("#darkModeToggle")
+    ?.addEventListener(
+      "change",
+      toggleDarkMode
+    );
+
+
+  /* INSTALL */
+
+  $("#installButton")
+    ?.addEventListener(
+      "click",
+      installPWA
+    );
+
+
+  /* EMPLOYEE */
+
+  $("#addEmployeeButton")
+    ?.addEventListener(
+      "click",
+      openEmployeeModal
+    );
+
+  $("#employeeSaveButton")
+    ?.addEventListener(
+      "click",
+      saveEmployee
+    );
+
+  $("#employeeCancelButton")
+    ?.addEventListener(
+      "click",
+      closeEmployeeModal
+    );
+
+
+  /* ITEM */
+
+  $("#addItemButton")
+    ?.addEventListener(
+      "click",
+      openItemModal
+    );
+
+  $("#itemSaveButton")
+    ?.addEventListener(
+      "click",
+      saveItem
+    );
+
+  $("#itemCancelButton")
+    ?.addEventListener(
+      "click",
+      closeItemModal
+    );
+
+
+  /* TIER */
+
+  $("#addTierButton")
+    ?.addEventListener(
+      "click",
+      openTierModal
+    );
+
+  $("#tierSaveButton")
+    ?.addEventListener(
+      "click",
+      saveTier
+    );
+
+  $("#tierCancelButton")
+    ?.addEventListener(
+      "click",
+      closeTierModal
+    );
+
+
+  /* JOB */
+
+  $("#jobSaveButton")
+    ?.addEventListener(
+      "click",
+      saveJob
+    );
+
+  $("#jobResetButton")
+    ?.addEventListener(
+      "click",
+      resetJobForm
+    );
+
+
+  /* WHATSAPP */
+
+  $("#whatsappPreviewButton")
+    ?.addEventListener(
+      "click",
+      previewWhatsApp
+    );
+
+  $("#whatsappImportButton")
+    ?.addEventListener(
+      "click",
+      importWhatsApp
+    );
+
+
+  /* REPORT */
+
+  $("#generateReportButton")
+    ?.addEventListener(
+      "click",
+      generateReport
+    );
+
+  $("#thermalPrintButton")
+    ?.addEventListener(
+      "click",
+      printThermal
+    );
+
+  $("#shareWhatsAppButton")
+    ?.addEventListener(
+      "click",
+      shareReportWhatsApp
+    );
+
+
+  /* BACKUP */
+
+  $("#backupButton")
+    ?.addEventListener(
+      "click",
+      exportBackup
+    );
+
+  $("#restoreInput")
+    ?.addEventListener(
+      "change",
+      event => {
+
+        restoreBackup(
+          event.target.files[0]
+        );
+
+      }
+    );
+
+
+  /* SETTINGS */
+
+  $("#saveAppNameButton")
+    ?.addEventListener(
+      "click",
+      saveAppName
+    );
+
+  $("#clearDataButton")
+    ?.addEventListener(
+      "click",
+      clearAllData
+    );
+
+
+  /* ONLINE */
+
+  window.addEventListener(
+    "online",
+    updateOnlineStatus
+  );
+
+  window.addEventListener(
+    "offline",
+    updateOnlineStatus
+  );
+}
+
+
+/* =========================================================
+   DATE DEFAULT
+========================================================= */
+
+function setupDefaultDates() {
+
+  const today =
+    todayISO();
+
+  setValue(
+    "#jobDate",
+    today
+  );
+
+  setValue(
+    "#whatsappDate",
+    today
+  );
+}
+
+
+/* =========================================================
+   SPLASH
+========================================================= */
+
+function hideSplashScreen() {
+
+  const splash =
+    $("#splashScreen");
+
+  if (!splash) return;
+
+  setTimeout(() => {
+
+    splash.classList.add("hide");
+
+    setTimeout(() => {
+
+      splash.remove();
+
+    }, 500);
+
+  }, 700);
+}
+
+
+/* =========================================================
+   INIT APP
+========================================================= */
+
+async function initApp() {
+
+  try {
+
+    updateOnlineStatus();
+
+    await openDatabase();
+
+    await loadData();
+
+    await createDefaultData();
+
+    setupDefaultDates();
+
+    setupEventListeners();
+
+    renderAll();
+
+    registerServiceWorker();
+
+    hideSplashScreen();
+
+    console.log(
+      `Laundry Manager ${APP_VERSION} Ready`
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    showToast(
+      "Aplikasi gagal dimulai",
+      "error"
+    );
+  }
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  initApp
+);
