@@ -1,0 +1,60 @@
+{
+  "app": "LAUNDRY LAND",
+  "version": "V5",
+
+  "settings": [
+    {
+      "id": 1,
+      "appName": "LAUNDRY LAND",
+      "showCommission": true
+    }
+  ],
+
+  "employees": [
+    {
+      "id": 1,
+      "name": "DESI",
+      "active": true,
+      "commissionRules": [
+        {
+          "itemCode": "CKS",
+          "rate": 500,
+          "unit": "KG"
+        },
+        {
+          "itemCode": "SPT",
+          "rate": 2000,
+          "unit": "PCS"
+        },
+        {
+          "itemCode": "KRP",
+          "rate": 1000,
+          "unit": "KG"
+        }
+      ]
+    }
+  ],
+
+  "items": [
+    {
+      "id": 1,
+      "name": "Cuci Kering",
+      "code": "CKS",
+      "unit": "KG"
+    },
+    {
+      "id": 2,
+      "name": "Sepatu",
+      "code": "SPT",
+      "unit": "PCS"
+    },
+    {
+      "id": 3,
+      "name": "Karpet",
+      "code": "KRP",
+      "unit": "KG"
+    }
+  ],
+
+  "workLogs": []
+}
